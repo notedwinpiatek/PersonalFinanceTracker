@@ -1,3 +1,82 @@
+/* COLOR VARIABLES */
+:root {
+    --primary-color: #ff7724;
+    --secondary-color: #181c3b;
+    --text-color: #fff;
+    --background-color: #121220;
+}
+
+
+/* GENERAL */
 body {
-    background-color: aqua;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "Funnel Sans", serif;
+    font-weight: 300;
+}
+
+
+/* NAVIGATION BAR */
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo p{
+    padding-left: 30px;
+    font-size: 25px;
+}
+
+.calendar{
+    border: none;
+    border-radius: 30px;
+    padding: 10px 5px 10px 20px;
+    background-color: var(--secondary-color);
+}
+
+.horizontal-month-list {
+    font-size: large;
+    list-style-type: none; 
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.horizontal-month-list li {
+    margin-right: 20px; 
+    transition: color 0.3s ease-in-out;
+}
+
+.horizontal-month-list li:hover {
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.userpanel img{
+    width: 40px;
+    padding-right: 6px;
+}
+
+.userpanel img:hover{
+    cursor: pointer;
+}
+
+/* MAIN */
+main{
+    height: 82vh;
+}
+
+
+/* FOOTER */
+footer hr {
+    background-color: var(--secondary-color);
+    border:none;
+    height: 1px;
+}
+
+footer p {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
 }
