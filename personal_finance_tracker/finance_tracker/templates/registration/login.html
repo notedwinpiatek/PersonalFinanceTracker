@@ -3,10 +3,17 @@
 {% block title %}Login - Personal Finance Tracker{% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form> 
-    <p>Don't have account? <a href="{% url 'register' %}" >Register</a></p>
+    <div class="form-wrapper">
+        <form method="post" class="auth">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    </div>
 {% endblock %}

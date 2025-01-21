@@ -1,9 +1,10 @@
 /* COLOR VARIABLES */
 :root {
-    --primary-color: #ff7724;
-    --secondary-color: #181c3b;
+    --primary-color: #ea453a;
+    --secondary-color: #fbbc16;
     --text-color: #fff;
     --background-color: #121220;
+    --secondary-background: #181c3b;
 }
 
 
@@ -13,6 +14,7 @@ body {
     color: var(--text-color);
     font-family: "Funnel Sans", serif;
     font-weight: 300;
+    text-align: center;
 }
 
 
@@ -32,6 +34,7 @@ nav{
 
 .logo p{
     font-size: 25px;
+    text-align: left;
 }
 
 .logo img {
@@ -48,7 +51,7 @@ nav{
     border: none;
     border-radius: 30px;
     padding: 10px 5px 10px 20px;
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-background);
 }
 
 .horizontal-month-list {
@@ -102,7 +105,7 @@ main{
 
 /* FOOTER */
 footer hr {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-background);
     border:none;
     height: 1px;
 }
@@ -113,3 +116,48 @@ footer p {
     margin-bottom: 5px;
 }
 
+
+/* FORMS */
+.form-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-wrapper button, input[name="username"], input[name="password"]{
+    font-size: 20px;
+    border-radius: 10px;
+    border:none;
+}
+
+input[name="username"], input[name="password"] {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+}
+
+.form-wrapper button {
+    font-weight: 600;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background-size: 400% 400%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    padding: 10px 114px;
+}
+
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+.form-wrapper button:hover {
+    animation: gradient-animation 2s ease infinite;
+}
