@@ -20,3 +20,20 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+def month(request, month_name):
+    valid_months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ]
+    if month_name not in valid_months:
+        return render(request, {'message': 'Invalid month selected.'})
+    else:
+        return render(request, 'finance_tracker/months/month_detail.html', {'month_name': month_name})
+
+def income(request):
+    return render(request, "finance_tracker/income.html")
+
+def expenses(request):
+    return render(request, "finance_tracker/expenses.html")

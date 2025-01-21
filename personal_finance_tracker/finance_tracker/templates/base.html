@@ -28,18 +28,18 @@
         {% if user.is_authenticated %}
         <div class="calendar">
             <ul class="horizontal-month-list">
-                <li>Jan</li>
-                <li>Feb</li>
-                <li>Mar</li>
-                <li>Apr</li>
-                <li>May</li>
-                <li>Jun</li>
-                <li>Jul</li>
-                <li>Aug</li>
-                <li>Sep</li>
-                <li>Oct</li>
-                <li>Nov</li>
-                <li>Dec</li>
+                <li><a href="{% url 'month' 'Jan' %}">Jan</a></li>
+                <li><a href="{% url 'month' 'Feb' %}">Feb</a></li>
+                <li><a href="{% url 'month' 'Mar' %}">Mar</a></li>
+                <li><a href="{% url 'month' 'Apr' %}">Apr</a></li>
+                <li><a href="{% url 'month' 'May' %}">May</a></li>
+                <li><a href="{% url 'month' 'Jun' %}">Jun</a></li>
+                <li><a href="{% url 'month' 'Jul' %}">Jul</a></li>
+                <li><a href="{% url 'month' 'Aug' %}">Aug</a></li>
+                <li><a href="{% url 'month' 'Sep' %}">Sep</a></li>
+                <li><a href="{% url 'month' 'Oct' %}">Oct</a></li>
+                <li><a href="{% url 'month' 'Nov' %}">Nov</a></li>
+                <li><a href="{% url 'month' 'Dec' %}">Dec</a></li>
             </ul>
         </div>
         {% endif %}
