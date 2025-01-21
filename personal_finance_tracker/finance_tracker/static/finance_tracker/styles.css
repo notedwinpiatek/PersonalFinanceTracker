@@ -58,13 +58,18 @@ nav{
     display: flex;
 }
 
-.horizontal-month-list li {
-    margin-right: 25px;
-    font-size: 25px;
+.horizontal-month-list li a{
+    color: var(--text-color);
+    text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
 
-.horizontal-month-list li:hover {
+.horizontal-month-list li {
+    margin-right: 25px;
+    font-size: 25px;
+}
+
+.horizontal-month-list li a:hover {
     color: var(--primary-color);
     cursor: pointer;
 }
@@ -76,7 +81,6 @@ nav{
 }
 
 .userpanel p {
-    padding-right: 30px;
     font-size: 40px;
 }
 
