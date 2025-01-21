@@ -42,11 +42,20 @@
                 <li>Dec</li>
             </ul>
         </div>
+        {% endif %}
         <div class="userpanel">
+            {% if user.is_authenticated %}
             <p>$</p>
             <img src="{% static 'finance_tracker/img/other_avatar.png'%}" alt="user icon">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+            {% endif %}
         </div>
-        {% endif %}
     </nav>
     <main>
         {% block content %}{% endblock %}
