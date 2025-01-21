@@ -129,13 +129,13 @@ footer p {
     margin-bottom: 100px;
 }
 
-.form-wrapper button, input[name="username"], input[name="password"]{
+.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"] {
     font-size: 20px;
     border-radius: 10px;
     border:none;
 }
 
-input[name="username"], input[name="password"] {
+input[name="username"], input[name="password"], input[name="password1"], input[name="password2"] {
     padding: 10px 20px;
     margin-bottom: 10px;
 }
@@ -146,8 +146,9 @@ input[name="username"], input[name="password"] {
     background-size: 400% 400%;
     color: var(--text-color);
     cursor: pointer;
+    margin-top: 15px;
     transition: all 0.1s ease-in-out;
-    padding: 10px 114px;
+    padding: 10px 50px;
 }
 
 @keyframes gradient-animation {
