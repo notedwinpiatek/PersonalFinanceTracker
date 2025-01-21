@@ -21,6 +21,7 @@
                 alt="Personal Finance Tracker Logo">
             <p>Personal Finance Tracker</p>
         </div>
+        {% if user.is_authenticated %}
         <div class="calendar">
             <ul class="horizontal-month-list">
                 <li>Jan</li>
@@ -41,6 +42,7 @@
             <p>$</p>
             <img src="{% static 'finance_tracker/img/other_avatar.png'%}" alt="user icon">
         </div>
+        {% endif %}
     </nav>
     <main>
         {% block content %}{% endblock %}
