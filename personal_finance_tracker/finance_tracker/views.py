@@ -26,3 +26,9 @@ def month(request, month_name):
         return render(request, {'message': 'Invalid month selected.'})
     else:
         return render(request, 'finance_tracker/months/month_detail.html', {'month_name': month_name})
+
+def income(request):
+    return render(request, "finance_tracker/income.html")
+
+def expenses(request):
+    return render(request, "finance_tracker/expenses.html")
