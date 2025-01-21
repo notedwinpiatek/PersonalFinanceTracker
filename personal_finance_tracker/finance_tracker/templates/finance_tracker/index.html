@@ -1,54 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends "./base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
+{% block title %}Dashboard - Personal Finance Tracker{% endblock %}
 
-    <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
-    <title>Personal Finance Tracker</title>
-</head>
+{% block content %}
 
-<body>
-    <nav>
-        <div class="logo">
-            <img src="{% static 'finance_tracker/img/personal_finance_tracker_logo.png'%}"
-                alt="Personal Finance Tracker Logo">
-            <p>Personal Finance Tracker</p>
-        </div>
-        <div class="calendar">
-            <ul class="horizontal-month-list">
-                <li>Jan</li>
-                <li>Feb</li>
-                <li>Mar</li>
-                <li>Apr</li>
-                <li>May</li>
-                <li>Jun</li>
-                <li>Jul</li>
-                <li>Aug</li>
-                <li>Sep</li>
-                <li>Oct</li>
-                <li>Nov</li>
-                <li>Dec</li>
-            </ul>
-        </div>
-        <div class="userpanel">
-            <p>$</p>
-            <img src="{% static 'finance_tracker/img/other_avatar.png'%}" alt="user icon">
-        </div>
-    </nav>
-    <main>
 
-    </main>
-    <footer>
-        <hr>
-        <p>Personal Finance Tracker</p>
-    </footer>
-</body>
 
-</html>
+{% endblock %}
