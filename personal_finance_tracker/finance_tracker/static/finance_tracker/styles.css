@@ -19,13 +19,21 @@ body {
 /* NAVIGATION BAR */
 nav{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
-
+.logo{
+    display: flex;
+    /* padding-left: 30px; */
+}
 .logo p{
-    padding-left: 30px;
+    
     font-size: 25px;
+}
+.logo img {
+    padding-top: 7px;
+    width: 64px;
+    height: 64px;
 }
 
 .calendar{
@@ -36,7 +44,6 @@ nav{
 }
 
 .horizontal-month-list {
-    font-size: large;
     list-style-type: none; 
     margin: 0;
     padding: 0;
@@ -44,7 +51,8 @@ nav{
 }
 
 .horizontal-month-list li {
-    margin-right: 20px; 
+    margin-right: 25px;
+    font-size: 25px;
     transition: color 0.3s ease-in-out;
 }
 
@@ -53,14 +61,29 @@ nav{
     cursor: pointer;
 }
 
+.userpanel {
+    display: flex;
+}
+
+.userpanel p {
+    padding-right: 30px;
+    font-size: 20px;
+}
+
+.userpanel p:hover{
+    cursor: pointer;
+}
+
 .userpanel img{
-    width: 40px;
-    padding-right: 6px;
+    width: 45px;
+    height: 45px;
+    padding-top: 12px;
 }
 
 .userpanel img:hover{
     cursor: pointer;
 }
+
 
 /* MAIN */
 main{
@@ -80,3 +103,4 @@ footer p {
     justify-content: center;
     margin-bottom: 5px;
 }
+
