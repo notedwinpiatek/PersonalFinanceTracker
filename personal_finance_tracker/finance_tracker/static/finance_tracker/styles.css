@@ -100,6 +100,9 @@ nav{
 /* MAIN */
 main{
     height: 78vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 
@@ -123,6 +126,7 @@ footer p {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-bottom: 100px;
 }
 
 .form-wrapper button, input[name="username"], input[name="password"]{
@@ -160,4 +164,10 @@ input[name="username"], input[name="password"] {
   
 .form-wrapper button:hover {
     animation: gradient-animation 2s ease infinite;
+}
+
+
+/* TEXT */
+h1 {
+    font-size: 35px;
 }
