@@ -21,6 +21,7 @@
     <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
 </div>
 <script>   
+    document.querySelector('input[name="username"]').setAttribute('placeholder', 'Username');
     document.querySelector('input[name="password1"]').setAttribute('placeholder', 'Password');
     document.querySelector('input[name="password2"]').setAttribute('placeholder', 'Confirm Password');
 </script>
