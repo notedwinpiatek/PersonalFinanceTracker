@@ -32,3 +32,6 @@ def income(request):
 
 def expenses(request):
     return render(request, "finance_tracker/expenses.html")
+
+def account_settings(request):
+    return render(request, "finance_tracker/account_settings.html")
