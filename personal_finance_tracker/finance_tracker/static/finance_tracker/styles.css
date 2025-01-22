@@ -182,3 +182,9 @@ form input:focus {
 h1 {
     font-size: 35px;
 }
+
+.redirect {
+    text-decoration: none;
+    color: var(--secondary-color);
+    margin-left: 10px;
+}
