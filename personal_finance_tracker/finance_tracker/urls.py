@@ -11,5 +11,7 @@ urlpatterns = [
     path('income/', views.income, name='income'),
     path('expenses/', views.expenses, name='expenses'),
     path('account/', views.account_settings, name='account_settings'),
+    path('password_change/', auth_views.PasswordChangeView.as_view(template_name='password_change/password_change.html'), name='password_change'),
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
     
 ]

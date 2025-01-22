@@ -133,13 +133,13 @@ footer p {
     margin-bottom: 100px;
 }
 
-.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"] {
+.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"] {
     font-size: 20px;
     border-radius: 10px;
     border:none;
 }
 
-input[name="username"], input[name="password"], input[name="password1"], input[name="password2"] {
+input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"] {
     padding: 10px 20px;
     margin-bottom: 10px;box-sizing: border-box;
     transition: border-color 0.3s;
@@ -171,14 +171,52 @@ form input:focus {
     100% {
       background-position: 0% 50%;
     }
-  }
-  
+}
+
+.form-wrapper a{
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
 .form-wrapper button:hover {
     animation: gradient-animation 2s ease infinite;
+}
+
+
+/* ACCOUNT SETTINGS */
+.floating-block{
+    margin: 0px auto;
+    border: none;
+    background-color: var(--secondary-background);
+    border-radius: 45px;
+    padding: 0px 50px 20px 50px;   
+    width: 400px; 
+}
+.floating-block p {
+    color: var(--primary-color);
 }
 
 
 /* TEXT */
 h1 {
     font-size: 35px;
+}
+
+/* BTN */
+button {
+    font-weight: 600;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background-size: 400% 400%;
+    color: var(--text-color);
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.1s ease-in-out;
+    width: 280px;
+    padding: 10px 0px;
+    font-size: 20px;
+    border-radius: 10px;
+    border:none;
+}
+button:hover {
+    animation: gradient-animation 2s ease infinite;
 }

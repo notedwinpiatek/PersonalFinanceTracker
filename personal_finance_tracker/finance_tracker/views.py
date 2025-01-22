@@ -40,3 +40,9 @@ def expenses(request):
 
 def account_settings(request):
     return render(request, "finance_tracker/account_settings.html")
+
+def password_change(request):
+    return render(request, "finance_tracker/password_change/password_change.html")
+
+def password_change_done(request):
+    return render(request, "finance_tracker/password_change/password_change_done.html")
