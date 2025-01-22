@@ -28,18 +28,18 @@
         {% if user.is_authenticated %}
         <div class="calendar">
             <ul class="horizontal-month-list">
-                <li><a href="{% url 'month' 'Jan' %}">Jan</a></li>
-                <li><a href="{% url 'month' 'Feb' %}">Feb</a></li>
-                <li><a href="{% url 'month' 'Mar' %}">Mar</a></li>
-                <li><a href="{% url 'month' 'Apr' %}">Apr</a></li>
-                <li><a href="{% url 'month' 'May' %}">May</a></li>
-                <li><a href="{% url 'month' 'Jun' %}">Jun</a></li>
-                <li><a href="{% url 'month' 'Jul' %}">Jul</a></li>
-                <li><a href="{% url 'month' 'Aug' %}">Aug</a></li>
-                <li><a href="{% url 'month' 'Sep' %}">Sep</a></li>
-                <li><a href="{% url 'month' 'Oct' %}">Oct</a></li>
-                <li><a href="{% url 'month' 'Nov' %}">Nov</a></li>
-                <li><a href="{% url 'month' 'Dec' %}">Dec</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Jan' %}">Jan</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Feb' %}">Feb</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Mar' %}">Mar</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Apr' %}">Apr</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'May' %}">May</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Jun' %}">Jun</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Jul' %}">Jul</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Aug' %}">Aug</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Sep' %}">Sep</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Oct' %}">Oct</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Nov' %}">Nov</a></li>
+                <li><a href="{% url request.resolver_match.view_name 'Dec' %}">Dec</a></li>
             </ul>
         </div>
         {% endif %}
