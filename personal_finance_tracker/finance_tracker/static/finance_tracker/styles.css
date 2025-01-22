@@ -141,7 +141,13 @@ footer p {
 
 input[name="username"], input[name="password"], input[name="password1"], input[name="password2"] {
     padding: 10px 20px;
-    margin-bottom: 10px;
+    margin-bottom: 10px;box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+form input:focus {
+    outline: none;
+    border: 3px solid var(--primary-color) ;
 }
 
 .form-wrapper button {
