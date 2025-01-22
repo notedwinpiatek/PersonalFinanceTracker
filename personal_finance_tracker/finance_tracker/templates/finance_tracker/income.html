@@ -3,4 +3,20 @@
 {% block title %}Income - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+    <h1>{{user.username}}</h1>
+    <h1>{{month}}</h1>
+    <ul>
+        {% for income in incomes %}
+            <li>
+                <strong>Amount:</strong> {{ income.amount }}<br>
+                <strong>Source:</strong> {{ income.source }}<br>
+                <strong>Date:</strong> {{ income.date_received }}<br>
+                <strong>Time:</strong> {{ income.time_received }}<br>
+                <strong>Description:</strong> {{ income.describtion|default:"No description" }}
+            </li>
+            <hr>
+        {% empty %}
+            <p>No income recorded for {{ month }}.</p>
+        {% endfor %}
+    </ul>
 {% endblock %}

@@ -18,7 +18,7 @@
         </div>
         <button type="submit">Register</button>
     </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <p>Already have an account? <a class="redirect" href="{% url 'login' %}">Login</a></p>
 </div>
 <script>   
     document.querySelector('input[name="username"]').setAttribute('placeholder', 'Username');
