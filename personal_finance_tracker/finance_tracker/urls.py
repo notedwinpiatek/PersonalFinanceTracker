@@ -10,4 +10,5 @@ urlpatterns = [
     path('expenses/<str:month_name>/', views.expenses, name='expenses'),
     path('<str:month_name>/', views.index, name='index'),
     path('', views.index, name='index'),
+    path('account/', views.account_settings, name='account_settings'),
 ]

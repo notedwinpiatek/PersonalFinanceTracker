@@ -77,3 +77,7 @@ def expenses(request, month_name):
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'expenses': user_expenses
     })
+
+
+def account_settings(request):
+    return render(request, "finance_tracker/account_settings.html")
