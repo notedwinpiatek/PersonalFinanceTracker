@@ -3,4 +3,20 @@
 {% block title %}Expenses - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+    <h1>{{user.username}}</h1>
+    <h1>{{month}}</h1>
+    <ul>
+        {% for expense in expenses %}
+            <li>
+                <strong>Amount:</strong> {{ expense.amount }}<br>
+                <strong>Source:</strong> {{ expense.category }}<br>
+                <strong>Date:</strong> {{ expense.date_incurred }}<br>
+                <strong>Time:</strong> {{ expense.time_incurred }}<br>
+                <strong>Description:</strong> {{ expense.description|default:"No description" }}
+            </li>
+            <hr>
+        {% empty %}
+            <p>No expenses recorded for {{ month }}.</p>
+        {% endfor %}
+    </ul>
 {% endblock %}

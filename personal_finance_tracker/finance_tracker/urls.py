@@ -3,11 +3,11 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html',redirect_authenticated_user=True), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
-    path('months/<str:month_name>/', views.month, name='month'),
     path('income/<str:month_name>/', views.income, name='income'),
-    path('expenses/', views.expenses, name='expenses'),
+    path('expenses/<str:month_name>/', views.expenses, name='expenses'),
+    path('<str:month_name>/', views.index, name='index'),
+    path('', views.index, name='index'),
 ]

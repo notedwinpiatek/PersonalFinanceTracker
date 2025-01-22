@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -122,5 +123,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGOUT_REDIRECT_URL = '/finance_tracker'
-LOGIN_REDIRECT_URL = '/finance_tracker'
+LOGOUT_REDIRECT_URL = 'index'
+current_month = datetime.datetime.now().strftime('%b')
+LOGIN_REDIRECT_URL = f'/finance_tracker/{current_month}/'

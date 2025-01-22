@@ -3,4 +3,8 @@
 {% block title %}Dashboard - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+    {%if user.is_authenticated%}
+        <h1>{{user.username}}</h1>
+        <h1>{{month}}</h1>
+    {% endif %}
 {% endblock %}
