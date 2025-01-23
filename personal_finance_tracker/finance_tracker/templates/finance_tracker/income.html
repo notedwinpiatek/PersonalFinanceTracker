@@ -3,20 +3,40 @@
 {% block title %}Income - Personal Finance Tracker{% endblock %}
 
 {% block content %}
-    <h1>{{user.username}}</h1>
-    <h1>{{month}}</h1>
-    <ul>
-        {% for income in incomes %}
-            <li>
-                <strong>Amount:</strong> {{ income.amount }}<br>
-                <strong>Source:</strong> {{ income.source }}<br>
-                <strong>Date:</strong> {{ income.date_received }}<br>
-                <strong>Time:</strong> {{ income.time_received }}<br>
-                <strong>Description:</strong> {{ income.describtion|default:"No description" }}
+<div class="container">
+    <div class="form-wrapper">
+        <h1>New Income</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Income</button>
+        </form>
+    </div>
+    <div class="income-block">
+        <h1>Income History</h1>
+        <ul class="income-list">
+            {% for income in incomes %}
+            <li class="income-item">
+                <span>
+                    <strong>{{ income.source }}</strong> <br>
+                    {{ income.date_received }} {{ income.time_received }}
+                </span>
+                <span>
+                    <strong>+${{ income.amount }}</strong><br>
+                    {{income.describtion}}
+                </span>
             </li>
-            <hr>
-        {% empty %}
+            {% empty %}
             <p>No income recorded for {{ month }}.</p>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>        
+    </div>  
+</div>
+<script>
+    document.querySelector('input[name="source"]').setAttribute('placeholder', 'Source');
+    document.querySelector('input[name="description"]').setAttribute('placeholder', 'description');
+    document.querySelector('input[name="date"]').setAttribute('placeholder', 'date');
+    document.querySelector('input[name="time"]').setAttribute('placeholder', 'time');
+    document.querySelector('input[name="amount"]').setAttribute('placeholder', 'amount');
+</script>
 {% endblock %}

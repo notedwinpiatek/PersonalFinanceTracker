@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import CustomPasswordChangeForm
 
+from .forms import IncomeForm
+
 import calendar
 from django.db.models import Sum
 import matplotlib.pyplot as plt
@@ -88,20 +90,35 @@ def register(request):
 
 def income(request, month_name):
     if not month_name:
-        month_name = datetime.now().strftime('%b') 
-    else:
+        month_name = datetime.now().strftime('%b')
+
+    try:
         month_number = list(calendar.month_abbr).index(month_name)
-        
-        # Filter income rocords based on user and month
-        user_incomes = Income.objects.filter(
+    except ValueError:
+        month_number = datetime.now().month
+
+    # Filter income records based on user and month
+    user_incomes = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-        )
-        
+    )
+
+    # Handle the form submission
+    if request.method == 'POST':
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            income = form.save(commit=False)  # Do not save yet
+            income.user = request.user  # Assign the logged-in user
+            income.save()  # Save the form instance
+            return redirect('income', month_name=month_name)
+    else:
+        form = IncomeForm()
+
     return render(request, "finance_tracker/income.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
-        'incomes': user_incomes
+        'incomes': user_incomes,
+        'form': form,
     })
 
 def expenses(request, month_name):
