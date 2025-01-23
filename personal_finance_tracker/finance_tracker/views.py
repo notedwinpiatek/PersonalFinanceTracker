@@ -5,6 +5,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test
 from .models import Income, Expense
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import CustomPasswordChangeForm
+
 import calendar
 from django.db.models import Sum
 import matplotlib.pyplot as plt
@@ -128,8 +134,15 @@ def expenses(request, month_name):
 def account_settings(request):
     return render(request, "finance_tracker/account_settings.html")
 
-def password_change(request):
-    return render(request, "finance_tracker/password_change/password_change.html")
 
-def password_change_done(request):
-    return render(request, "finance_tracker/password_change/password_change_done.html")
+@login_required
+def custom_password_change(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return render(request, 'registration/password_change_done.html')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+    return render(request, 'registration/password_change.html', {'form': form})

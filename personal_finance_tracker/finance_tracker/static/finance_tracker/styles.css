@@ -26,6 +26,10 @@ nav{
     justify-content: space-between;
     align-items: center;
 }
+nav a{
+    color: var(--text-color);
+    text-decoration: none;
+}
 
 .logo{
     display: flex;
