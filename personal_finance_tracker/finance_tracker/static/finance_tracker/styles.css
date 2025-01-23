@@ -139,10 +139,21 @@ footer p {
     margin-bottom: 100px;
 }
 
-.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"] {
+.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"], .form-control {
     font-size: 20px;
     border-radius: 10px;
     border:none;
+}
+.form-block {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.form-control{
+    padding: 10px 20px;
+    margin-bottom: 0px;
+    width: 280px;
 }
 
 input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"] {
@@ -329,22 +340,18 @@ button:hover {
 
 }
 
-#history-item::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 4px; 
 }
 
-#history-item::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
     background: transparent;
 }
 
-#history-item::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 5px;
     height: 10px;
-}
-
-#history-item::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-color);
 }
 
 .history p {
@@ -360,39 +367,47 @@ button:hover {
 .history-expense {
     color: var(--red);
 }
+
+
 /* INCOME PAGE */
 .container {
-    width: 100%;
-    max-width: 1200px;
+    width: 80%;
     margin: 0 auto;
-    display: flex;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 0px;
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 83%;
+    overflow: hidden;
 }
-.income-form{
-    grid-area: 1 / 1 / 2 / 2; 
-    
-}
+
 .income-block {
-    grid-area: 1 / 2 / 2 / 3;
+    height: 87%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: relative;
 }
+
 .income-block ul{
     padding-inline-start: 0px;
 }
-.income-list{
-    width: 100%;
+
+.income-block h1 {
+    position: sticky;
+    margin-top: 0;
+    top: 0;
+    padding: 22px 0px 9px 0px;
+    background-color: var(--background-color);
+    z-index: 10;
 }
+
 .income-item{
-    width: 595PX;
+    width: 595px;
     display: flex;
     justify-content: space-between;
     list-style-type: none;
     align-items: center;
     border: none;
-    padding: 20px 45px;
+    padding: 18px 45px;
     margin-bottom: 15px;
     border-radius: 15px; 
     background-color: var(--secondary-background);

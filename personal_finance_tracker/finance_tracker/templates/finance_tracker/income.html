@@ -4,14 +4,15 @@
 
 {% block content %}
 <div class="container">
-    <div class="form-wrapper">
+    <div class="form-wrapper form-block">
         <h1>New Income</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Add Income</button>
+            <button class="add-income-btn" type="submit">Add Income</button>
         </form>
     </div>
+    
     <div class="income-block">
         <h1>Income History</h1>
         <ul class="income-list">
@@ -32,11 +33,4 @@
         </ul>        
     </div>  
 </div>
-<script>
-    document.querySelector('input[name="source"]').setAttribute('placeholder', 'Source');
-    document.querySelector('input[name="description"]').setAttribute('placeholder', 'description');
-    document.querySelector('input[name="date"]').setAttribute('placeholder', 'date');
-    document.querySelector('input[name="time"]').setAttribute('placeholder', 'time');
-    document.querySelector('input[name="amount"]').setAttribute('placeholder', 'amount');
-</script>
 {% endblock %}
