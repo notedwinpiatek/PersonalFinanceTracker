@@ -201,6 +201,19 @@ form input:focus {
 h1 {
     font-size: 35px;
 }
+.item-header{
+    text-align: left;
+    font-weight: 400;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.item-p{
+    margin-top: 10px;
+    padding-top: 0;
+    text-align: left;
+    font-weight: 400;
+    font-size: 35px;
+}
 
 /* BTN */
 button {
@@ -240,12 +253,20 @@ button:hover {
 
 .parent div {
     border-radius: 15px;
+    padding: 5px 20px;
 }
     
 .balance {
     grid-area: 1 / 1 / 2 / 2;
-    background-color: #fbbc16;
+    background: linear-gradient(85deg, var(--primary-color), var(--secondary-color));
+    background-size: 200% 400%;
+    transition: all 0.1s ease-in-out;
 }
+
+.balance:hover{
+    animation: gradient-animation 2s ease infinite;
+}
+
 .income {
     grid-area: 1 / 2 / 2 / 3;
     background-color: #7e796b;

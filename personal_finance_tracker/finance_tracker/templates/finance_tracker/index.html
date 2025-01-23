@@ -10,7 +10,10 @@
     <h1>{{total_expenses_amount}}</h1>
     <h1>{{user_balance}}</h1> {% endcomment %}
     <div class="parent">
-        <div class="balance">balance</div>
+        <div class="balance">
+            <h1 class="item-header">Available Balance</h1>
+            <p class="item-p">${{user_balance}}</p>
+        </div>
         <div class="income">income</div>
         <div class="monthly-tracking">monthly tracking</div>
         <div class="spendings">spendings</div>
