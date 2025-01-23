@@ -3,8 +3,12 @@
 {% block title %}Dashboard - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {%if user.is_authenticated%}
-        <h1>{{user.username}}</h1>
-        <h1>{{month}}</h1>
+    <h1>{{user.username}}</h1>
+    <h1>{{month}}</h1>
+    <h1>{{total_income_amount}}</h1>
+    <h1>{{total_expenses_amount}}</h1>
+    <h1>{{user_balance}}</h1>
     {% endif %}
 {% endblock %}

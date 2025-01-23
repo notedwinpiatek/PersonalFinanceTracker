@@ -6,6 +6,9 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test
 from .models import Income, Expense
 import calendar
+from django.db.models import Sum
+import matplotlib.pyplot as plt
+from django.db.models.functions import TruncDay
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -21,9 +24,43 @@ def index(request, month_name=None):
             month_name = datetime.datetime.now().strftime('%b') 
         
         month_number = list(calendar.month_abbr).index(month_name)
-            
+        
+        # Filter income rocords based on user and month
+        user_incomes = Income.objects.filter(
+        user=request.user,
+        date_received__year=YEAR,
+        date_received__month=month_number
+        )
+        user_expenses = Expense.objects.filter(
+        user=request.user,
+        date_incurred__year=YEAR,
+        date_incurred__month=month_number
+        )
+        
+        user_incomes_total = user_incomes.aggregate(total_amount=Sum('amount'))
+        user_incomes_total = user_incomes_total['total_amount'] or 0
+        user_incomes_total = format(user_incomes_total, '.2f') 
+        
+        user_expenses_total = user_expenses.aggregate(total_amount=Sum('amount'))
+        user_expenses_total = user_expenses_total['total_amount'] or 0
+        user_expenses_total = format(user_expenses_total, '.2f') 
+        
+        # Calculate overall total income and expenses
+        total_income = Income.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
+        total_expenses = Expense.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
+
+        total_income_amount = total_income['total_amount'] or 0
+        total_expenses_amount = total_expenses['total_amount'] or 0
+
+        # Calculate user balance
+        user_balance = total_income_amount - total_expenses_amount
+        user_balance = format(user_balance, '.2f')
+
         return render(request, "finance_tracker/index.html", {
-            'month': f"{calendar.month_name[month_number]} {YEAR}"
+            'month': f"{calendar.month_name[month_number]} {YEAR}",
+            'total_income_amount': user_incomes_total,
+            'total_expenses_amount': user_expenses_total,
+            'user_balance': user_balance
         })
     else:
         return render(request, "finance_tracker/index.html")
