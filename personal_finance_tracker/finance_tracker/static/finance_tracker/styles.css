@@ -5,6 +5,8 @@
     --text-color: #fff;
     --background-color: #121220;
     --secondary-background: #181c3b;
+    --green: #06ff4c;
+    --red: #dc3f4d;
 }
 
 
@@ -253,18 +255,24 @@ button:hover {
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     padding: 0px 40px;
+    box-sizing: border-box;
 }
 
 .parent div, .parent a {
     border-radius: 15px;
-    padding: 5px 20px;
+    padding: 5px 30px;
+    background-color: var(--secondary-background);
 }
 
 .parent a {
-    background-color: var(--secondary-background);
     display: block;
     text-decoration: none; 
     color: inherit; 
+    transition: all 0.1s;
+}
+
+.parent a:hover{
+    transform: scale(1.02);
 }
     
 .balance {
@@ -284,25 +292,74 @@ button:hover {
 
 .monthly-tracking {
     grid-area: 2 / 1 / 5 / 2;
-    background-color: #16fbd5;
 }
+
 .spendings {
     grid-area: 3 / 2 / 5 / 3;
-    background-color: #fb161e;
 }
+
 .income-source {
     grid-area: 3 / 3 / 5 / 4;
-    background-color: #16fb22;
 }
+
 .expenses {
     grid-area: 2 / 2 / 3 / 3;
-    background-color: #fb1672;
 }
+
 .history {
     grid-area: 1 / 3 / 3 / 4;
     background-color: #1644fb;
 }
 
+.history h1{
+    background-color: var(--secondary-background);
+    text-align: center;
+    margin-top: 0px;
+    padding: 25px;
+    position: sticky;
+    top: 5px;
+}
+
+#history-item{
+    padding: 0px 100px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    position: relative;
+    padding-bottom: 20px;
+
+}
+
+#history-item::-webkit-scrollbar {
+    width: 4px; 
+}
+
+#history-item::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#history-item::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 5px;
+    height: 10px;
+}
+
+#history-item::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+.history p {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.history-income {
+    color: var(--green);
+}
+
+.history-expense {
+    color: var(--red);
+}
 /* INCOME PAGE */
 .container {
     width: 100%;
