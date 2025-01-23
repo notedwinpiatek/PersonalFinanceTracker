@@ -6,8 +6,6 @@
     {%if user.is_authenticated%}
     {% comment %} <h1>{{user.username}}</h1>
     <h1>{{month}}</h1>
-    <h1>{{total_income_amount}}</h1>
-    <h1>{{total_expenses_amount}}</h1>
     <h1>{{user_balance}}</h1> {% endcomment %}
     <div class="parent">
         <div class="balance">
@@ -25,7 +23,24 @@
             <h1 class="item-header">Expenses</h1>
             <p class="item-p">${{total_expenses_amount}}</p>
         </a>
-        <div class="history">history</div>
+        <div class="history" id="history-item">
+            <h1 class="item-header">History</h1>
+            <div class="history-container">
+                {% for transaction in transactions %}
+                    {% if transaction.date_received %}
+                    <p class="item-p">
+                        <span class="history-income"> + ${{ transaction.amount }}</span>
+                        <span>{{transaction.date_received.day}}.{{transaction.date_received.month}}.{{transaction.date_received.year}}</span>
+                    </p>
+                    {% else %}
+                    <p class="item-p">
+                        <span class="history-expense"> - ${{ transaction.amount }}</span>
+                        <span>{{transaction.date_incurred.day}}.{{transaction.date_incurred.month}}.{{transaction.date_incurred.year}}  </span>
+                    </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
     {% endif %}
 {% endblock %}

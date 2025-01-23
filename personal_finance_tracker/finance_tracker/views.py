@@ -9,6 +9,8 @@ import calendar
 from django.db.models import Sum
 import matplotlib.pyplot as plt
 from django.db.models.functions import TruncDay
+from itertools import chain
+from operator import attrgetter
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -37,6 +39,11 @@ def index(request, month_name=None):
         date_incurred__month=month_number
         )
         
+        transactions = sorted(
+            chain(user_incomes, user_expenses),
+            key=lambda obj: getattr(obj, 'date_received', None) or getattr(obj, 'date_incurred', None), reverse=True
+        )
+        
         user_incomes_total = user_incomes.aggregate(total_amount=Sum('amount'))
         user_incomes_total = user_incomes_total['total_amount'] or 0
         user_incomes_total = format(user_incomes_total, '.2f') 
@@ -61,7 +68,8 @@ def index(request, month_name=None):
             'total_income_amount': user_incomes_total,
             'total_expenses_amount': user_expenses_total,
             'user_balance': user_balance,
-            'month_name': month_name
+            'month_name': month_name,
+            'transactions' : transactions
         })
     else:
         return render(request, "finance_tracker/index.html")
