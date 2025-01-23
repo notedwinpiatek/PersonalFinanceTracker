@@ -4,9 +4,7 @@
 
 {% block content %}
     {%if user.is_authenticated%}
-    {% comment %} <h1>{{user.username}}</h1>
-    <h1>{{month}}</h1>
-    <h1>{{user_balance}}</h1> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="parent">
         <div class="balance">
             <h1 class="item-header">Available Balance</h1>
@@ -16,7 +14,10 @@
             <h1 class="item-header">Income</h1>
             <p class="item-p">${{total_income_amount}}</p>
         </a>
-        <div class="monthly-tracking">monthly tracking</div>
+        <div class="monthly-tracking">
+            <h1 class="item-header">Monthly Tracking</h1>
+            <canvas id="monthlyChart" width="400" height="220"></canvas>
+        </div>
         <div class="spendings">spendings</div>
         <div class="income-source">income source</div>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
@@ -42,5 +43,89 @@
             </div>
         </div>
     </div>
+    <script>
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        const incomeData = {{ income_data|safe }};
+        const expenseData = {{ expense_data|safe }};
+        const months = {{ months|safe }};
+    
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Max Income',
+                        data: incomeData,
+                        backgroundColor: '#06ff4c', 
+                        borderColor: 'rgba(0, 128, 0, 1)',
+                        borderWidth: 1,
+                        borderRadius: 7
+                    },
+                    {
+                        label: 'Max Expenses',
+                        data: expenseData, 
+                        backgroundColor: '#dc3f4d',
+                        borderColor: 'rgba(128, 0, 0, 1)',
+                        borderWidth: 1,
+                        borderRadius: 7
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        align: 'center',
+                        labels: {
+                            usePointStyle: true,
+                            color: '#ffffff',
+                        },
+                    },
+                    title: {
+                        display: false,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `$${context.raw.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 5,
+                        right: 5,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#ffffff', 
+                        },
+                        grid: {
+                            display: false 
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#ffffff', 
+                        },
+                        grid: {
+                            display: false 
+                        }
+                    },
+                },
+            },
+            plugins: [],
+            devicePixelRatio: window.devicePixelRatio
+        });
+    </script>
+    
     {% endif %}
 {% endblock %}

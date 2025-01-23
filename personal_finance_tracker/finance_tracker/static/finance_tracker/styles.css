@@ -305,6 +305,10 @@ button:hover {
     grid-area: 2 / 1 / 5 / 2;
 }
 
+.monthly-tracking h1 {
+    text-align: center;
+}
+
 .spendings {
     grid-area: 3 / 2 / 5 / 3;
 }
@@ -326,9 +330,9 @@ button:hover {
     background-color: var(--secondary-background);
     text-align: center;
     margin-top: 0px;
-    padding: 25px;
+    padding: 30px;
     position: sticky;
-    top: 5px;
+    top: 0px;
 }
 
 #history-item{
@@ -337,7 +341,6 @@ button:hover {
     box-sizing: border-box;
     position: relative;
     padding-bottom: 20px;
-
 }
 
 *::-webkit-scrollbar {
