@@ -134,7 +134,7 @@ def custom_password_change(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('password_change_done')
+            return render(request, 'registration/password_change_done.html')
     else:
         form = CustomPasswordChangeForm(request.user)
     return render(request, 'registration/password_change.html', {'form': form})
