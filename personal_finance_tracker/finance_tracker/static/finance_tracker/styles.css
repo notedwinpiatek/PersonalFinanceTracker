@@ -294,6 +294,10 @@ button:hover {
     grid-area: 2 / 1 / 5 / 2;
 }
 
+.monthly-tracking h1 {
+    text-align: center;
+}
+
 .spendings {
     grid-area: 3 / 2 / 5 / 3;
 }

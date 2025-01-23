@@ -1,4 +1,5 @@
 import datetime
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -68,14 +69,37 @@ def index(request, month_name=None):
         # Calculate user balance
         user_balance = total_income_amount - total_expenses_amount
         user_balance = format(user_balance, '.2f')
+        
+        # Initialize monthly data arrays
+        income_data = [0.0] * 12
+        expense_data = [0.0] * 12
+        
+         # Fetch all income and expense records for the entire year
+        all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
+        all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
 
+        # Group and aggregate income and expense data for the entire year
+        monthly_income = all_user_incomes.values('date_received__month').annotate(total=Sum('amount'))
+        monthly_expenses = all_user_expenses.values('date_incurred__month').annotate(total=Sum('amount'))
+
+        # Populate the monthly data arrays
+        for income in monthly_income:
+            income_data[income['date_received__month'] - 1] = float(income['total'])
+        for expense in monthly_expenses:
+            expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
+            
+        print(income_data)
+        print(expense_data)
         return render(request, "finance_tracker/index.html", {
             'month': f"{calendar.month_name[month_number]} {YEAR}",
             'total_income_amount': user_incomes_total,
             'total_expenses_amount': user_expenses_total,
             'user_balance': user_balance,
             'month_name': month_name,
-            'transactions' : transactions
+            'transactions' : transactions,
+            'income_data': json.dumps(income_data),
+            'expense_data': json.dumps(expense_data),
+            'months': json.dumps(VALID_MONTHS),
         })
     else:
         return render(request, "finance_tracker/index.html")
