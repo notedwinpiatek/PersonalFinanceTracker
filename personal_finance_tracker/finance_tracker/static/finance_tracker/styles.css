@@ -251,9 +251,16 @@ button:hover {
     padding: 0px 40px;
 }
 
-.parent div {
+.parent div, .parent a {
     border-radius: 15px;
     padding: 5px 20px;
+}
+
+.parent a {
+    background-color: var(--secondary-background);
+    display: block;
+    text-decoration: none; 
+    color: inherit; 
 }
     
 .balance {
@@ -269,8 +276,8 @@ button:hover {
 
 .income {
     grid-area: 1 / 2 / 2 / 3;
-    background-color: #7e796b;
 }
+
 .monthly-tracking {
     grid-area: 2 / 1 / 5 / 2;
     background-color: #16fbd5;

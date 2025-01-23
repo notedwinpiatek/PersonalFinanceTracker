@@ -60,7 +60,8 @@ def index(request, month_name=None):
             'month': f"{calendar.month_name[month_number]} {YEAR}",
             'total_income_amount': user_incomes_total,
             'total_expenses_amount': user_expenses_total,
-            'user_balance': user_balance
+            'user_balance': user_balance,
+            'month_name': month_name
         })
     else:
         return render(request, "finance_tracker/index.html")

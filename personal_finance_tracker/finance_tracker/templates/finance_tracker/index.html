@@ -14,11 +14,17 @@
             <h1 class="item-header">Available Balance</h1>
             <p class="item-p">${{user_balance}}</p>
         </div>
-        <div class="income">income</div>
+        <a class="income" href="{% url 'income' month_name=month_name %}">
+            <h1 class="item-header">Income</h1>
+            <p class="item-p">${{total_income_amount}}</p>
+        </a>
         <div class="monthly-tracking">monthly tracking</div>
         <div class="spendings">spendings</div>
         <div class="income-source">income source</div>
-        <div class="expenses">expenses</div>
+        <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
+            <h1 class="item-header">Expenses</h1>
+            <p class="item-p">${{total_expenses_amount}}</p>
+        </a>
         <div class="history">history</div>
     </div>
     {% endif %}
