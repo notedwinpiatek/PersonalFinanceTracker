@@ -17,8 +17,10 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="{% static 'finance_tracker/img/personal_finance_tracker_logo.png'%}"
-                alt="Personal Finance Tracker Logo">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'finance_tracker/img/personal_finance_tracker_logo.png'%}"
+                    alt="Personal Finance Tracker Logo">
+            </a>
             <p>
                 Personal Finance
                 <br>

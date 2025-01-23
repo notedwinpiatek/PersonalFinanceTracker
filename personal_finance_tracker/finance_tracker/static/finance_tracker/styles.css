@@ -201,6 +201,19 @@ form input:focus {
 h1 {
     font-size: 35px;
 }
+.item-header{
+    text-align: left;
+    font-weight: 400;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.item-p{
+    margin-top: 10px;
+    padding-top: 0;
+    text-align: left;
+    font-weight: 400;
+    font-size: 35px;
+}
 
 /* BTN */
 button {
@@ -225,4 +238,63 @@ button:hover {
     text-decoration: none;
     color: var(--secondary-color);
     margin-left: 10px;
+}
+
+/* DASHBOARD GRID */
+.parent {
+    height: 85%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    padding: 0px 40px;
+}
+
+.parent div, .parent a {
+    border-radius: 15px;
+    padding: 5px 20px;
+}
+
+.parent a {
+    background-color: var(--secondary-background);
+    display: block;
+    text-decoration: none; 
+    color: inherit; 
+}
+    
+.balance {
+    grid-area: 1 / 1 / 2 / 2;
+    background: linear-gradient(85deg, var(--primary-color), var(--secondary-color));
+    background-size: 200% 400%;
+    transition: all 0.1s ease-in-out;
+}
+
+.balance:hover{
+    animation: gradient-animation 2s ease infinite;
+}
+
+.income {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.monthly-tracking {
+    grid-area: 2 / 1 / 5 / 2;
+    background-color: #16fbd5;
+}
+.spendings {
+    grid-area: 3 / 2 / 5 / 3;
+    background-color: #fb161e;
+}
+.income-source {
+    grid-area: 3 / 3 / 5 / 4;
+    background-color: #16fb22;
+}
+.expenses {
+    grid-area: 2 / 2 / 3 / 3;
+    background-color: #fb1672;
+}
+.history {
+    grid-area: 1 / 3 / 3 / 4;
+    background-color: #1644fb;
 }

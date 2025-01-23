@@ -4,7 +4,28 @@
 
 {% block content %}
     {%if user.is_authenticated%}
-        <h1>{{user.username}}</h1>
-        <h1>{{month}}</h1>
+    {% comment %} <h1>{{user.username}}</h1>
+    <h1>{{month}}</h1>
+    <h1>{{total_income_amount}}</h1>
+    <h1>{{total_expenses_amount}}</h1>
+    <h1>{{user_balance}}</h1> {% endcomment %}
+    <div class="parent">
+        <div class="balance">
+            <h1 class="item-header">Available Balance</h1>
+            <p class="item-p">${{user_balance}}</p>
+        </div>
+        <a class="income" href="{% url 'income' month_name=month_name %}">
+            <h1 class="item-header">Income</h1>
+            <p class="item-p">${{total_income_amount}}</p>
+        </a>
+        <div class="monthly-tracking">monthly tracking</div>
+        <div class="spendings">spendings</div>
+        <div class="income-source">income source</div>
+        <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
+            <h1 class="item-header">Expenses</h1>
+            <p class="item-p">${{total_expenses_amount}}</p>
+        </a>
+        <div class="history">history</div>
+    </div>
     {% endif %}
 {% endblock %}
