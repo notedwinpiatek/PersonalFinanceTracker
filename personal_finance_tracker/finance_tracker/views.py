@@ -13,6 +13,8 @@ from django.shortcuts import render, redirect
 from .forms import CustomPasswordChangeForm
 
 from .forms import IncomeForm
+from .forms import ExpenseForm
+
 
 import calendar
 from django.db.models import Sum
@@ -159,24 +161,31 @@ def income(request, month_name):
     })
 
 
-def expenses(request, month_name):
+def expenses(request, month_name=None):
     if not month_name:
-        month_name = datetime.now().strftime('%b') 
+        month_number = datetime.now().month
     else:
-        month_number = list(calendar.month_abbr).index(month_name)
-        
-        # Filter income rocords based on user and month
-        user_expenses = Expense.objects.filter(
+        try:
+            month_number = list(calendar.month_abbr).index(month_name.capitalize())
+        except ValueError:
+            return render(request, "finance_tracker/error.html", {
+                'error_message': f"Invalid month name: {month_name}"
+            })
+
+    user_expenses = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
-        )
-        
+    )
+
+    
+    form = ExpenseForm()
+
     return render(request, "finance_tracker/expenses.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
-        'expenses': user_expenses
+        'expenses': user_expenses,
+        'form': form,  # Pass the form to the template
     })
-
 
 def account_settings(request):
     return render(request, "finance_tracker/account_settings.html")

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Income
+from .models import Income, Expense
 from django.contrib.auth.forms import PasswordChangeForm
 
 class CustomPasswordChangeForm(PasswordChangeForm):
@@ -26,4 +26,23 @@ class IncomeForm(forms.ModelForm):
             'date_received': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'time_received': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'describtion': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
+        }
+        
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = ['amount', 'category', 'date_incurred', 'time_incurred', 'description']
+        labels = {
+            'amount': '',
+            'category': '',
+            'date_incurred': '',
+            'time_incurred': '',
+            'description': '',
+        }
+        widgets = {
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder': 'Amount'}),
+            'category': forms.TextInput(attrs={'class': 'form-control', 'id': 'category-field', 'placeholder': 'Category'}),
+            'date_incurred': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), 
+            'time_incurred': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}), 
+            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }

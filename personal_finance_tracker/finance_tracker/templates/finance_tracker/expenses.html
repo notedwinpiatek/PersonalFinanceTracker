@@ -1,22 +1,37 @@
 {% extends "../base.html" %}
 
-{% block title %}Expenses - Personal Finance Tracker{% endblock %}
+{% block title %}Exspense - Personal Finance Tracker{% endblock %}
 
 {% block content %}
-    <h1>{{user.username}}</h1>
-    <h1>{{month}}</h1>
-    <ul>
-        {% for expense in expenses %}
-            <li>
-                <strong>Amount:</strong> {{ expense.amount }}<br>
-                <strong>Source:</strong> {{ expense.category }}<br>
-                <strong>Date:</strong> {{ expense.date_incurred }}<br>
-                <strong>Time:</strong> {{ expense.time_incurred }}<br>
-                <strong>Description:</strong> {{ expense.description|default:"No description" }}
+<div class="container">
+    <div class="form-wrapper form-block">
+        <h1>New Expense</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="add-income-btn" type="submit">Add Expense</button>
+        </form>
+    </div>
+    
+    <div class="income-block">
+        <h1>Expense History</h1>
+        <ul class="income-list">
+            {% for expense in expenses %}
+            <li class="income-item">
+                <span>
+                    <strong>{{ expense.category }}</strong> <br>
+                    {{ expense.date_incurred }} {{ expense.time_incurred }}
+                </span>
+                <span>
+                    <strong>-${{ expense.amount }}</strong><br>
+                    {{ expense.description }}  <!-- Corrected field name -->
+                </span>
             </li>
-            <hr>
-        {% empty %}
+            {% empty %}
             <p>No expenses recorded for {{ month }}.</p>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>        
+    </div>
+    
+</div>
 {% endblock %}
