@@ -189,7 +189,7 @@ def expenses(request, month_name=None):
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
-    )
+    ).order_by('-date_incurred', '-time_incurred')
 
     return render(request, "finance_tracker/expenses.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
