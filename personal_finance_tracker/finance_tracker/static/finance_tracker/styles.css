@@ -9,6 +9,18 @@
     --red: #dc3f4d;
 }
 
+/* ANIMATIONS */
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
 
 /* GENERAL */
 body {
@@ -71,7 +83,7 @@ nav a{
 .horizontal-month-list li a{
     color: var(--text-color);
     text-decoration: none;
-    transition: color 0.3s ease-in-out;
+    transition: color 0.1s ease-in-out;
 }
 
 .horizontal-month-list li {
@@ -80,7 +92,7 @@ nav a{
 }
 
 .horizontal-month-list li a:hover {
-    color: var(--primary-color);
+    color: var(--secondary-color);
     cursor: pointer;
 }
 
@@ -138,57 +150,48 @@ footer p {
     flex-direction: column;
     justify-content: center;
     margin-bottom: 100px;
+    box-sizing: border-box;
 }
 
-.form-wrapper button, input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"], .form-control {
+.form-wrapper p {
+    margin: 12px;
+}
+
+button[type="submit"], input, .form-control, textarea {
     font-size: 20px;
     border-radius: 10px;
     border:none;
+    width: 280px;
 }
+
 .form-block {
     height: 100%;
     margin: 0px;
     padding: 0px;
 }
 
-.form-control{
+.form-control {
     padding: 10px 20px;
     margin-bottom: 0px;
-    width: 280px;
 }
 
-input[name="username"], input[name="password"], input[name="password1"], input[name="password2"], input[name="old_password"], input[name="new_password1"], input[name="new_password2"] {
+input {
     padding: 10px 20px;
-    margin-bottom: 10px;box-sizing: border-box;
+    margin-bottom: 10px;
+    box-sizing: border-box;
     transition: border-color 0.3s;
 }
 
-form input:focus {
+form input:focus, textarea:focus {
     outline: none;
     border: 3px solid var(--primary-color) ;
 }
 
-.form-wrapper button {
-    font-weight: 600;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    background-size: 400% 400%;
-    color: var(--text-color);
-    cursor: pointer;
-    margin-top: 15px;
-    transition: all 0.1s ease-in-out;
-    padding: 10px 50px;
-}
-
-@keyframes gradient-animation {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+textarea#description-field{
+    font-family: "Funnel Sans", serif;
+    box-sizing: border-box;
+    resize: none;
+    width: 280px;
 }
 
 .form-wrapper a{
@@ -196,9 +199,15 @@ form input:focus {
     text-decoration: none;
 }
 
+.form-wrapper button {
+    padding: 10px 50px;
+    margin-top: 5px;
+}
+
 .form-wrapper button:hover {
     animation: gradient-animation 2s ease infinite;
 }
+
 
 
 /* ACCOUNT SETTINGS */
@@ -219,12 +228,14 @@ form input:focus {
 h1 {
     font-size: 35px;
 }
+
 .item-header{
     text-align: left;
     font-weight: 400;
     margin-bottom: 0;
     padding-bottom: 0;
 }
+
 .item-p{
     margin-top: 10px;
     padding-top: 0;
@@ -248,15 +259,19 @@ button {
     border-radius: 10px;
     border:none;
 }
+
 button:hover {
     animation: gradient-animation 2s ease infinite;
 }
 
+
+/* LINKS */
 .redirect {
     text-decoration: none;
     color: var(--secondary-color);
     margin-left: 10px;
 }
+
 
 /* DASHBOARD GRID */
 .parent {
