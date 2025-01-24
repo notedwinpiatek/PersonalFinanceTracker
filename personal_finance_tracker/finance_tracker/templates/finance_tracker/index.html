@@ -18,8 +18,10 @@
             <h1 class="item-header">Monthly Tracking</h1>
             <canvas id="monthlyChart" width="400" height="220"></canvas>
         </div>
+        <a class="income-source" href="{% url 'sources'%}">
+            <h1 class="item-header">Sources</h1> 
+        </a>
         <div class="spendings">spendings</div>
-        <div class="income-source">income source</div>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
             <h1 class="item-header">Expenses</h1>
             <p class="item-p">${{total_expenses_amount}}</p>

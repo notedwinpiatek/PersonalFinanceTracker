@@ -1,0 +1,29 @@
+{% extends "../base.html" %}
+
+{% block title %}Sources - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<h1>Your Income Sources</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Source</button>
+</form>
+
+<h3>Existing Sources</h3>
+<ul>
+    {% for source in sources %}
+        <li>
+            {{ source.name }}
+            <!-- Delete link -->
+            <a href="?delete={{ source.id }}" class="btn btn-danger btn-sm" 
+               onclick="return confirm('Are you sure you want to delete this source?');">
+               Delete
+            </a>
+        </li>
+    {% empty %}
+        <p>No income sources added yet.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

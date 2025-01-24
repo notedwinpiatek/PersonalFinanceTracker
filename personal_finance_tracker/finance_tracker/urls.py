@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('select_gender/', views.select_gender, name='select_gender'),
+    path('sources/', views.sources, name='sources'),
     path('account/', views.account_settings, name='account_settings'),
     path('password_change/', views.custom_password_change, name='password_change'),
     path('password_change_done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),

@@ -2,13 +2,13 @@ import datetime
 import json
 import calendar
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from .models import Income, Expense
-from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm, IncomeSourceForm
 from django.db.models import Sum
 from itertools import chain
 from django.db.models.signals import post_save
@@ -242,3 +242,24 @@ def select_gender(request):
     else:
         form = GenderSelectionForm()
     return render(request, 'finance_tracker/select_gender.html', {'form': form})
+
+@login_required
+def sources(request):
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+    sources = IncomeSource.objects.filter(user=request.user)
+    if request.method == 'POST':
+        form = IncomeSourceForm(request.POST)
+        if form.is_valid():
+            source = form.save(commit=False)
+            source.user = request.user
+            source.save()
+            return redirect('sources')
+    elif request.method == 'GET' and 'delete' in request.GET:
+        item_id = request.GET.get('delete')
+        item = get_object_or_404(IncomeSource, id=item_id, user=request.user)
+        item.delete()
+        return redirect('sources')
+    else:
+        form = IncomeSourceForm()
+
+    return render(request, 'finance_tracker/sources.html', {'form': form, 'sources': sources, 'gender': gender})

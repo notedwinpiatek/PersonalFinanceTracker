@@ -28,7 +28,7 @@
             </div>
         </a>
         {% if user.is_authenticated %}
-            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' %}
+            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' and request.resolver_match.url_name != 'sources' %}
             <div class="calendar">
                 <ul class="horizontal-month-list">
                     {% for month in months %}

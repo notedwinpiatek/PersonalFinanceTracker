@@ -69,3 +69,19 @@ class ExpenseForm(forms.ModelForm):
         
         self.fields['category'].queryset = ExpenseCategory.objects.filter(user=user)
         self.fields['category'].empty_label = "Category"
+        
+class IncomeSourceForm(forms.ModelForm):
+    class Meta:
+        model = IncomeSource
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter income source name'}),
+        }
+
+class ExpenseCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ExpenseCategory
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter expense category name'}),
+        }
