@@ -28,7 +28,7 @@
             </div>
         </a>
         {% if user.is_authenticated %}
-            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' %}
+            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' %}
             <div class="calendar">
                 <ul class="horizontal-month-list">
                     {% for month in months %}
@@ -41,11 +41,11 @@
             {% endif %}
         {% endif %}
         <div class="userpanel">
-            {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' %}
+            {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'select_gender' %}
                 {% if user.is_authenticated %}
                 <p>$</p>
                 <a href="{% url 'account_settings' %}">
-                    <img src="{% static 'finance_tracker/img/other_avatar.png'%}" alt="user icon">
+                    <img id="userImg" src="{% static 'finance_tracker/img/'|add:gender|add:'.png'%}" alt="user icon">
                 </a>
                 {% else %}
                 <a class="redirect" href="{% url 'login' %}">Login</a>

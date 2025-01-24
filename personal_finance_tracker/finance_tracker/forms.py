@@ -1,7 +1,14 @@
 from django import forms
-from .models import Income, Expense, IncomeSource, ExpenseCategory
+from .models import Income, Expense, IncomeSource, ExpenseCategory, UserProfile
 from django.contrib.auth.forms import PasswordChangeForm
 
+class GenderSelectionForm(forms.Form):
+    gender = forms.ChoiceField(
+        choices=UserProfile.GENDER_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'gender-select'}),
+        label="",
+    )
+    
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

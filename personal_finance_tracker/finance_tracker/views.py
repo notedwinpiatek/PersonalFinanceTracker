@@ -8,7 +8,7 @@ from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from .models import Income, Expense
-from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm
 from django.db.models import Sum
 from itertools import chain
 from django.db.models.signals import post_save
@@ -73,6 +73,8 @@ def index(request, month_name=None):
         all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
         all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
 
+        gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+
         # Group and aggregate income and expense data for the entire year
         monthly_income = all_user_incomes.values('date_received__month').annotate(total=Sum('amount'))
         monthly_expenses = all_user_expenses.values('date_incurred__month').annotate(total=Sum('amount'))
@@ -93,6 +95,7 @@ def index(request, month_name=None):
             'income_data': json.dumps(income_data),
             'expense_data': json.dumps(expense_data),
             'months': VALID_MONTHS,
+            'gender': gender
         })
     else:
         return render(request, "finance_tracker/index.html")
@@ -109,8 +112,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user) 
-            current_month = datetime.datetime.now().strftime('%b')
-            return redirect(reverse('index', kwargs={'month_name': current_month}))
+            return redirect(reverse('select_gender')) 
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
@@ -124,6 +126,8 @@ def income(request, month_name=None):
 
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name)
+    
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
 
     # Filter and sort income records based on user and month
     user_incomes = Income.objects.filter(
@@ -149,7 +153,8 @@ def income(request, month_name=None):
         'incomes': user_incomes,
         'form': form,
         'months': VALID_MONTHS,
-        'month_name': month_name
+        'month_name': month_name,
+        'gender': gender
     })
 
 
@@ -161,7 +166,9 @@ def expenses(request, month_name=None):
         
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name.capitalize())
-
+    
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+    
     # Handle the form submission
     if request.method == "POST":
         form = ExpenseForm(request.POST, user=request.user)
@@ -186,26 +193,29 @@ def expenses(request, month_name=None):
         'expenses': user_expenses,
         'form': form,
         'months': VALID_MONTHS,
-        'month_name': month_name
+        'month_name': month_name,
+        'gender': gender
     })
 
 
 @login_required
 def account_settings(request):
-    return render(request, "finance_tracker/account_settings.html")
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+    return render(request, "finance_tracker/account_settings.html", {'gender': gender})
 
 
 @login_required
 def custom_password_change(request):
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
     if request.method == 'POST':
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return render(request, 'registration/password_change_done.html')
+            return render(request, 'registration/password_change_done.html', {'gender': gender})
     else:
         form = CustomPasswordChangeForm(request.user)
-    return render(request, 'registration/password_change.html', {'form': form})
+    return render(request, 'registration/password_change.html', {'form': form, 'gender': gender})
 
 @receiver(post_save, sender=User)
 def create_default_sources_and_categories(sender, instance, created, **kwargs):
@@ -219,3 +229,16 @@ def create_default_sources_and_categories(sender, instance, created, **kwargs):
         default_expense_categories = ['Groceries', 'Rent', 'Utilities', 'Entertainment', 'Other']
         for category in default_expense_categories:
             ExpenseCategory.objects.create(name=category, user=instance)
+            
+def select_gender(request):
+    if request.method == 'POST':
+        form = GenderSelectionForm(request.POST)
+        if form.is_valid():
+            # Save the gender in the user's profile
+            gender = form.cleaned_data['gender']
+            UserProfile.objects.create(user=request.user, gender=gender)
+            current_month = datetime.datetime.now().strftime('%b')
+            return redirect(reverse('index', kwargs={'month_name': current_month}))
+    else:
+        form = GenderSelectionForm()
+    return render(request, 'finance_tracker/select_gender.html', {'form': form})

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Select Your Gender</h2>
+<form method="post" id="gender-form">
+    {% csrf_token %}
+    <div class="gender-options">
+        <label for="gender_M">
+            <input type="radio" name="gender" id="gender_M" value="M" hidden>
+            <img src="{% static 'finance_tracker/img/M.png' %}" alt="Male" class="gender-image">
+        </label>
+        <label for="gender_F">
+            <input type="radio" name="gender" id="gender_F" value="F" hidden>
+            <img src="{% static 'finance_tracker/img/F.png' %}" alt="Female" class="gender-image">
+        </label>
+        <label for="gender_O">
+            <input type="radio" name="gender" id="gender_O" value="O" hidden>
+            <img src="{% static 'finance_tracker/img/O.png' %}" alt="Other" class="gender-image">
+        </label>
+    </div>
+</form>
+<script>
+    document.querySelectorAll('.gender-options label').forEach(label => {
+        label.addEventListener('click', () => {
+            // Submit the form when an image is clicked
+            document.getElementById('gender-form').submit();
+        });
+    });
+</script>
+{% endblock %}
