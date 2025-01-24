@@ -5,10 +5,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.models import User
 from .models import Income, Expense
-from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource
 from django.db.models import Sum
 from itertools import chain
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -200,3 +203,16 @@ def custom_password_change(request):
     else:
         form = CustomPasswordChangeForm(request.user)
     return render(request, 'registration/password_change.html', {'form': form})
+
+@receiver(post_save, sender=User)
+def create_default_sources_and_categories(sender, instance, created, **kwargs):
+    if created:
+        # Create default IncomeSource instances
+        default_income_sources = ['Salary', 'Freelance', 'Investment', 'Other']
+        for source in default_income_sources:
+            IncomeSource.objects.create(name=source, user=instance)
+        
+        # Create default ExpenseCategory instances
+        default_expense_categories = ['Groceries', 'Rent', 'Utilities', 'Entertainment', 'Other']
+        for category in default_expense_categories:
+            ExpenseCategory.objects.create(name=category, user=instance)
