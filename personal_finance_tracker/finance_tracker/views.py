@@ -121,37 +121,43 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 def income(request, month_name):
+    # Handle the current month if no month name is provided
     if not month_name:
         month_name = datetime.now().strftime('%b')
 
     try:
+        # Convert the month name to a month number
         month_number = list(calendar.month_abbr).index(month_name)
     except ValueError:
+        # Fallback to the current month if the month name is invalid
         month_number = datetime.now().month
 
-    # Filter income records based on user and month
+    # Filter and sort income records based on user and month
     user_incomes = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-    )
+    ).order_by('-date_received', '-time_received')  # Sort incomes by date and time in descending order
 
     # Handle the form submission
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
-            income = form.save(commit=False)  # Do not save yet
-            income.user = request.user  # Assign the logged-in user
-            income.save()  # Save the form instance
+            # Save the form instance but assign the logged-in user
+            income = form.save(commit=False)
+            income.user = request.user
+            income.save()
             return redirect('income', month_name=month_name)
     else:
         form = IncomeForm()
 
+    # Render the income page with the form and sorted incomes
     return render(request, "finance_tracker/income.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'incomes': user_incomes,
         'form': form,
     })
+
 
 def expenses(request, month_name):
     if not month_name:
