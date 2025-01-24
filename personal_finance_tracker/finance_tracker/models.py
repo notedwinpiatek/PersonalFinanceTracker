@@ -3,16 +3,22 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
 class IncomeSource(models.Model):
-    name = models.CharField(max_length=25, unique=True)
+    name = models.CharField(max_length=25)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
+    class Meta:
+        unique_together = ('name', 'user')
+        
     def __str__(self):
         return self.name
 
 class ExpenseCategory(models.Model):
-    name = models.CharField(max_length=25, unique=True)
+    name = models.CharField(max_length=25)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
+    class Meta:
+        unique_together = ('name', 'user')
+        
     def __str__(self):
         return self.name
 
