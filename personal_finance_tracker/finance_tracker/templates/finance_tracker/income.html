@@ -9,26 +9,26 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="add-income-btn" type="submit">Add Income</button>
+            <button class="add-transaction-btn" type="submit">Add Income</button>
         </form>
     </div>
     
-    <div class="income-block">
+    <div class="transaction-block">
         <h1>Income History</h1>
-        <ul class="income-list">
+        <ul class="transaction-list">
             {% for income in incomes %}
-            <li class="income-item">
+            <li class="transaction-item">
                 <span>
                     <strong>{{ income.source }}</strong> <br>
                     {{ income.date_received }} {{ income.time_received }}
                 </span>
-                <span>
+                <span class='desc-amt'>
                     <strong>+${{ income.amount }}</strong><br>
                     {{income.describtion}}
                 </span>
             </li>
             {% empty %}
-            <p>No income recorded for {{ month }}.</p>
+            <p>No income in {{ month }}.</p>
             {% endfor %}
         </ul>        
     </div>  

@@ -9,26 +9,26 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="add-income-btn" type="submit">Add Expense</button>
+            <button class="add-transaction-btn" type="submit">Add Expense</button>
         </form>
     </div>
     
-    <div class="income-block">
+    <div class="transaction-block">
         <h1>Expense History</h1>
-        <ul class="income-list">
+        <ul class="transaction-list">
             {% for expense in expenses %}
-            <li class="income-item">
+            <li class="transaction-item">
                 <span>
                     <strong>{{ expense.category }}</strong> <br>
                     {{ expense.date_incurred }} {{ expense.time_incurred }}
                 </span>
-                <span>
+                <span class='desc-amt'>
                     <strong>-${{ expense.amount }}</strong><br>
-                    {{ expense.description }}  <!-- Corrected field name -->
+                    {{ expense.description }}
                 </span>
             </li>
             {% empty %}
-            <p>No expenses recorded for {{ month }}.</p>
+            <p>No expenses in {{ month }}.</p>
             {% endfor %}
         </ul>        
     </div>

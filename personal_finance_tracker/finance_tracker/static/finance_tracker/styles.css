@@ -154,6 +154,7 @@ footer p {
     justify-content: center;
     margin-bottom: 100px;
     box-sizing: border-box;
+    transition: all 0.1s;
 }
 
 .form-wrapper p {
@@ -402,18 +403,18 @@ button:hover {
     overflow: hidden;
 }
 
-.income-block {
+.transaction-block {
     height: 87%;
     overflow-y: scroll;
     overflow-x: hidden;
     position: relative;
 }
 
-.income-block ul{
+.transaction-block ul{
     padding-inline-start: 0px;
 }
 
-.income-block h1 {
+.transaction-block h1 {
     position: sticky;
     margin-top: 0;
     top: 0;
@@ -422,9 +423,10 @@ button:hover {
     z-index: 10;
 }
 
-.income-item{
+.transaction-item{
     width: 595px;
     display: flex;
+    text-align: left;
     justify-content: space-between;
     list-style-type: none;
     align-items: center;
@@ -435,6 +437,10 @@ button:hover {
     background-color: var(--secondary-background);
 }
 
-.income-block span {
+.transaction-block span {
     display: block; 
+}
+
+.desc-amt{
+    text-align: right;
 }
