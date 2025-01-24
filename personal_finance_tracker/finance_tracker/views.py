@@ -88,7 +88,7 @@ def index(request, month_name=None):
             'transactions' : transactions,
             'income_data': json.dumps(income_data),
             'expense_data': json.dumps(expense_data),
-            'months': json.dumps(VALID_MONTHS),
+            'months': VALID_MONTHS,
         })
     else:
         return render(request, "finance_tracker/index.html")
@@ -142,6 +142,8 @@ def income(request, month_name=None):
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'incomes': user_incomes,
         'form': form,
+        'months': VALID_MONTHS,
+        'month_name': month_name
     })
 
 
@@ -177,6 +179,8 @@ def expenses(request, month_name=None):
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'expenses': user_expenses,
         'form': form,
+        'months': VALID_MONTHS,
+        'month_name': month_name
     })
 
 

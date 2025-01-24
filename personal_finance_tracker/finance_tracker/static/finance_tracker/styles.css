@@ -119,6 +119,9 @@ nav a{
     cursor: pointer;
 }
 
+li.active a {
+    color: var(--secondary-color);
+}
 
 /* MAIN */
 main{
