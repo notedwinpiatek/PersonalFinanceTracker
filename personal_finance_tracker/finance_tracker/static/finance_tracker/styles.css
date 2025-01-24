@@ -131,6 +131,24 @@ main{
     justify-content: center;
 }
 
+/* GENDER */
+.gender-image {
+    width: 300px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.gender-image:hover {
+    transform: scale(1.06);
+}
+
+.gender-options {
+    margin-top: 70px;
+}
+
+#gender-form{
+    height: 70%;
+}
 
 /* FOOTER */
 footer hr {
