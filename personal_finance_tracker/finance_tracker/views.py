@@ -172,20 +172,31 @@ def expenses(request, month_name=None):
                 'error_message': f"Invalid month name: {month_name}"
             })
 
+    
+    if request.method == "POST":
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            
+            expense = form.save(commit=False)
+            expense.user = request.user  
+            expense.save()
+            return redirect('expenses', month_name=calendar.month_abbr[month_number])  
+    else:
+        form = ExpenseForm()  
+
+    
     user_expenses = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
     )
 
-    
-    form = ExpenseForm()
-
     return render(request, "finance_tracker/expenses.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'expenses': user_expenses,
-        'form': form,  # Pass the form to the template
+        'form': form,
     })
+
 
 def account_settings(request):
     return render(request, "finance_tracker/account_settings.html")
