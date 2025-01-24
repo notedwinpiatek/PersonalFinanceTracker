@@ -1,27 +1,14 @@
 import datetime
 import json
-from django.http import HttpResponse
+import calendar
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import user_passes_test
-from .models import Income, Expense
-
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from .forms import CustomPasswordChangeForm
-
-from .forms import IncomeForm
-from .forms import ExpenseForm
-
-
-import calendar
+from django.contrib.auth.decorators import user_passes_test, login_required
+from .models import Income, Expense
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm
 from django.db.models import Sum
-import matplotlib.pyplot as plt
-from django.db.models.functions import TruncDay
 from itertools import chain
-from operator import attrgetter
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -92,8 +79,6 @@ def index(request, month_name=None):
         for expense in monthly_expenses:
             expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
             
-        print(income_data)
-        print(expense_data)
         return render(request, "finance_tracker/index.html", {
             'month': f"{calendar.month_name[month_number]} {YEAR}",
             'total_income_amount': user_incomes_total,
@@ -108,8 +93,10 @@ def index(request, month_name=None):
     else:
         return render(request, "finance_tracker/index.html")
 
+
 def not_logged_in(user):
     return not user.is_authenticated
+
 
 @user_passes_test(not_logged_in, login_url='/finance_tracker', redirect_field_name=None)  
 def register(request):
@@ -122,24 +109,22 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-def income(request, month_name):
+
+@login_required
+def income(request, month_name=None):
     # Handle the current month if no month name is provided
     if not month_name:
-        month_name = datetime.now().strftime('%b')
+        month_name = datetime.datetime.now().strftime('%b') 
 
-    try:
-        # Convert the month name to a month number
-        month_number = list(calendar.month_abbr).index(month_name)
-    except ValueError:
-        # Fallback to the current month if the month name is invalid
-        month_number = datetime.now().month
+    # Convert the month name to a month number
+    month_number = list(calendar.month_abbr).index(month_name)
 
     # Filter and sort income records based on user and month
     user_incomes = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-    ).order_by('-date_received', '-time_received')  # Sort incomes by date and time in descending order
+    ).order_by('-date_received', '-time_received')
 
     # Handle the form submission
     if request.method == 'POST':
@@ -153,7 +138,6 @@ def income(request, month_name):
     else:
         form = IncomeForm()
 
-    # Render the income page with the form and sorted incomes
     return render(request, "finance_tracker/income.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'incomes': user_incomes,
@@ -161,18 +145,16 @@ def income(request, month_name):
     })
 
 
+@login_required
 def expenses(request, month_name=None):
+    # Handle the current month if no month name is provided
     if not month_name:
-        month_number = datetime.now().month
-    else:
-        try:
-            month_number = list(calendar.month_abbr).index(month_name.capitalize())
-        except ValueError:
-            return render(request, "finance_tracker/error.html", {
-                'error_message': f"Invalid month name: {month_name}"
-            })
+        month_name = datetime.datetime.now().strftime('%b') 
+        
+    # Convert the month name to a month number
+    month_number = list(calendar.month_abbr).index(month_name.capitalize())
 
-    
+    # Handle the form submission
     if request.method == "POST":
         form = ExpenseForm(request.POST)
         if form.is_valid():
@@ -184,7 +166,7 @@ def expenses(request, month_name=None):
     else:
         form = ExpenseForm()  
 
-    
+    # Filter and sort expense records based on user and month
     user_expenses = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
@@ -198,6 +180,7 @@ def expenses(request, month_name=None):
     })
 
 
+@login_required
 def account_settings(request):
     return render(request, "finance_tracker/account_settings.html")
 
