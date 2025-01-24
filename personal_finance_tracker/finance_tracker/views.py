@@ -128,7 +128,7 @@ def income(request, month_name=None):
 
     # Handle the form submission
     if request.method == 'POST':
-        form = IncomeForm(request.POST)
+        form = IncomeForm(request.POST, user=request.user)
         if form.is_valid():
             # Save the form instance but assign the logged-in user
             income = form.save(commit=False)
@@ -136,7 +136,7 @@ def income(request, month_name=None):
             income.save()
             return redirect('income', month_name=month_name)
     else:
-        form = IncomeForm()
+        form = IncomeForm(user=request.user)
 
     return render(request, "finance_tracker/income.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
@@ -158,7 +158,7 @@ def expenses(request, month_name=None):
 
     # Handle the form submission
     if request.method == "POST":
-        form = ExpenseForm(request.POST)
+        form = ExpenseForm(request.POST, user=request.user)
         if form.is_valid():
             
             expense = form.save(commit=False)
@@ -166,7 +166,7 @@ def expenses(request, month_name=None):
             expense.save()
             return redirect('expenses', month_name=calendar.month_abbr[month_number])  
     else:
-        form = ExpenseForm()  
+        form = ExpenseForm(user=request.user)  
 
     # Filter and sort expense records based on user and month
     user_expenses = Expense.objects.filter(
