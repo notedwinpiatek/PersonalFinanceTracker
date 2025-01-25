@@ -13,6 +13,7 @@ from django.db.models import Sum
 from itertools import chain
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib import messages
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -247,6 +248,8 @@ def select_gender(request):
 def sources(request):
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
     sources = IncomeSource.objects.filter(user=request.user)
+    other_source = IncomeSource.objects.get(user=request.user, name='Other')
+    
     if request.method == 'POST':
         form = IncomeSourceForm(request.POST)
         if form.is_valid():
@@ -257,7 +260,14 @@ def sources(request):
     elif request.method == 'GET' and 'delete' in request.GET:
         item_id = request.GET.get('delete')
         item = get_object_or_404(IncomeSource, id=item_id, user=request.user)
-        item.delete()
+        
+         # Prevent deletion of "Other"
+        if item.name == 'Other':
+            messages.error(request, "You cannot delete the 'Other' source.")
+        else:
+            # Reassign incomes to "Other"
+            Income.objects.filter(source=item).update(source=other_source)
+            item.delete()
         return redirect('sources')
     else:
         form = IncomeSourceForm()
