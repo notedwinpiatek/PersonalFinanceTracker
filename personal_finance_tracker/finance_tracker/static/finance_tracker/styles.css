@@ -367,6 +367,11 @@ button:hover {
 /* SOURCES / SPENDINGS */
 .spendings {
     grid-area: 3 / 2 / 5 / 3;
+    box-sizing: border-box;
+}
+
+.spendings canvas {
+    max-height: 180px;
 }
 
 .income-source {

@@ -95,6 +95,22 @@ def index(request, month_name=None):
         
         source_labels = [source['source__name'] for source in income_sources]
         source_totals = [float(source['total']) for source in income_sources]
+        
+        categories = ExpenseCategory.objects.filter(user=request.user)
+        other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
+        
+        categories = list(categories)  # Convert queryset to list (if needed)
+        categories.sort(key=lambda category: category.name == "Other") 
+        
+        # Filter income sources by month
+        expense_categories = Expense.objects.filter(
+            user=request.user,
+            date_incurred__year=YEAR,
+            date_incurred__month=month_number
+        ).values('category__name').annotate(total=Sum('amount'))
+        
+        category_labels = [category['category__name'] for category in expense_categories]
+        category_totals = [float(category['total']) for category in expense_categories]
             
         return render(request, "finance_tracker/index.html", {
             'month': f"{calendar.month_name[month_number]} {YEAR}",
@@ -109,6 +125,8 @@ def index(request, month_name=None):
             'gender': gender,
             'source_labels': json.dumps(source_labels),
             'source_totals': json.dumps(source_totals),
+            'category_labels': json.dumps(category_labels),
+            'category_totals': json.dumps(category_totals),
         })
     else:
         return render(request, "finance_tracker/index.html")
