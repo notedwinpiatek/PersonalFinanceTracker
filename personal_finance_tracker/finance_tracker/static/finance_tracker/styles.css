@@ -489,7 +489,8 @@ button:hover {
     margin: 0 auto;
     display:flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 10%;
     height: 83%;
     overflow: hidden;
 }
@@ -499,6 +500,16 @@ button:hover {
     overflow-y: scroll;
     overflow-x: hidden;
     position: relative;
+}
+
+.form-block{
+    background-color: var(--secondary-background);
+    padding: 0px 40px 15px;
+    border-radius: 15px;
+}
+
+.form-block button {
+    margin-top: 0;
 }
 
 .transaction-block ul{
@@ -515,7 +526,7 @@ button:hover {
 }
 
 .transaction-item{
-    width: 595px;
+    width: 400px;
     display: flex;
     text-align: left;
     justify-content: space-between;
