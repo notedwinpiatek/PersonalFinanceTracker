@@ -8,7 +8,7 @@ from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from .models import Income, Expense
-from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm, IncomeSourceForm
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm, IncomeSourceForm, ExpenseCategoryForm
 from django.db.models import Sum
 from itertools import chain
 from django.db.models.signals import post_save
@@ -270,6 +270,9 @@ def sources(request, month_name=None):
     sources = IncomeSource.objects.filter(user=request.user)
     other_source = IncomeSource.objects.get(user=request.user, name='Other')
     
+    sources = list(sources)  # Convert queryset to list (if needed)
+    sources.sort(key=lambda source: source.name == "Other") 
+    
     # Filter income sources by month
     income_sources = Income.objects.filter(
         user=request.user,
@@ -310,4 +313,64 @@ def sources(request, month_name=None):
         'months': VALID_MONTHS,
         'source_labels': json.dumps(source_labels),
         'source_totals': json.dumps(source_totals),
+        })
+    
+@login_required
+def spendings(request, month_name=None):
+    # Handle the current month if no month name is provided
+    if not month_name:
+        month_name = datetime.datetime.now().strftime('%b') 
+        
+    # Convert the month name to a month number
+    month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+    
+    categories = ExpenseCategory.objects.filter(user=request.user)
+    other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
+    
+    categories = list(categories)  # Convert queryset to list (if needed)
+    categories.sort(key=lambda category: category.name == "Other") 
+    
+    # Filter income sources by month
+    expense_categories = Expense.objects.filter(
+        user=request.user,
+        date_incurred__year=YEAR,
+        date_incurred__month=month_number
+    ).values('category__name').annotate(total=Sum('amount'))
+    
+    category_labels = [category['category__name'] for category in expense_categories]
+    category_totals = [float(category['total']) for category in expense_categories]
+    
+    
+    if request.method == 'POST':
+        form = ExpenseCategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.user = request.user
+            category.save()
+            return redirect('spendings')
+    elif request.method == 'GET' and 'delete' in request.GET:
+        item_id = request.GET.get('delete')
+        item = get_object_or_404(ExpenseCategory, id=item_id, user=request.user)
+        
+         # Prevent deletion of "Other"
+        if item.name == 'Other':
+            messages.error(request, "You cannot delete the 'Other' source.")
+        else:
+            # Reassign incomes to "Other"
+            Expense.objects.filter(category=item).update(category=other_category)
+            item.delete()
+        return redirect('spendings')
+    else:
+        form = ExpenseCategoryForm()
+
+    return render(request, 'finance_tracker/spendings.html', {
+        'form': form,
+        'categories': categories,
+        'gender': gender,
+        'month_name': month_name,
+        'months': VALID_MONTHS,
+        'category_labels': json.dumps(category_labels),
+        'category_totals': json.dumps(category_totals),
         })

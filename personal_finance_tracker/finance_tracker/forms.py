@@ -85,6 +85,9 @@ class ExpenseCategoryForm(forms.ModelForm):
     class Meta:
         model = ExpenseCategory
         fields = ['name']
+        labels = {
+            'name': ''
+        }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter expense category name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'New Category'}),
         }

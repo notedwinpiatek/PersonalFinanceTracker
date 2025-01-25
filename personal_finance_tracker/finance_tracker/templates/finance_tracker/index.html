@@ -22,7 +22,9 @@
             <h1 class="item-header">Income Source</h1>
             <canvas id="sourceChart" width="400" height="100"></canvas>
         </a>
-        <div class="spendings">spendings</div>
+        <a class="spendings"  href="{% url 'spendings'%}">
+            <h1 class="item-header">Spendings</h1>
+        </a>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
             <h1 class="item-header">Expenses</h1>
             <p class="item-p">${{total_expenses_amount}}</p>

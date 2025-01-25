@@ -1,0 +1,106 @@
+{% extends "../base.html" %}
+
+{% block title %}Categories - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="charts-container">
+    <div class="items-container">
+        <h1>Expense Categories</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Category</button>
+        </form>
+        <ul class="items-list">
+            {% for category in categories %}
+            <li class="item">
+                <span class="item-name">{{ category.name }}</span>
+                {% if category.name != 'Other' %}
+                    <a href="?delete={{ category.id }}" class="delete-icon" 
+                       onclick="return confirm('Are you sure you want to delete this category?');">
+                        &times;
+                    </a>
+                {% else %}
+                    <span class="text-muted">(Default)</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <canvas id="categoryChart" width="300" height="300"></canvas>
+</div>
+<script defer>
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    const categoryLabels = {{ category_labels|safe }};
+    const categoryTotals = {{ category_totals|safe }};
+
+    // Check if there is no data
+    const allZeros = categoryTotals.length === 0 || categoryTotals.every(total => total === 0);
+
+    // Define chart data based on the presence of data
+    const chartData = allZeros
+        ? {
+            labels: ['No Data Available'], 
+            datasets: [{
+                label: 'Expense Amount',
+                data: [1],
+                backgroundColor: ['#cccccc'],
+                borderWidth: 0,
+            }]
+        }
+        : {
+            labels: categoryLabels,
+            datasets: [{
+                label: 'Income Amount',
+                data: categoryTotals,
+                backgroundColor: [
+                    '#06ff4c',
+                    '#dc3f4d',
+                    '#fbbc16',
+                    '#45aaf2',
+                    '#8E1BE0',
+                    '#E0D12D',
+                    '#E12ECB',
+                    '#45DBE0'
+                ],
+                borderWidth: 0,
+            }]
+        };
+
+    // Create the pie chart
+    const sourceChart = new Chart(categoryCtx, {
+        type: 'pie',
+        data: chartData, 
+        options: {
+            devicePixelRatio: 4,
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true, 
+                    position: 'bottom',
+                    labels: {
+                        color: '#fff',
+                        font: {
+                            size: 14,
+                        },
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(2);
+                            return allZeros
+                                ? label 
+                                : `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+</script>
+{% endblock %}
