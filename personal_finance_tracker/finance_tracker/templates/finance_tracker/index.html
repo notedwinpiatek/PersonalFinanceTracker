@@ -78,6 +78,7 @@
                 ],
             },
             options: {
+                devicePixelRatio: 4,
                 responsive: true,
                 plugins: {
                     legend: {
@@ -136,33 +137,54 @@
         const sourceLabels = {{ source_labels|safe }};
         const sourceTotals = {{ source_totals|safe }};
 
+        // Combine labels and totals into a single array of objects
+        const categories = sourceLabels.map((label, index) => ({
+            label,
+            value: sourceTotals[index],
+        }));
+
+        // Sort categories by value (highest to lowest)
+        categories.sort((a, b) => b.value - a.value);
+
+        // Limit to the top 8 categories
+        const maxCategories = 7;
+        const limitedCategories = categories.slice(0, maxCategories);
+
+        // Split sorted and limited categories back into labels and totals
+        const sortedAndLimitedLabels = limitedCategories.map(category => category.label);
+        const sortedAndLimitedTotals = limitedCategories.map(category => category.value);
+
          // Dynamically adjust canvas width
         const canvas = document.getElementById('sourceChart');
         const minWidth = 100; // Minimum width for the canvas
-        const barWidth = 60; // Width per bar (adjust as needed)
+        const barWidth = 70; // Width per bar (adjust as needed)
         const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
         canvas.style.maxWidth = `${maxWidth}px`;
     
         const sourceChart = new Chart(sourceCtx, {
             type: 'bar',
             data: {
-                labels: sourceLabels,
+                labels: sortedAndLimitedLabels,
                 datasets: [{
                     label: 'Income Amount',
-                    data: sourceTotals,
+                    data: sortedAndLimitedTotals,
                     backgroundColor: [
-                        '#f7b731',
-                        '#eb3b5a',
-                        '#20bf6b',
+                        '#06ff4c',
+                        '#dc3f4d',
+                        '#fbbc16',
                         '#45aaf2',
-                        '#fd9644'
+                        '#8E1BE0',
+                        '#E0D12D',
+                        '#E12ECB',
+                        '#45DBE0'
                     ],
                     borderWidth: 0,
                     borderRadius: 7,
-                    maxBarThickness: 50,
+                    maxBarThickness: 60,
                 }]
             },
             options: {
+                devicePixelRatio: 4,
                 responsive: true,
                 plugins: {
                     legend: {
@@ -178,7 +200,7 @@
                 },
                 layout: {
                     padding: {
-                        bottom: 18
+                        bottom: 15
                     },
                 },
                 scales: {
