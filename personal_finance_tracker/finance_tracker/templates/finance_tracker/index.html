@@ -19,7 +19,8 @@
             <canvas id="monthlyChart" width="400" height="220"></canvas>
         </div>
         <a class="income-source" href="{% url 'sources'%}">
-            <h1 class="item-header">Sources</h1> 
+            <h1 class="item-header">Income Source</h1>
+            <canvas id="sourceChart" width="400" height="100"></canvas>
         </a>
         <div class="spendings">spendings</div>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
@@ -47,7 +48,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script defer>
         const ctx = document.getElementById('monthlyChart').getContext('2d');
         const incomeData = {{ income_data|safe }};
         const expenseData = {{ expense_data|safe }};
@@ -130,6 +131,80 @@
             devicePixelRatio: window.devicePixelRatio
         });
     </script>
+    <script defer>
+        const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+        const sourceLabels = {{ source_labels|safe }};
+        const sourceTotals = {{ source_totals|safe }};
+
+         // Dynamically adjust canvas width
+        const canvas = document.getElementById('sourceChart');
+        const minWidth = 100; // Minimum width for the canvas
+        const barWidth = 60; // Width per bar (adjust as needed)
+        const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
+        canvas.style.maxWidth = `${maxWidth}px`;
     
+        const sourceChart = new Chart(sourceCtx, {
+            type: 'bar',
+            data: {
+                labels: sourceLabels,
+                datasets: [{
+                    label: 'Income Amount',
+                    data: sourceTotals,
+                    backgroundColor: [
+                        '#f7b731',
+                        '#eb3b5a',
+                        '#20bf6b',
+                        '#45aaf2',
+                        '#fd9644'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 7,
+                    maxBarThickness: 50,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `$${context.raw.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        bottom: 18
+                    },
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#ffffff',
+                        },
+                        grid: {
+                            display: false
+                        },
+                    },
+                    y: {
+                        border: {
+                            display: false,
+                        },
+                        beginAtZero: true,
+                        ticks: {
+                            display: false
+                        },
+                        grid: {
+                            display: false
+                        },
+                    },
+                },
+            }
+        });
+    </script>
     {% endif %}
 {% endblock %}

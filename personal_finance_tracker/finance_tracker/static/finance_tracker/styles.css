@@ -343,7 +343,7 @@ button:hover {
     grid-area: 2 / 1 / 5 / 2;
 }
 
-.monthly-tracking h1 {
+.monthly-tracking h1, .income-source h1 {
     text-align: center;
 }
 

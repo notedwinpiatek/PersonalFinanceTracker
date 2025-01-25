@@ -86,6 +86,16 @@ def index(request, month_name=None):
         for expense in monthly_expenses:
             expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
             
+        # Filter income sources by month
+        income_sources = Income.objects.filter(
+            user=request.user,
+            date_received__year=YEAR,
+            date_received__month=month_number
+        ).values('source__name').annotate(total=Sum('amount'))
+        
+        source_labels = [source['source__name'] for source in income_sources]
+        source_totals = [float(source['total']) for source in income_sources]
+            
         return render(request, "finance_tracker/index.html", {
             'month': f"{calendar.month_name[month_number]} {YEAR}",
             'total_income_amount': user_incomes_total,
@@ -96,7 +106,9 @@ def index(request, month_name=None):
             'income_data': json.dumps(income_data),
             'expense_data': json.dumps(expense_data),
             'months': VALID_MONTHS,
-            'gender': gender
+            'gender': gender,
+            'source_labels': json.dumps(source_labels),
+            'source_totals': json.dumps(source_totals),
         })
     else:
         return render(request, "finance_tracker/index.html")
@@ -245,8 +257,16 @@ def select_gender(request):
     return render(request, 'finance_tracker/select_gender.html', {'form': form})
 
 @login_required
-def sources(request):
+def sources(request, month_name=None):
+    # Handle the current month if no month name is provided
+    if not month_name:
+        month_name = datetime.datetime.now().strftime('%b') 
+        
+    # Convert the month name to a month number
+    month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+    
     sources = IncomeSource.objects.filter(user=request.user)
     other_source = IncomeSource.objects.get(user=request.user, name='Other')
     
