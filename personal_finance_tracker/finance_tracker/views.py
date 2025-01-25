@@ -270,6 +270,16 @@ def sources(request, month_name=None):
     sources = IncomeSource.objects.filter(user=request.user)
     other_source = IncomeSource.objects.get(user=request.user, name='Other')
     
+    # Filter income sources by month
+    income_sources = Income.objects.filter(
+        user=request.user,
+        date_received__year=YEAR,
+        date_received__month=month_number
+    ).values('source__name').annotate(total=Sum('amount'))
+    
+    source_labels = [source['source__name'] for source in income_sources]
+    source_totals = [float(source['total']) for source in income_sources]
+    
     if request.method == 'POST':
         form = IncomeSourceForm(request.POST)
         if form.is_valid():
@@ -292,4 +302,12 @@ def sources(request, month_name=None):
     else:
         form = IncomeSourceForm()
 
-    return render(request, 'finance_tracker/sources.html', {'form': form, 'sources': sources, 'gender': gender})
+    return render(request, 'finance_tracker/sources.html', {
+        'form': form,
+        'sources': sources,
+        'gender': gender,
+        'month_name': month_name,
+        'months': VALID_MONTHS,
+        'source_labels': json.dumps(source_labels),
+        'source_totals': json.dumps(source_totals),
+        })

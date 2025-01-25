@@ -3,30 +3,104 @@
 {% block title %}Sources - Personal Finance Tracker{% endblock %}
 
 {% block content %}
-<h1>Your Income Sources</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="charts-container">
+    <div class="items-container">
+        <h1>Your Income Sources</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Source</button>
+        </form>
+        <ul class="items-list">
+            {% for source in sources %}
+            <li class="item">
+                <span class="item-name">{{ source.name }}</span>
+                {% if source.name != 'Other' %}
+                    <a href="?delete={{ source.id }}" class="delete-icon" 
+                       onclick="return confirm('Are you sure you want to delete this source?');">
+                        &times;
+                    </a>
+                {% else %}
+                    <span class="text-muted">(Default)</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <canvas id="sourcesChart" width="300" height="300"></canvas>
+</div>
+<script defer>
+    const sourceCtx = document.getElementById('sourcesChart').getContext('2d');
+    const sourceLabels = {{ source_labels|safe }};
+    const sourceTotals = {{ source_totals|safe }};
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add Source</button>
-</form>
+    // Check if there is no data
+    const allZeros = sourceTotals.length === 0 || sourceTotals.every(total => total === 0);
 
-<h3>Existing Sources</h3>
-<ul>
-    {% for source in sources %}
-        <li>
-            {{ source.name }}
-            {% if source.name != 'Other' %}
-                <a href="?delete={{ source.id }}" class="btn btn-danger btn-sm" 
-                   onclick="return confirm('Are you sure you want to delete this source?');">
-                   Delete
-                </a>
-            {% else %}
-                <span class="text-muted">(Default and cannot be deleted)</span>
-            {% endif %}
-        </li>
-    {% empty %}
-        <p>No income sources added yet.</p>
-    {% endfor %}
-</ul>
+    // Define chart data based on the presence of data
+    const chartData = allZeros
+        ? {
+            labels: ['No Data Available'], 
+            datasets: [{
+                label: 'Income Amount',
+                data: [1],
+                backgroundColor: ['#cccccc'],
+                borderWidth: 0,
+            }]
+        }
+        : {
+            labels: sourceLabels,
+            datasets: [{
+                label: 'Income Amount',
+                data: sourceTotals,
+                backgroundColor: [
+                    '#06ff4c',
+                    '#dc3f4d',
+                    '#fbbc16',
+                    '#45aaf2',
+                    '#8E1BE0',
+                    '#E0D12D',
+                    '#E12ECB',
+                    '#45DBE0'
+                ],
+                borderWidth: 0,
+            }]
+        };
+
+    // Create the pie chart
+    const sourceChart = new Chart(sourceCtx, {
+        type: 'pie',
+        data: chartData, 
+        options: {
+            devicePixelRatio: 4,
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true, 
+                    position: 'bottom',
+                    labels: {
+                        color: '#fff',
+                        font: {
+                            size: 14,
+                        },
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(2);
+                            return allZeros
+                                ? label 
+                                : `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+</script>
 {% endblock %}

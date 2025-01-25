@@ -355,6 +355,79 @@ button:hover {
     grid-area: 3 / 3 / 5 / 4;
 }
 
+.charts-container {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 100%;
+    gap: 10%;
+}
+
+.charts-container canvas {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.items-container {
+    padding: 25px;
+    border-radius: 15px;
+    background-color: var(--secondary-background);
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.items-container button {
+    margin-top: 0px;
+}
+
+.items-list {
+    list-style: none;
+    padding: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 8px;
+    width: 280px;
+}
+
+/* List item styling */
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.523);
+}
+
+/* Last item without border */
+.item:last-child {
+    border-bottom: none;
+}
+
+/* Cross icon styling */
+.delete-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.2s, color 0.2s;
+}
+
+/* Hover effects for delete icon */
+.delete-icon:hover {
+    transform: scale(1.2);
+    color: var(--secondary-color);
+}
+
+/* Default text styling */
+.text-muted {
+    /* font-style: italic; */
+    color: #6c757d;
+}
+
+
 .expenses {
     grid-area: 2 / 2 / 3 / 3;
 }

@@ -74,8 +74,11 @@ class IncomeSourceForm(forms.ModelForm):
     class Meta:
         model = IncomeSource
         fields = ['name']
+        labels = {
+            'name': ''
+        }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter income source name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'New Source'}),
         }
 
 class ExpenseCategoryForm(forms.ModelForm):
