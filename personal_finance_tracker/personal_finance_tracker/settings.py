@@ -123,6 +123,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'landing_page'
 current_month = datetime.datetime.now().strftime('%b')
 LOGIN_REDIRECT_URL = f'/finance_tracker/{current_month}/'

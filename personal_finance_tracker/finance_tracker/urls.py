@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
+    path('landing_page/', views.landing_page, name='landing_page'),
     path('select_gender/', views.select_gender, name='select_gender'),
     path('sources/<str:month_name>/', views.sources, name='sources'),
     path('sources/', views.sources, name='sources'),

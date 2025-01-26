@@ -22,114 +22,111 @@ VALID_MONTHS = [
 
 YEAR = datetime.datetime.now().year
 
-# Create your views here.
+@login_required
 def index(request, month_name=None):
-    if request.user.is_authenticated:
-        if not month_name:
-            month_name = datetime.datetime.now().strftime('%b') 
+    if not month_name:
+        month_name = datetime.datetime.now().strftime('%b') 
+    
+    month_number = list(calendar.month_abbr).index(month_name)
+    
+    # Filter income rocords based on user and month
+    user_incomes = Income.objects.filter(
+    user=request.user,
+    date_received__year=YEAR,
+    date_received__month=month_number
+    )
+    user_expenses = Expense.objects.filter(
+    user=request.user,
+    date_incurred__year=YEAR,
+    date_incurred__month=month_number
+    )
+    
+    transactions = sorted(
+        chain(user_incomes, user_expenses),
+        key=lambda obj: getattr(obj, 'date_received', None) or getattr(obj, 'date_incurred', None), reverse=True
+    )
+    
+    user_incomes_total = user_incomes.aggregate(total_amount=Sum('amount'))
+    user_incomes_total = user_incomes_total['total_amount'] or 0
+    user_incomes_total = format(user_incomes_total, '.2f') 
+    
+    user_expenses_total = user_expenses.aggregate(total_amount=Sum('amount'))
+    user_expenses_total = user_expenses_total['total_amount'] or 0
+    user_expenses_total = format(user_expenses_total, '.2f') 
+    
+    # Calculate overall total income and expenses
+    total_income = Income.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
+    total_expenses = Expense.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
+
+    total_income_amount = total_income['total_amount'] or 0
+    total_expenses_amount = total_expenses['total_amount'] or 0
+
+    # Calculate user balance
+    user_balance = total_income_amount - total_expenses_amount
+    user_balance = format(user_balance, '.2f')
+    
+    # Initialize monthly data arrays
+    income_data = [0.0] * 12
+    expense_data = [0.0] * 12
+    
+        # Fetch all income and expense records for the entire year
+    all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
+    all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
+
+    gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
+
+    # Group and aggregate income and expense data for the entire year
+    monthly_income = all_user_incomes.values('date_received__month').annotate(total=Sum('amount'))
+    monthly_expenses = all_user_expenses.values('date_incurred__month').annotate(total=Sum('amount'))
+
+    # Populate the monthly data arrays
+    for income in monthly_income:
+        income_data[income['date_received__month'] - 1] = float(income['total'])
+    for expense in monthly_expenses:
+        expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
         
-        month_number = list(calendar.month_abbr).index(month_name)
-        
-        # Filter income rocords based on user and month
-        user_incomes = Income.objects.filter(
+    # Filter income sources by month
+    income_sources = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-        )
-        user_expenses = Expense.objects.filter(
+    ).values('source__name').annotate(total=Sum('amount'))
+    
+    source_labels = [source['source__name'] for source in income_sources]
+    source_totals = [float(source['total']) for source in income_sources]
+    
+    categories = ExpenseCategory.objects.filter(user=request.user)
+    other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
+    
+    categories = list(categories)  # Convert queryset to list (if needed)
+    categories.sort(key=lambda category: category.name == "Other") 
+    
+    # Filter income sources by month
+    expense_categories = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
-        )
+    ).values('category__name').annotate(total=Sum('amount'))
+    
+    category_labels = [category['category__name'] for category in expense_categories]
+    category_totals = [float(category['total']) for category in expense_categories]
         
-        transactions = sorted(
-            chain(user_incomes, user_expenses),
-            key=lambda obj: getattr(obj, 'date_received', None) or getattr(obj, 'date_incurred', None), reverse=True
-        )
-        
-        user_incomes_total = user_incomes.aggregate(total_amount=Sum('amount'))
-        user_incomes_total = user_incomes_total['total_amount'] or 0
-        user_incomes_total = format(user_incomes_total, '.2f') 
-        
-        user_expenses_total = user_expenses.aggregate(total_amount=Sum('amount'))
-        user_expenses_total = user_expenses_total['total_amount'] or 0
-        user_expenses_total = format(user_expenses_total, '.2f') 
-        
-        # Calculate overall total income and expenses
-        total_income = Income.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
-        total_expenses = Expense.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
-
-        total_income_amount = total_income['total_amount'] or 0
-        total_expenses_amount = total_expenses['total_amount'] or 0
-
-        # Calculate user balance
-        user_balance = total_income_amount - total_expenses_amount
-        user_balance = format(user_balance, '.2f')
-        
-        # Initialize monthly data arrays
-        income_data = [0.0] * 12
-        expense_data = [0.0] * 12
-        
-         # Fetch all income and expense records for the entire year
-        all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
-        all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
-
-        gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
-
-        # Group and aggregate income and expense data for the entire year
-        monthly_income = all_user_incomes.values('date_received__month').annotate(total=Sum('amount'))
-        monthly_expenses = all_user_expenses.values('date_incurred__month').annotate(total=Sum('amount'))
-
-        # Populate the monthly data arrays
-        for income in monthly_income:
-            income_data[income['date_received__month'] - 1] = float(income['total'])
-        for expense in monthly_expenses:
-            expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
-            
-        # Filter income sources by month
-        income_sources = Income.objects.filter(
-            user=request.user,
-            date_received__year=YEAR,
-            date_received__month=month_number
-        ).values('source__name').annotate(total=Sum('amount'))
-        
-        source_labels = [source['source__name'] for source in income_sources]
-        source_totals = [float(source['total']) for source in income_sources]
-        
-        categories = ExpenseCategory.objects.filter(user=request.user)
-        other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
-        
-        categories = list(categories)  # Convert queryset to list (if needed)
-        categories.sort(key=lambda category: category.name == "Other") 
-        
-        # Filter income sources by month
-        expense_categories = Expense.objects.filter(
-            user=request.user,
-            date_incurred__year=YEAR,
-            date_incurred__month=month_number
-        ).values('category__name').annotate(total=Sum('amount'))
-        
-        category_labels = [category['category__name'] for category in expense_categories]
-        category_totals = [float(category['total']) for category in expense_categories]
-            
-        return render(request, "finance_tracker/index.html", {
-            'month': f"{calendar.month_name[month_number]} {YEAR}",
-            'total_income_amount': user_incomes_total,
-            'total_expenses_amount': user_expenses_total,
-            'user_balance': user_balance,
-            'month_name': month_name,
-            'transactions' : transactions,
-            'income_data': json.dumps(income_data),
-            'expense_data': json.dumps(expense_data),
-            'months': VALID_MONTHS,
-            'gender': gender,
-            'source_labels': json.dumps(source_labels),
-            'source_totals': json.dumps(source_totals),
-            'category_labels': json.dumps(category_labels),
-            'category_totals': json.dumps(category_totals),
-        })
-    else:
-        return render(request, "finance_tracker/index.html")
+    return render(request, "finance_tracker/index.html", {
+        'month': f"{calendar.month_name[month_number]} {YEAR}",
+        'total_income_amount': user_incomes_total,
+        'total_expenses_amount': user_expenses_total,
+        'user_balance': user_balance,
+        'month_name': month_name,
+        'transactions' : transactions,
+        'income_data': json.dumps(income_data),
+        'expense_data': json.dumps(expense_data),
+        'months': VALID_MONTHS,
+        'gender': gender,
+        'source_labels': json.dumps(source_labels),
+        'source_totals': json.dumps(source_totals),
+        'category_labels': json.dumps(category_labels),
+        'category_totals': json.dumps(category_totals),
+    })
 
 
 def not_logged_in(user):
@@ -392,3 +389,7 @@ def spendings(request, month_name=None):
         'category_labels': json.dumps(category_labels),
         'category_totals': json.dumps(category_totals),
         })
+
+@user_passes_test(not_logged_in)    
+def landing_page(request):
+    return render(request, 'finance_tracker/landing_page.html')

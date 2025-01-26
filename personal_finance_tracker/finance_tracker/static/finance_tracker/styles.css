@@ -139,7 +139,6 @@ li.active a {
 
 /* MAIN */
 main{
-    height: 78vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -165,6 +164,10 @@ main{
 }
 
 /* FOOTER */
+footer{
+    margin-top: auto;
+}
+
 footer hr {
     background-color: var(--secondary-background);
     border:none;
@@ -231,7 +234,7 @@ textarea#description-field{
 }
 
 .form-wrapper a{
-    color: var(--primary-color);
+    color: var(--secondary-color);
     text-decoration: none;
 }
 
@@ -551,4 +554,74 @@ button:hover {
 
 .desc-amt{
     text-align: right;
+}
+
+/* LANDINGPAGE */
+.functionality-wrap{
+    background-color: var(--secondary-background);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    border: none;
+    border-radius: 40px;
+    width: 800px;
+    margin: 0px auto;
+    box-shadow: -3px 8px 34px -9px rgb(0, 0, 0);
+}
+
+.functionality-wrap2{
+    align-items: center;
+    background-color: var(--secondary-background);
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    border: none;
+    border-radius: 40px;
+    width: 1000px;
+    margin: 0px auto;
+    box-shadow: -3px 8px 34px -9px rgb(0, 0, 0);
+}
+
+.functionality-wrap img, .functionalities img, .functionality-wrap2 img{
+    margin: 0px auto;
+    width: 600px;
+    height: auto;
+    border-radius: 30px;
+    transition: all 0.2s;
+}
+
+.functionality-wrap img:hover{
+    transform: scale(1.05);
+    box-shadow: -3px 8px 19px -9px rgba(0, 0, 0);
+}
+
+.text-highlight{
+    color: var(--secondary-color);
+    
+}
+
+.functionality-wrap p{
+    font-size: 20px;
+    padding-top: 20px;
+    margin: 0px auto;
+    text-align: center;
+    max-width: 600px;
+}
+
+.functionality-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+
+/* Styles for long page */
+.long-page {
+    height: 200vh;
+}
+
+/* Styles for short page */
+.short-page {
+    height: 78vh;
 }

@@ -16,7 +16,11 @@
 
 <body>
     <nav>
+        {% if user.is_authenticated %}
         <a href="{% url 'index' %}">
+        {% else %}
+        <a href="{% url 'landing_page' %}">
+        {% endif %}
             <div class="logo">
                 <img src="{% static 'finance_tracker/img/personal_finance_tracker_logo.png'%}"
                     alt="Personal Finance Tracker Logo">
@@ -28,7 +32,7 @@
             </div>
         </a>
         {% if user.is_authenticated %}
-            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' %}
+            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' and request.resolver_match.url_name != 'landing_page'%}
             <div class="calendar">
                 <ul class="horizontal-month-list">
                     {% for month in months %}
@@ -49,15 +53,20 @@
                 </a>
                 {% else %}
                 <a class="redirect" href="{% url 'login' %}">Login</a>
-                <a class="redirect" href="{% url 'register' %}">Register</a>
+                <a class="redirect" href="{% url 'register' %}">Sign up for free</a>
                 {% endif %}
             {% endif %}
         </div>
     </nav>
-    <main>
+    {% if request.resolver_match.url_name != 'landing_page' %}
+    <main class="short-page">
+    {% else %}
+    <main class="long-page"">
+         
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
-    <footer>
+            <footer>
         <hr>
         <p>&copy; Personal Finance Tracker 2025</p>
     </footer>
