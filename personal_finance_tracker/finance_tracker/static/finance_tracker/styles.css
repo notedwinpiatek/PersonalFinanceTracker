@@ -75,6 +75,11 @@ nav a{
     height: 64px;
 }
 
+#currencyImg {
+    width: 64px;
+    height: auto;
+}
+
 .calendar{
     display: flex;
     justify-content: center;  
@@ -612,8 +617,6 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
-
-
 
 
 /* Styles for long page */
