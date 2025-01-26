@@ -47,7 +47,7 @@
         <div class="userpanel">
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'select_gender' %}
                 {% if user.is_authenticated %}
-                <p>$</p>
+                <img id="currencyImg" src="{% static 'finance_tracker/img/exchange.png'%}">
                 <a href="{% url 'account_settings' %}">
                     <img id="userImg" src="{% static 'finance_tracker/img/'|add:gender|add:'.png'%}" alt="user icon">
                 </a>

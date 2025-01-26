@@ -75,6 +75,11 @@ nav a{
     height: 64px;
 }
 
+#currencyImg {
+    width: 64px;
+    height: auto;
+}
+
 .calendar{
     display: flex;
     justify-content: center;  
@@ -620,8 +625,6 @@ button:hover {
 .register-btn{
     margin-top: 0px;
 }
-
-
 
 /* Styles for long page */
 .long-page {
