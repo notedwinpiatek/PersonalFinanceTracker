@@ -52,8 +52,8 @@
                     <img id="userImg" src="{% static 'finance_tracker/img/'|add:gender|add:'.png'%}" alt="user icon">
                 </a>
                 {% else %}
-                <a class="redirect" href="{% url 'login' %}">Login</a>
-                <a class="redirect" href="{% url 'register' %}">Sign up for free</a>
+                <a class="redirect" href="{% url 'login' %}"><button class="button2">Login</button></a>
+                <a class="redirect" href="{% url 'register' %}"><button class="button2">Register</button></a>
                 {% endif %}
             {% endif %}
         </div>

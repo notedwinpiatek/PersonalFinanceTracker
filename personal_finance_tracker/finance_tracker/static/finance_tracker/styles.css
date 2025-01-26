@@ -284,7 +284,7 @@ h1 {
 }
 
 /* BTN */
-button {
+button, .button2 {
     font-weight: 600;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     background-size: 400% 400%;
@@ -297,6 +297,9 @@ button {
     font-size: 20px;
     border-radius: 10px;
     border:none;
+}
+.button2 {
+    width: 100px;
 }
 
 button:hover {
@@ -565,7 +568,7 @@ button:hover {
     border: none;
     border-radius: 40px;
     width: 800px;
-    margin: 0px auto;
+    margin: 0px auto 20px auto;
     box-shadow: -3px 8px 34px -9px rgb(0, 0, 0);
 }
 
@@ -574,11 +577,12 @@ button:hover {
     background-color: var(--secondary-background);
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     padding: 30px;
     border: none;
     border-radius: 40px;
     width: 1000px;
-    margin: 0px auto;
+    margin: 0px auto 20px auto;
     box-shadow: -3px 8px 34px -9px rgb(0, 0, 0);
 }
 
@@ -613,12 +617,15 @@ button:hover {
     justify-content: space-between;
 }
 
+.register-btn{
+    margin-top: 0px;
+}
 
 
 
 /* Styles for long page */
 .long-page {
-    height: 200vh;
+    height: 220vh;
 }
 
 /* Styles for short page */

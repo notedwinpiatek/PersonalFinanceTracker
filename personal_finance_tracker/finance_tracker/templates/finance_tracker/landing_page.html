@@ -12,31 +12,33 @@
     <div class="functionality-wrap">
         <h1>Take Control of <span class="text-highlight">Every</span> Cent</h1>
         <img src="{% static 'finance_tracker/img/dashboard.png' %}" alt="screen shot of the dashboard">
-    <p>
+    <p> 
         Take control of your finances with our intuitive personal finance tracker. Get a clear view of your balance,
-        income, and expenses, track monthly trends, and see where your money goes with spending and income breakdowns.
-        Simple, sleek, and designed to help you manage your money effortlessly!
+        income, and expenses. Simple, sleek, and designed to help you manage your money effortlessly!
     </p>
 </div>
-<br>
+
 <h1>Add Your Incomes And Expenses With <span class="text-highlight">Just A Few clicks</span></h1>
 <div class="functionality-container">
 
     <div class="functionality-wrap">
         <img src="{% static 'finance_tracker/img/income.png' %}" alt="screen shot of the income page">
-        <p>Tracking income history provides valuable insights into your earnings over time. It helps you identify reliable income sources, monitor growth, and plan better for future financial goals. By understanding your income trends, you can make informed decisions about saving, investing, and budgeting.</p>
+        <p>Tracking income history provides valuable insights into your earnings over time. By understanding your income trends, you can make informed decisions about saving, investing, and budgeting.</p>
     </div>
     
     <div class="functionality-wrap">
         <img src="{% static 'finance_tracker/img/expenses.png' %}" alt="screen shot of the expenses page">
-        <p>Monitoring expenses history is essential for identifying spending patterns and controlling your finances. It allows you to pinpoint areas where you can cut costs, manage budgets effectively, and avoid unnecessary expenses. By analyzing your expenses, you gain clarity on how to align your spending with your financial priorities.</p>
+        <p>Monitoring expenses history is essential for identifying spending patterns and controlling your finances.  By analyzing your expenses, you gain clarity on how to align your spending with your financial priorities.</p>
     </div>
 </div>
 <h1>Find The Right <span class="text-highlight">Balance</span> In Your Wallet</h1>
 <div class="functionality-wrap2">
     <img src="{% static 'finance_tracker/img/monthly_tracking.png' %}" alt="">
-    <p>Monthly tracking function provides a clear, year-long overview of your finances by comparing income and expenses month by month. This visual representation helps you identify trends, such as high-spending months or consistent savings periods. By analyzing these patterns, you can adjust your budgeting strategies, plan for future expenses, and maintain a balanced financial outlook throughout the year.</p>
+    <p>Monthly tracking function provides a clear, year-long overview of your finances by comparing income and expenses month by month. By analyzing these pattern you can plan for future expenses throughout the year.</p>
 </div>
+<h1>Ready To <span class="text-highlight">Track</span>?</h1>
+<a class="redirect" href="{% url 'register' %}"><button class="register-btn">Register</button></a>
+
     
 
 {% endblock %}
