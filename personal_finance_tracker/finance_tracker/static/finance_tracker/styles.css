@@ -332,6 +332,10 @@ button:hover {
     box-sizing: border-box;
 }
 
+.parent>*{
+    box-shadow: 3px 5px 9px rgba(0, 0, 0, 0.647);
+}
+
 .parent div, .parent a {
     border-radius: 15px;
     padding: 5px 30px;
@@ -628,7 +632,7 @@ button:hover {
 
 /* Styles for long page */
 .long-page {
-    height: 220vh;
+    height: 230vh;
 }
 
 /* Styles for short page */
