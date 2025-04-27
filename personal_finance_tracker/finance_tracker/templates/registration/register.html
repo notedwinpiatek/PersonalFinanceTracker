@@ -1,8 +1,10 @@
 {% extends "../base.html" %}
-
+{%load static%}
 {% block title %}Register - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+<script src="{% static 'finance_tracker/js/register.js' %}" defer></script>
+
 <div class="form-wrapper">
     <h1>Register</h1>
     <form method="post" class="auth">
@@ -20,9 +22,4 @@
     </form>
     <p>Already have an account? <a class="redirect" href="{% url 'login' %}">Login</a></p>
 </div>
-<script>   
-    document.querySelector('input[name="username"]').setAttribute('placeholder', 'Username');
-    document.querySelector('input[name="password1"]').setAttribute('placeholder', 'Password');
-    document.querySelector('input[name="password2"]').setAttribute('placeholder', 'Confirm Password');
-</script>
 {% endblock %}

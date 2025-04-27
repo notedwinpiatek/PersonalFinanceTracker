@@ -11,7 +11,6 @@
         rel="stylesheet">   
     <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
-    <script src="{% static 'finance_tracker/script.js' %}" defer></script>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
 </head>
 
@@ -63,14 +62,12 @@
     <main class="short-page">
     {% else %}
     <main class="long-page"">
-         
-        {% endif %}
+    {% endif %}
         {% block content %}{% endblock %}
     </main>
-            <footer>
+    <footer>
         <hr>
         <p>&copy; Personal Finance Tracker 2025</p>
     </footer>
 </body>
-
 </html>

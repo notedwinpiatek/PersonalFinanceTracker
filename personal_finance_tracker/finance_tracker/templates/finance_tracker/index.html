@@ -1,10 +1,12 @@
 {% extends "../base.html" %}
-
 {% block title %}Dashboard - Personal Finance Tracker{% endblock %}
+{%load static%}
 
 {% block content %}
     {%if user.is_authenticated%}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'finance_tracker/js/indexCharts.js' %}" defer></script>
+
     <div class="parent">
         <div class="balance">
             <h1 class="item-header">Available Balance</h1>
@@ -16,15 +18,15 @@
         </a>
         <div class="monthly-tracking">
             <h1 class="item-header">Monthly Tracking</h1>
-            <canvas id="monthlyChart" width="400" height="220"></canvas>
+            <canvas id="monthlyChart" width="400" height="220" data-income="{{income_data}}" data-expense="{{expense_data}}" data-months="{{months_labels}}"></canvas>
         </div>
         <a class="income-source" href="{% url 'sources'%}">
             <h1 class="item-header">Income Source</h1>
-            <canvas id="sourceChart" width="400" height="100"></canvas>
+            <canvas id="sourceChart" width="400" height="100" data-source-labels="{{source_labels}}" data-source-totals="{{source_totals}}"></canvas>
         </a>
         <a class="spendings"  href="{% url 'spendings'%}">
             <h1 class="item-header">Spendings</h1>
-            <canvas id="categoryChart" width="400" height="160"></canvas>
+            <canvas id="categoryChart" width="400" height="160" data-category-labels="{{category_labels}}" data-category-totals="{{category_totals}}"></canvas>
         </a>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
             <h1 class="item-header">Expenses</h1>
@@ -42,7 +44,7 @@
                     {% else %}
                     <p class="item-p">
                         <span class="history-expense"> - ${{ transaction.amount }}</span>
-                        <span>{{transaction.date_incurred.month}}.{{transaction.date_incurred.day}}.{{transaction.date_incurred.year}}  </span>
+                        <span>{{transaction.date_incurred.month}}.{{transaction.date_incurred.day}}.{{transaction.date_incurred.year}}</span>
                     </p>
                     {% endif %}
                 {% empty %}
@@ -51,266 +53,5 @@
             </div>
         </div>
     </div>
-    <script defer>
-        const ctx = document.getElementById('monthlyChart').getContext('2d');
-        const incomeData = {{ income_data|safe }};
-        const expenseData = {{ expense_data|safe }};
-        const months = {{ months|safe }};
-    
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: 'Max Income',
-                        data: incomeData,
-                        backgroundColor: '#06ff4c', 
-                        borderColor: 'rgba(0, 128, 0, 1)',
-                        borderWidth: 1,
-                        borderRadius: 7
-                    },
-                    {
-                        label: 'Max Expenses',
-                        data: expenseData, 
-                        backgroundColor: '#dc3f4d',
-                        borderColor: 'rgba(128, 0, 0, 1)',
-                        borderWidth: 1,
-                        borderRadius: 7
-                    },
-                ],
-            },
-            options: {
-                devicePixelRatio: 4,
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        align: 'center',
-                        labels: {
-                            usePointStyle: true,
-                            color: '#ffffff',
-                        },
-                    },
-                    title: {
-                        display: false,
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                return `$${context.raw.toLocaleString()}`;
-                            }
-                        }
-                    }
-                },
-                layout: {
-                    padding: {
-                        left: 5,
-                        right: 5,
-                        top: 25,
-                        bottom: 0
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff', 
-                        },
-                        grid: {
-                            display: false 
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#ffffff', 
-                        },
-                        grid: {
-                            display: false 
-                        }
-                    },
-                },
-            },
-            plugins: [],
-            devicePixelRatio: window.devicePixelRatio
-        });
-    </script>
-    <script defer>
-        const sourceCtx = document.getElementById('sourceChart').getContext('2d');
-        const sourceLabels = {{ source_labels|safe }};
-        const sourceTotals = {{ source_totals|safe }};
-
-        // Combine labels and totals into a single array of objects
-        const categories = sourceLabels.map((label, index) => ({
-            label,
-            value: sourceTotals[index],
-        }));
-
-        // Sort categories by value (highest to lowest)
-        categories.sort((a, b) => b.value - a.value);
-
-        // Limit to the top 8 categories
-        const maxCategories = 7;
-        const limitedCategories = categories.slice(0, maxCategories);
-
-        // Split sorted and limited categories back into labels and totals
-        const sortedAndLimitedLabels = limitedCategories.map(category => category.label);
-        const sortedAndLimitedTotals = limitedCategories.map(category => category.value);
-
-         // Dynamically adjust canvas width
-        const canvas = document.getElementById('sourceChart');
-        const minWidth = 100; // Minimum width for the canvas
-        const barWidth = 70; // Width per bar (adjust as needed)
-        const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
-        canvas.style.maxWidth = `${maxWidth}px`;
-    
-        const sourceChart = new Chart(sourceCtx, {
-            type: 'bar',
-            data: {
-                labels: sortedAndLimitedLabels,
-                datasets: [{
-                    label: 'Income Amount',
-                    data: sortedAndLimitedTotals,
-                    backgroundColor: [
-                        '#06ff4c',
-                        '#dc3f4d',
-                        '#fbbc16',
-                        '#45aaf2',
-                        '#8E1BE0',
-                        '#E0D12D',
-                        '#E12ECB',
-                        '#45DBE0'
-                    ],
-                    borderWidth: 0,
-                    borderRadius: 7,
-                    maxBarThickness: 60,
-                }]
-            },
-            options: {
-                devicePixelRatio: 4,
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                return `$${context.raw.toLocaleString()}`;
-                            }
-                        }
-                    }
-                },
-                layout: {
-                    padding: {
-                        bottom: 15
-                    },
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff',
-                        },
-                        grid: {
-                            display: false
-                        },
-                    },
-                    y: {
-                        border: {
-                            display: false,
-                        },
-                        beginAtZero: true,
-                        ticks: {
-                            display: false
-                        },
-                        grid: {
-                            display: false
-                        },
-                    },
-                },
-            }
-        });
-    </script>
-    <script defer>
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        const categoryLabels = {{ category_labels|safe }};
-        const categoryTotals = {{ category_totals|safe }};
-    
-        // Check if there is no data
-        const allZeros = categoryTotals.length === 0 || categoryTotals.every(total => total === 0);
-    
-        // Define chart data based on the presence of data
-        const chartData = allZeros
-            ? {
-                labels: ['No Data'], 
-                datasets: [{
-                    label: 'Expense Amount',
-                    data: [1],
-                    backgroundColor: ['#cccccc'],
-                    borderWidth: 0,
-                }]
-            }
-            : {
-                labels: categoryLabels,
-                datasets: [{
-                    label: 'Income Amount',
-                    data: categoryTotals,
-                    backgroundColor: [
-                        '#06ff4c',
-                        '#dc3f4d',
-                        '#fbbc16',
-                        '#45aaf2',
-                        '#8E1BE0',
-                        '#E0D12D',
-                        '#E12ECB',
-                        '#45DBE0'
-                    ],
-                    borderWidth: 0,
-                }]
-            };
-    
-        // Create the pie chart
-        const categoryChart = new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: chartData, 
-            options: {
-                devicePixelRatio: 4,
-                responsive: true,
-                layout: {
-                    padding: {
-                        bottom: 70, 
-                        left: 120, 
-                        right: 120
-                    },
-                },
-                plugins: {
-                    legend: {
-                        display: true, 
-                        position: 'left',
-                        labels: {
-                            color: '#fff',
-                            font: {
-                                size: 16,
-                            },
-                        },
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(2);
-                                return allZeros
-                                    ? label 
-                                    : `${label}: $${value.toLocaleString()} (${percentage}%)`;
-                            },
-                        },
-                    },
-                },
-                cutout: '50%',
-            },
-        });
-    </script>
     {% endif %}
 {% endblock %}

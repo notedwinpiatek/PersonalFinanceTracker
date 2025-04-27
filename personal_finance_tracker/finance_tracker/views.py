@@ -120,6 +120,7 @@ def index(request, month_name=None):
         'transactions' : transactions,
         'income_data': json.dumps(income_data),
         'expense_data': json.dumps(expense_data),
+        'months_labels': json.dumps(VALID_MONTHS),
         'months': VALID_MONTHS,
         'gender': gender,
         'source_labels': json.dumps(source_labels),

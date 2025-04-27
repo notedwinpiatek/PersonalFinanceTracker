@@ -2,13 +2,7 @@
 {% load static %}
 
 {% block title %}Personal Finance Tracker{% endblock %}
-
-
-
-
 {% block content %}
-
-    
     <div class="functionality-wrap">
         <h1>Take Control of <span class="text-highlight">Every</span> Cent</h1>
         <img src="{% static 'finance_tracker/img/dashboard.png' %}" alt="screen shot of the dashboard">
@@ -17,7 +11,6 @@
         income, and expenses. Simple, sleek, and designed to help you manage your money effortlessly!
     </p>
 </div>
-
 <h1>Add Your Incomes And Expenses With <span class="text-highlight">Just A Few clicks</span></h1>
 <div class="functionality-container">
 
@@ -38,7 +31,4 @@
 </div>
 <h1>Ready To <span class="text-highlight">Track</span>?</h1>
 <a class="redirect" href="{% url 'register' %}"><button class="register-btn">Register</button></a>
-
-    
-
 {% endblock %}
