@@ -577,7 +577,7 @@ button:hover {
     border: none;
     border-radius: 40px;
     width: 800px;
-    margin: 0px auto 20px auto;
+    /* margin: 0px auto 20px auto; */
     box-shadow: -3px 8px 34px -9px rgb(0, 0, 0);
 }
 
@@ -623,18 +623,20 @@ button:hover {
 
 .functionality-container{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 30px;
 }
 
 .register-btn{
     margin-top: 0px;
 }
 
-/* Styles for long page */
-.long-page {
-    height: 230vh;
+.cta {
+    margin-bottom: 15px;
 }
-
+.long-page {
+    align-items: center;
+}
 /* Styles for short page */
 .short-page {
     height: 78vh;
