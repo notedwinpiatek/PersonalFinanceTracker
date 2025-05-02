@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
+    <title>{% block title %}Error - Personal Finance Tracker{% endblock %}</title>
+    <script src="{% static 'finance_tracker/script.js' %}" defer></script>
+    <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
+</head>
+
+<body>
+    <nav>
+        <a href="{% url 'landing_page' %}">
+            <div class="logo">
+                <img src="{% static 'finance_tracker/img/personal_finance_tracker_logo.png'%}"
+                    alt="Personal Finance Tracker Logo">
+                <p>
+                    Personal Finance
+                    <br>
+                    Tracker
+                </p>
+            </div>
+        </a>
+        <div class="userpanel">
+            <a class="redirect" href="{% url 'login' %}"><button class="button2">Login</button></a>
+                <a class="redirect" href="{% url 'register' %}"><button class="button2">Register</button></a>
+        </div>
+    </nav>
+
+    <main class="short-page">
+        {% block content %}
+        <h1>Error Page</h1>
+        <p>Something went wrong. Please try again later or go back to the homepage.</p>
+        <a href="{% url 'landing_page' %}">Go back to homepage</a>
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; Personal Finance Tracker 2025</p>
+    </footer>
+</body>
+
+</html>

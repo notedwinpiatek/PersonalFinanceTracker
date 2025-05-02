@@ -13,6 +13,7 @@
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
     <script src="{% static 'finance_tracker/script.js' %}" defer></script>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
+    {% comment %} {%block style%}{%endblock%} {% endcomment %}
 </head>
 
 <body>
@@ -62,7 +63,7 @@
     {% if request.resolver_match.url_name != 'landing_page' %}
     <main class="short-page">
     {% else %}
-    <main class="long-page"">
+    <main class="long-page">
          
         {% endif %}
         {% block content %}{% endblock %}
