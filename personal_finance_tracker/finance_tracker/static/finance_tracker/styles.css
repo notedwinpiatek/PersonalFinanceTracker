@@ -263,7 +263,7 @@ textarea#description-field{
     padding: 0px 50px 20px 50px;   
     width: 400px; 
 }
-.floating-block p {
+.floating-block p, .link-text {
     color: var(--primary-color);
 }
 
@@ -640,4 +640,9 @@ button:hover {
 /* Styles for short page */
 .short-page {
     height: 78vh;
+}
+.error-image {
+    margin: 0 auto;
+    width: 10rem;
+    height: auto;
 }

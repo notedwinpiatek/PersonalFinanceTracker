@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error 500 Page not found - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+
+<img src="{% static 'finance_tracker/img/server_warning.png'%}" alt="error" class="error-image">
+<h1> Page not found (500) </h1>
+<p>Sorry but the page you are trying to reach does not exist</p>
+<a  href="{% url 'login' %}"class="link-text">Go back</a>
+
+{% endblock %}
