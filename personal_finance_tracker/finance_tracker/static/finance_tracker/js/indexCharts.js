@@ -151,7 +151,7 @@ const sourceData = sortedAndLimitedTotals.length
         datasets: [{
             label: 'Income Amount',
             data: [6, 4, 3, 2],
-            backgroundColor: ['#cccccc', '#aaaaaa', '#999999'],
+            backgroundColor: ['#cccccc', '#aaaaaa', '#999999', '#666666'],
             borderWidth: 0,
             borderRadius: 7,
             maxBarThickness: 60,

@@ -733,3 +733,32 @@ button:hover {
         grid-area: auto;
     }
 }
+
+
+/* Currency modal */
+#currencySelector{
+    position: fixed;
+    border: 0.2rem solid var(--secondary-color);
+    background-color: var(--secondary-background);
+    border-radius: 1rem;
+    z-index: 1;
+    padding: 1rem 1.5rem;
+    margin-top: 20vh;
+    left: 89%;
+    box-shadow: 0.2rem 0.3rem 0.5rem rgba(0, 0, 0, 0.647);
+}
+
+.currency-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+    transition: all 0.1s;
+}
+
+.currency-image {
+    width: 0.3rem;
+}
+
+.currency-image:hover {
+    transform: scale(1.06);
+}

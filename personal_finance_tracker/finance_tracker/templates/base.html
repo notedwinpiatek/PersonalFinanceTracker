@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">   
     <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
+    <script src="{% static 'finance_tracker/js/index.js' %}" defer></script>
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
 </head>
@@ -48,6 +49,14 @@
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'select_gender' %}
                 {% if user.is_authenticated %}
                 <img id="currencyImg" src="{% static 'finance_tracker/img/exchange.png'%}">
+                <div id="currencySelector" style="display: none">
+                    <div class="currency-wrapper">
+                        <div class="currency-option" data-currency="PLN"><img src="{% static 'finance_tracker/img/zloty.png' %}" alt="PLN" class="currency-image"></div>
+                        <div class="currency-option" data-currency="USD"><img src="{% static 'finance_tracker/img/dollar.png' %}" alt="USD" class="currency-image"></div>
+                        <div class="currency-option" data-currency="GBP"><img src="{% static 'finance_tracker/img/pound.png' %}" alt="GBP" class="currency-image"></div>
+                        <div class="currency-option" data-currency="EUR"><img src="{% static 'finance_tracker/img/euro.png' %}" alt="EUR" class="currency-image"></div>
+                    </div>
+                </div>
                 <a href="{% url 'account_settings' %}">
                     <img id="userImg" src="{% static 'finance_tracker/img/'|add:gender|add:'.png'%}" alt="user icon">
                 </a>
