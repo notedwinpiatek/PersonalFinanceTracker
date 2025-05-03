@@ -1,11 +1,8 @@
 const montlyChartEl = document.getElementById('monthlyChart');
 const ctx = montlyChartEl.getContext('2d');
 const incomeData = JSON.parse(montlyChartEl.getAttribute("data-income"));
-console.log(incomeData)
 const expenseData = JSON.parse(montlyChartEl.getAttribute("data-expense"));
-console.log(expenseData)
 const months = JSON.parse(montlyChartEl.getAttribute("data-months"));
-console.log(months)
 
 const chart = new Chart(ctx, {
     type: 'bar',
@@ -64,7 +61,10 @@ const chart = new Chart(ctx, {
         scales: {
             x: {
                 ticks: {
-                    color: '#ffffff', 
+                    color: '#ffffff',
+                    font: {
+                        size: 14
+                    } 
                 },
                 grid: {
                     display: false 
@@ -72,8 +72,14 @@ const chart = new Chart(ctx, {
             },
             y: {
                 beginAtZero: true,
+                suggestedMin: 0, 
+                suggestedMax: 500,
                 ticks: {
-                    color: '#ffffff', 
+                    font: {
+                        size: 14
+                    },
+                    color: '#ffffff',
+                    callback: (value) => `$${value.toLocaleString()}` 
                 },
                 grid: {
                     display: false 
@@ -87,8 +93,8 @@ const chart = new Chart(ctx, {
 
 const sourceEl = document.getElementById('sourceChart');
 const sourceCtx = sourceEl.getContext('2d');
-const sourceLabels = JSON.parse(sourceEl.getAttribute("data-source-labels"));
-const sourceTotals = JSON.parse(sourceEl.getAttribute("data-source-totals"));
+const sourceLabels = JSON.parse(sourceEl.getAttribute("data-source-labels") || '[]');
+const sourceTotals = JSON.parse(sourceEl.getAttribute("data-source-totals") || '[]');
 
 // Combine labels and totals into a single array of objects
 const categories = sourceLabels.map((label, index) => ({
@@ -111,12 +117,16 @@ const sortedAndLimitedTotals = limitedCategories.map(category => category.value)
 const canvas = document.getElementById('sourceChart');
 const minWidth = 100; // Minimum width for the canvas
 const barWidth = 70; // Width per bar 
-const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
+let maxWidth;
+if (sourceLabels.length){
+    maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
+} else {
+    maxWidth = Math.max(minWidth, 4 * (barWidth + 10));
+}
 canvas.style.maxWidth = `${maxWidth}px`;
 
-const sourceChart = new Chart(sourceCtx, {
-    type: 'bar',
-    data: {
+const sourceData = sortedAndLimitedTotals.length
+    ? {
         labels:  sortedAndLimitedLabels,
         datasets: [{
             label: 'Income Amount',
@@ -135,7 +145,22 @@ const sourceChart = new Chart(sourceCtx, {
             borderRadius: 7,
             maxBarThickness: 60,
         }]
-    },
+    } 
+    : {
+        labels:  ["No data 1", "No Data 2", "No Data 3", "No Data 4"],
+        datasets: [{
+            label: 'Income Amount',
+            data: [6, 4, 3, 2],
+            backgroundColor: ['#cccccc', '#aaaaaa', '#999999'],
+            borderWidth: 0,
+            borderRadius: 7,
+            maxBarThickness: 60,
+        }]
+    }
+
+const sourceChart = new Chart(sourceCtx, {
+    type: 'bar',
+    data: sourceData,
     options: {
         devicePixelRatio: 4,
         maintainAspectRatio: false,
@@ -161,6 +186,9 @@ const sourceChart = new Chart(sourceCtx, {
             x: {
                 ticks: {
                     color: '#ffffff',
+                    font: {
+                        size: 14
+                    } 
                 },
                 grid: {
                     display: false
