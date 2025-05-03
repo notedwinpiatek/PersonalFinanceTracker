@@ -32,6 +32,7 @@ const chart = new Chart(ctx, {
     },
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
             legend: {
@@ -57,8 +58,7 @@ const chart = new Chart(ctx, {
             padding: {
                 left: 5,
                 right: 5,
-                top: 25,
-                bottom: 0
+                bottom: 70
             }
         },
         scales: {
@@ -107,17 +107,17 @@ const limitedCategories = categories.slice(0, maxCategories);
 const sortedAndLimitedLabels = limitedCategories.map(category => category.label);
 const sortedAndLimitedTotals = limitedCategories.map(category => category.value);
 
-    // Dynamically adjust canvas width
+// Dynamically adjust canvas width
 const canvas = document.getElementById('sourceChart');
 const minWidth = 100; // Minimum width for the canvas
-const barWidth = 70; // Width per bar (adjust as needed)
+const barWidth = 70; // Width per bar 
 const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
 canvas.style.maxWidth = `${maxWidth}px`;
 
 const sourceChart = new Chart(sourceCtx, {
     type: 'bar',
     data: {
-        labels: sortedAndLimitedLabels,
+        labels:  sortedAndLimitedLabels,
         datasets: [{
             label: 'Income Amount',
             data: sortedAndLimitedTotals,
@@ -138,6 +138,7 @@ const sourceChart = new Chart(sourceCtx, {
     },
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
             legend: {
@@ -149,11 +150,11 @@ const sourceChart = new Chart(sourceCtx, {
                         return `$${context.raw.toLocaleString()}`;
                     }
                 }
-            }
+            },
         },
         layout: {
             padding: {
-                bottom: 15
+                bottom: 70
             },
         },
         scales: {
@@ -219,18 +220,21 @@ const chartData = allZeros
         }]
     };
 
+const mobileScreen = window.innerWidth < 700;
+
 // Create the pie chart
 const categoryChart = new Chart(categoryCtx, {
     type: 'doughnut',
     data: chartData, 
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         layout: {
             padding: {
                 bottom: 70, 
-                left: 120, 
-                right: 120
+                left: mobileScreen? 70: 100, 
+                right: mobileScreen? 70: 100
             },
         },
         plugins: {

@@ -16,17 +16,17 @@
             <h1 class="item-header">Income</h1>
             <p class="item-p">${{total_income_amount}}</p>
         </a>
-        <div class="monthly-tracking">
+        <div class="monthly-tracking chartblock">
             <h1 class="item-header">Monthly Tracking</h1>
-            <canvas id="monthlyChart" width="400" height="220" data-income="{{income_data}}" data-expense="{{expense_data}}" data-months="{{months_labels}}"></canvas>
+            <canvas id="monthlyChart" data-income="{{income_data}}" data-expense="{{expense_data}}" data-months="{{months_labels}}"></canvas>
         </div>
-        <a class="income-source" href="{% url 'sources'%}">
+        <a class="income-source chartblock" href="{% url 'sources'%}">
             <h1 class="item-header">Income Source</h1>
-            <canvas id="sourceChart" width="400" height="100" data-source-labels="{{source_labels}}" data-source-totals="{{source_totals}}"></canvas>
+            <canvas id="sourceChart" data-source-labels="{{source_labels}}" data-source-totals="{{source_totals}}"></canvas>
         </a>
-        <a class="spendings"  href="{% url 'spendings'%}">
+        <a class="spendings chartblock" href="{% url 'spendings'%}">
             <h1 class="item-header">Spendings</h1>
-            <canvas id="categoryChart" width="400" height="160" data-category-labels="{{category_labels}}" data-category-totals="{{category_totals}}"></canvas>
+            <canvas id="categoryChart" data-category-labels="{{category_labels}}" data-category-totals="{{category_totals}}"></canvas>
         </a>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
             <h1 class="item-header">Expenses</h1>
