@@ -1,36 +1,45 @@
 {% extends "../base.html" %}
-{%load static%}
+{% load static %}
+
 {% block title %}Login - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'finance_tracker/css/login.css' %}">
 <script src="{% static 'finance_tracker/js/login.js' %}" defer></script>
 
-<div class="form-wrapper">
-        <h1>Login</h1>
-        <form method="post" class="auth">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.username }}
-                {% if form.username.errors %}
-                <div class="error-messages">
-                    {% for error in form.username.errors %}
-                        <p class="error-text">{{ error }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.password }}
-                {% if form.password.errors %}
-                <div class="error-messages">
-                    {% for error in form.password.errors %}
-                        <p class="error-text">{{ error }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a class="redirect" href="{% url 'register' %}">Register</a></p>
+{% if form.non_field_errors %}
+<div class="error-wrapper" id="errorWrapper">
+    <img src="{% static "finance_tracker/img/alert.png" %}" >
+    <div class="error-heading">
+        <h3>Something Went Wrong!</h3>
+        <div class="error-text">
+            {% for error in form.non_field_errors %}
+            <p class="error-text">{{ error }}</p>
+            {% endfor %}
+        </div>
     </div>
+</div>
+{% endif %}
+
+<div class="form-wrapper">
+    
+    <h1>Login</h1>
+    <form method="post" class="auth">
+        {% csrf_token %}    
+        
+        
+        
+        <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+            {{ form.username }}
+        </div>
+
+        <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+            {{ form.password }}
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a class="redirect" href="{% url 'register' %}">Register</a></p>
+</div>
 {% endblock %}
