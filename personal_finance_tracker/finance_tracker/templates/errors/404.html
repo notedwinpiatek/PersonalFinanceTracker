@@ -1,0 +1,12 @@
+{% extends "../base_errors.html" %}
+{% load static %}
+{% block title %}404 Page not found - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+
+<img src="{% static 'finance_tracker/img/404_error.png'%}" alt="error" class="error-image">
+<h1> Page not found (404) </h1>
+<p>Sorry but the page you are trying to reach does not exist.</p>
+<a  href="{% url 'login' %}"class="link-text">Go back</a>
+
+{% endblock %}

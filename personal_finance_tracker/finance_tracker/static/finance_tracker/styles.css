@@ -279,7 +279,7 @@ textarea#description-field{
     padding: 0px 3.1rem 1.25rem 3.1rem;   
     width: 25rem; 
 }
-.floating-block p {
+.floating-block p, .link-text {
     color: var(--primary-color);
 }
 
@@ -637,7 +637,8 @@ button:hover {
 
 .functionality-container{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 30px;
 }
 
 .register-btn{
@@ -645,13 +646,16 @@ button:hover {
 }
 
 .long-page {
-    height: 230vh;
+    align-items: center;
 }
+.error-image {
+    margin: 0 auto;
+    width: 10rem;
+    height: auto;
 
 .short-page {
     height: 78vh;
 }
-
 
 @media(max-width: 1800px){
     :root{

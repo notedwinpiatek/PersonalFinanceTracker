@@ -1,0 +1,12 @@
+{% extends "../base_errors.html" %}
+{% load static %}
+{% block title %}400 Bad Request - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+
+<img src="{% static 'finance_tracker/img/bad_request.png'%}" alt="error" class="error-image">
+<h1> Bad Request(400) </h1>
+<p>Something went wrong with your request. Please try again.</p>
+<a  href="{% url 'login' %}"class="link-text">Go back</a>
+
+{% endblock %}
