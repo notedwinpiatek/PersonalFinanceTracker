@@ -646,7 +646,7 @@ button:hover {
 
 .error-wrapper {
     position: fixed; 
-    top: 20vh;
+    top: 18vh;
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
