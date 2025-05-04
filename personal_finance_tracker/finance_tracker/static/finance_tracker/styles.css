@@ -657,6 +657,64 @@ button:hover {
     height: 78vh;
 }
 
+.error-wrapper {
+    position: fixed; 
+    top: 18vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: none;
+    padding: 1rem;
+    width: 20rem;
+    height: auto;
+    background-color: var(--secondary-background);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3); 
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.error-wrapper img{
+    /* margin: auto; */
+    width: auto;
+    height: 3rem;
+}
+.error-heading h3{
+    margin: 0;
+    padding-bottom: 0;
+}
+
+#closeError {
+    position: absolute;
+    top: 0.1rem;
+    right: 0.3rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 9999;
+    transition: color 0.2s ease;
+}
+
+#closeError:hover {
+    color: var(--red);
+}
+
+.error-input {
+    border: 2px solid var(--red) !important;
+    background-color: var(--text-color);
+}
+
+.error-input:focus {
+    outline: none;
+    border-color: darkred; 
+}
+
 @media(max-width: 1800px){
     :root{
         font-size: 13px;
