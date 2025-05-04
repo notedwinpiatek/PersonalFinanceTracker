@@ -37,7 +37,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     gap: 3rem;
-    height: 98vh;
+    height: 97vh;
 }
 
 *::-webkit-scrollbar {
@@ -61,6 +61,11 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    padding: 0.5rem 0rem;
+    background-color: var(--background-color);
 }
 
 nav a{
@@ -78,6 +83,7 @@ nav a{
 .logo p{
     font-size: 1.5rem;
     text-align: left;
+    margin: 0px;
 }
 
 .logo img {
@@ -155,7 +161,6 @@ li.active a {
 /* MAIN */
 main{
     flex: 1;
-    max-height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -182,13 +187,6 @@ main{
 }
 
 /* FOOTER */
-/* footer{
-    position: fixed;
-    bottom: 1rem;
-    height: 3rem;
-    width: 100%;
-} */
-
 footer hr {
     background-color: var(--secondary-background);
     border:none;
@@ -321,6 +319,7 @@ button, .button2 {
 }
 .button2 {
     width: 6.25rem;
+    margin: 0;
 }
 
 button:hover {
@@ -526,7 +525,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     gap: 10%;
-    height: 83%;
+    height: 95%;
     overflow: hidden;
 }
 
@@ -646,15 +645,19 @@ button:hover {
 }
 
 .long-page {
+    justify-content: start;
     align-items: center;
+    flex: 1;
 }
+
 .error-image {
     margin: 0 auto;
     width: 10rem;
     height: auto;
 }
 .short-page {
-    height: 78vh;
+    max-height: 78vh;
+    height: 70vh;
 }
 
 .error-wrapper {
@@ -678,7 +681,6 @@ button:hover {
 }
 
 .error-wrapper img{
-    /* margin: auto; */
     width: auto;
     height: 3rem;
 }
@@ -723,7 +725,7 @@ button:hover {
         max-width: none;
     }
     .parent > * {
-        padding: 0px 0.9rem !important;
+        padding: 0px 1rem !important;
     }
 }
 @media(max-width: 1200px){
@@ -803,7 +805,7 @@ button:hover {
     border: 0.2rem solid var(--secondary-color);
     background-color: var(--secondary-background);
     border-radius: 1rem;
-    z-index: 1;
+    z-index: 9999999;
     padding: 1rem 1.5rem;
     margin-top: 20vh;
     left: 89%;

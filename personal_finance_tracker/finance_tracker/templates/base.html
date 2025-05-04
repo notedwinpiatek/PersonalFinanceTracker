@@ -10,10 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">   
     <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
+    {%if request.resolver_match.url_name != 'landing_page'%}
     <script src="{% static 'finance_tracker/js/index.js' %}" defer></script>
+    {%endif%}
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
-    {% comment %} {%block style%}{%endblock%} {% endcomment %}
 </head>
 
 <body>
