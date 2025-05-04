@@ -73,7 +73,7 @@ def convert_dataset_currency(dataset, currency):
     converted = []
     for entry in dataset:
         rate = get_exchange_rate(entry.currency, currency)
-        converted_amount = entry.amount * rate-2
+        converted_amount = entry.amount * rate
         entry.converted_amount = format(converted_amount, '.2f')
         converted.append(entry)
     return converted
@@ -305,7 +305,7 @@ def expenses(request, month_name=None):
     ).order_by('-date_incurred', '-time_incurred')
     
     converted_expenses = convert_dataset_currency(user_expenses, selected_currency)
-
+    
     return render(request, "finance_tracker/expenses.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
         'expenses': converted_expenses,

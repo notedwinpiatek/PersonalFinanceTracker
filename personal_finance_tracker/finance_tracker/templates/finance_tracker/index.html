@@ -47,12 +47,12 @@
                         <span class="history-income">
                              + {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ transaction.converted_amount }}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
                         </span>
-                        <span>{{transaction.date_received.month}}.{{transaction.date_received.day}}{{transaction.date_received.year}}</span>
+                        <span>{{transaction.date_received.month}}.{{transaction.date_received.day}}.{{transaction.date_received.year}}</span>
                     </p>
                     {% else %}
                     <p class="item-p">
                         <span class="history-expense">
-                             -  {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ transaction.converted_amount }}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                             - {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ transaction.converted_amount }}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
                             </span>
                         <span>{{transaction.date_incurred.month}}.{{transaction.date_incurred.day}}.{{transaction.date_incurred.year}}</span>
                     </p>

@@ -44,8 +44,7 @@
                 </span>
                 <span class='desc-amt'>
                     <strong>
-                        -{%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ expense.converted_amount }}
-                        {%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                        -{%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{expense.converted_amount}}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
                     </strong><br>
                     {{ expense.description }}
                 </span>
