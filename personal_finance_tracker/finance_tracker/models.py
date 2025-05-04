@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
+CURRENCY_CHOICES = [
+    ("USD", "US Dollar"),
+    ("PLN", "Polish Złoty"),
+    ("EUR", "Euro"),
+    ("GBP", "British Pound"),
+]
+
 class IncomeSource(models.Model):
     name = models.CharField(max_length=25)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,6 +34,7 @@ class Income(models.Model):
     amount = models.DecimalField(
         max_digits=10, decimal_places=2,
         validators=[MinValueValidator(0.01)], null=False, blank=False)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="USD")
     source = models.ForeignKey(IncomeSource, on_delete=models.CASCADE, null=False)
     date_received = models.DateField(null=False, blank=False)
     time_received = models.TimeField(null=False, blank=False)
@@ -40,6 +48,7 @@ class Expense(models.Model):
     amount = models.DecimalField(
         max_digits=10, decimal_places=2,
         validators=[MinValueValidator(0.01)], null=False, blank=False)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="USD")
     category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE, null=False)
     date_incurred = models.DateField(null=False, blank=False)
     time_incurred = models.TimeField(null=False, blank=False)

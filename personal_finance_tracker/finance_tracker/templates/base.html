@@ -49,7 +49,7 @@
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'select_gender' %}
                 {% if user.is_authenticated %}
                 <img id="currencyImg" src="{% static 'finance_tracker/img/exchange.png'%}">
-                <div id="currencySelector" style="display: none">
+                <div id="currencySelector" data-url="{% url 'set_currency' %}" style="display: none">
                     <div class="currency-wrapper">
                         <div class="currency-option" data-currency="PLN"><img src="{% static 'finance_tracker/img/zloty.png' %}" alt="PLN" class="currency-image"></div>
                         <div class="currency-option" data-currency="USD"><img src="{% static 'finance_tracker/img/dollar.png' %}" alt="USD" class="currency-image"></div>

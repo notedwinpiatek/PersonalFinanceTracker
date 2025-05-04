@@ -10,15 +10,19 @@
     <div class="parent">
         <div class="balance">
             <h1 class="item-header">Available Balance</h1>
-            <p class="item-p">${{user_balance}}</p>
+            <p class="item-p">
+                {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{user_balance}}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+            </p>
         </div>
         <a class="income" href="{% url 'income' month_name=month_name %}">
             <h1 class="item-header">Income</h1>
-            <p class="item-p">${{total_income_amount}}</p>
+            <p class="item-p">
+                {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{total_income_amount}}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+            </p>
         </a>
         <div class="monthly-tracking chartblock">
             <h1 class="item-header">Monthly Tracking</h1>
-            <canvas id="monthlyChart" data-income="{{income_data}}" data-expense="{{expense_data}}" data-months="{{months_labels}}"></canvas>
+            <canvas id="monthlyChart" data-income="{{income_data}}" data-expense="{{expense_data}}" data-months="{{months_labels}}" data-currency-sign="{{currency_sign}}"></canvas>
         </div>
         <a class="income-source chartblock" href="{% url 'sources'%}">
             <h1 class="item-header">Income Source</h1>
@@ -30,7 +34,9 @@
         </a>
         <a class="expenses" href="{% url 'expenses' month_name=month_name %}">
             <h1 class="item-header">Expenses</h1>
-            <p class="item-p">${{total_expenses_amount}}</p>
+            <p class="item-p">
+                {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{total_expenses_amount}}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+            </p>
         </a>
         <div class="history" id="history-item">
             <h1 class="item-header">History</h1>
@@ -38,12 +44,16 @@
                 {% for transaction in transactions %}
                     {% if transaction.date_received %}
                     <p class="item-p">
-                        <span class="history-income"> + ${{ transaction.amount }}</span>
-                        <span>{{transaction.date_received.month}}.{{transaction.date_received.day}}.{{transaction.date_received.year}}</span>
+                        <span class="history-income">
+                             + {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ transaction.converted_amount }}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                        </span>
+                        <span>{{transaction.date_received.month}}.{{transaction.date_received.day}}{{transaction.date_received.year}}</span>
                     </p>
                     {% else %}
                     <p class="item-p">
-                        <span class="history-expense"> - ${{ transaction.amount }}</span>
+                        <span class="history-expense">
+                             -  {%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ transaction.converted_amount }}{%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                            </span>
                         <span>{{transaction.date_incurred.month}}.{{transaction.date_incurred.day}}.{{transaction.date_incurred.year}}</span>
                     </p>
                     {% endif %}

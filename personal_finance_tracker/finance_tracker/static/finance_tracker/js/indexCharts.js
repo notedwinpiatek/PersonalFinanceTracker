@@ -3,6 +3,12 @@ const ctx = montlyChartEl.getContext('2d');
 const incomeData = JSON.parse(montlyChartEl.getAttribute("data-income"));
 const expenseData = JSON.parse(montlyChartEl.getAttribute("data-expense"));
 const months = JSON.parse(montlyChartEl.getAttribute("data-months"));
+const currencySign = montlyChartEl.getAttribute("data-currency-sign");
+
+const formatCurrency = (value) => {
+    const formatted = value.toLocaleString();
+    return currencySign === "zł" ? `${formatted}${currencySign}` : `${currencySign}${formatted}`;
+};
 
 const chart = new Chart(ctx, {
     type: 'bar',
@@ -46,7 +52,7 @@ const chart = new Chart(ctx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return `$${context.raw.toLocaleString()}`;
+                        return formatCurrency(context.raw);
                     }
                 }
             }
@@ -79,7 +85,7 @@ const chart = new Chart(ctx, {
                         size: 14
                     },
                     color: '#ffffff',
-                    callback: (value) => `$${value.toLocaleString()}` 
+                    callback: (value) => formatCurrency(value)
                 },
                 grid: {
                     display: false 
@@ -172,7 +178,7 @@ const sourceChart = new Chart(sourceCtx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return `$${context.raw.toLocaleString()}`;
+                        return formatCurrency(context.raw)
                     }
                 }
             },
@@ -285,7 +291,7 @@ const categoryChart = new Chart(categoryCtx, {
                         const percentage = ((value / total) * 100).toFixed(2);
                         return allZeros
                             ? label 
-                            : `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                            : `${label}: ${formatCurrency(value)} (${percentage}%)`;
                     },
                 },
             },
