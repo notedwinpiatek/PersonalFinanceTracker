@@ -1,5 +1,5 @@
 {% extends "../base.html" %}
-{%load static%}
+{% load static %}
 {% block title %}Register - Personal Finance Tracker{% endblock %}
 
 {% block content %}
@@ -7,17 +7,29 @@
 
 <div class="form-wrapper">
     <h1>Register</h1>
-    <form method="post" class="auth">
+    <form method="post" class="auth" novalidate>
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.username }}
+
+        {% for field in form %}
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
+            {{ field }}
+
+            {% if field.errors %}
+            <div class="error-wrapper">
+                <img src="{% static 'finance_tracker/img/alert.png' %}">
+                <div class="error-heading">
+                    <h3>Something Went Wrong!</h3>
+                    <div class="error-text">
+                        {% for error in field.errors %}
+                        <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        <div class="form-group">
-            {{ form.password1 }}
-        </div>
-        <div class="form-group">
-            {{ form.password2 }}
-        </div>
+        {% endfor %}
+
         <button type="submit">Register</button>
     </form>
     <p>Already have an account? <a class="redirect" href="{% url 'login' %}">Login</a></p>

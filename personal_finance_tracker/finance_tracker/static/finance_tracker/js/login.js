@@ -1,10 +1,10 @@
 const errorTexts = document.querySelectorAll('.error-text');
-const errorWrapper = document.getElementById('errorWrapper');
+const errorWrappers = document.querySelectorAll('.error-wrapper');
 
 document.querySelector('input[name="username"]').setAttribute('placeholder', 'Username');
 document.querySelector('input[name="password"]').setAttribute('placeholder', 'Password');
 
-// Show wrapper only if there's any relevant error
+// Show wrappers only if there's a relevant error
 let hasVisibleError = false;
 
 errorTexts.forEach(el => {
@@ -24,18 +24,18 @@ errorTexts.forEach(el => {
         el.innerText = 'This field cannot be empty.';
         hasVisibleError = true;
     }
-
-    el.classList.add('custom-error-animation');
 });
 
-// Display error wrapper only if there's something to show
+// Show all error wrappers if any error exists
 if (hasVisibleError) {
-    errorWrapper.style.display = 'flex';
+    errorWrappers.forEach(wrapper => wrapper.style.display = 'flex');
 }
 
-
+// Hide all error wrappers if user clicks outside of any of them
 document.addEventListener('click', function (event) {
-    if (!errorWrapper.contains(event.target)) {
-        errorWrapper.style.display = 'none';
-    }
+    errorWrappers.forEach(wrapper => {
+        if (!wrapper.contains(event.target)) {
+            wrapper.style.display = 'none';
+        }
+    });
 });
