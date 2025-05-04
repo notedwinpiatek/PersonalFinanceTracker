@@ -1,18 +1,36 @@
 {% extends "../base.html" %}
+{% load static %}
 
 {% block title %}Income - Personal Finance Tracker{% endblock %}
 
 {% block content %}
+<script src="{% static 'finance_tracker/js/incomeForm.js' %}" defer></script>
+
 <div class="container">
     <div class="form-wrapper form-block">
         <h1>New Income</h1>
-        <form method="post">
+        <form method="post" class="auth" novalidate>
             {% csrf_token %}
-            {{ form.as_p }}
+
+            {% for field in form %}
+            <p class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <!-- Add a class to highlight the field in JS -->
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            document.getElementById("{{ field.id_for_label }}").classList.add("error-input");
+                        });
+                    </script>
+                {% endif %}
+            </p>
+            {% endfor %}
+
             <button class="add-transaction-btn" type="submit">Add Income</button>
         </form>
     </div>
-    
+
     <div class="transaction-block">
         <h1>Income History</h1>
         <ul class="transaction-list">
@@ -24,7 +42,7 @@
                 </span>
                 <span class='desc-amt'>
                     <strong>+${{ income.amount }}</strong><br>
-                    {{income.description}}
+                    {{ income.description }}
                 </span>
             </li>
             {% empty %}

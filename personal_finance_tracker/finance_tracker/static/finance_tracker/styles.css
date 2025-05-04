@@ -689,5 +689,15 @@ button:hover {
 }
 
 #closeError:hover {
-    color: red;
+    color: var(--red);
+}
+
+.error-input {
+    border: 2px solid var(--red) !important;
+    background-color: var(--text-color);
+}
+
+.error-input:focus {
+    outline: none;
+    border-color: darkred; 
 }
