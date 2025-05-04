@@ -22,6 +22,20 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from functools import lru_cache
 
+VALID_MONTHS = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+]
+
+CURRENCIES = {
+    "USD": "$",
+    "GBP": "£",
+    "EUR": "€",
+    "PLN": "zł"
+}
+
+YEAR = datetime.datetime.now().year
+
 @require_POST
 @csrf_exempt
 def set_currency(request): 
@@ -46,7 +60,6 @@ def get_exchange_rate(base, target):
     else:
         return Decimal("1.0")
 
-
 def convert_queryset_total(queryset, target_currency):
     total = Decimal("0.0")
     for obj in queryset:
@@ -64,21 +77,7 @@ def convert_dataset_currency(dataset, currency):
         entry.converted_amount = format(converted_amount, '.2f')
         converted.append(entry)
     return converted
- 
 
-VALID_MONTHS = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-]
-
-CURRENCIES = {
-    "USD": "$",
-    "GBP": "£",
-    "EUR": "€",
-    "PLN": "zł"
-}
-
-YEAR = datetime.datetime.now().year
 
 @login_required
 def index(request, month_name=None):
@@ -166,7 +165,6 @@ def index(request, month_name=None):
     source_labels = list(income_source_totals.keys())
     source_totals = [float(amount) for amount in income_source_totals.values()]
     
-    
     categories = ExpenseCategory.objects.filter(user=request.user)
     other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
     
@@ -214,7 +212,6 @@ def index(request, month_name=None):
 
 def not_logged_in(user):
     return not user.is_authenticated
-
 
 @user_passes_test(not_logged_in, login_url='/finance_tracker', redirect_field_name=None)  
 def register(request):
@@ -274,7 +271,6 @@ def income(request, month_name=None):
         'currency_sign': currency_sign
     })
 
-
 @login_required
 def expenses(request, month_name=None):
     selected_currency = request.session.get("current_currency", "USD")
@@ -319,7 +315,6 @@ def expenses(request, month_name=None):
         'gender': gender,
         'currency_sign': currency_sign
     })
-
 
 @login_required
 def account_settings(request):

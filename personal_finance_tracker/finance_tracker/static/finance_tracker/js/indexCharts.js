@@ -4,11 +4,7 @@ const incomeData = JSON.parse(montlyChartEl.getAttribute("data-income"));
 const expenseData = JSON.parse(montlyChartEl.getAttribute("data-expense"));
 const months = JSON.parse(montlyChartEl.getAttribute("data-months"));
 const currencySign = montlyChartEl.getAttribute("data-currency-sign");
-
-const formatCurrency = (value) => {
-    const formatted = value.toLocaleString();
-    return currencySign === "zł" ? `${formatted}${currencySign}` : `${currencySign}${formatted}`;
-};
+import { formatCurrency } from "./utils.js";
 
 const chart = new Chart(ctx, {
     type: 'bar',
@@ -52,7 +48,7 @@ const chart = new Chart(ctx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return formatCurrency(context.raw);
+                        return formatCurrency(context.raw, currencySign);
                     }
                 }
             }
@@ -85,7 +81,7 @@ const chart = new Chart(ctx, {
                         size: 14
                     },
                     color: '#ffffff',
-                    callback: (value) => formatCurrency(value)
+                    callback: (value) => formatCurrency(value, currencySign)
                 },
                 grid: {
                     display: false 
@@ -178,7 +174,7 @@ const sourceChart = new Chart(sourceCtx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return formatCurrency(context.raw)
+                        return formatCurrency(context.raw, currencySign)
                     }
                 }
             },
@@ -291,7 +287,7 @@ const categoryChart = new Chart(categoryCtx, {
                         const percentage = ((value / total) * 100).toFixed(2);
                         return allZeros
                             ? label 
-                            : `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                            : `${label}: ${formatCurrency(value, currencySign)} (${percentage}%)`;
                     },
                 },
             },
