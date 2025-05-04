@@ -3,7 +3,6 @@
 {% block title %}Account Settings - Personal Finance Tracker{% endblock %}
 
 {% block content %}
-
 <div class="floating-block">
     <h1>Hi {{user.username}}!</h1>
     <a href="{% url 'password_change' %}">
@@ -14,5 +13,4 @@
         <button type="submit">Logout</button>
     </form>
 </div>
-
 {% endblock %}

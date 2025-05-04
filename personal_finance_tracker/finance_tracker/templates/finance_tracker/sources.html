@@ -1,9 +1,12 @@
 {% extends "../base.html" %}
 
 {% block title %}Sources - Personal Finance Tracker{% endblock %}
+{%load static%}
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="{% static 'finance_tracker/js/sourceChart.js'%}" type="module" defer></script>
+
 <div class="charts-container">
     <div class="items-container">
         <h1>Your Income Sources</h1>
@@ -28,79 +31,6 @@
         {% endfor %}
         </ul>
     </div>
-    <canvas id="sourcesChart" width="300" height="300"></canvas>
+    <canvas id="sourceChart" width="300" height="300" data-source-labels="{{source_labels}}" data-source-totals="{{source_totals}}" data-currency-sign="{{currency_sign}}"></canvas>
 </div>
-<script defer>
-    const sourceCtx = document.getElementById('sourcesChart').getContext('2d');
-    const sourceLabels = {{ source_labels|safe }};
-    const sourceTotals = {{ source_totals|safe }};
-
-    // Check if there is no data
-    const allZeros = sourceTotals.length === 0 || sourceTotals.every(total => total === 0);
-
-    // Define chart data based on the presence of data
-    const chartData = allZeros
-        ? {
-            labels: ['No Data Available'], 
-            datasets: [{
-                label: 'Income Amount',
-                data: [1],
-                backgroundColor: ['#cccccc'],
-                borderWidth: 0,
-            }]
-        }
-        : {
-            labels: sourceLabels,
-            datasets: [{
-                label: 'Income Amount',
-                data: sourceTotals,
-                backgroundColor: [
-                    '#06ff4c',
-                    '#dc3f4d',
-                    '#fbbc16',
-                    '#45aaf2',
-                    '#8E1BE0',
-                    '#E0D12D',
-                    '#E12ECB',
-                    '#45DBE0'
-                ],
-                borderWidth: 0,
-            }]
-        };
-
-    // Create the pie chart
-    const sourceChart = new Chart(sourceCtx, {
-        type: 'pie',
-        data: chartData, 
-        options: {
-            devicePixelRatio: 4,
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true, 
-                    position: 'bottom',
-                    labels: {
-                        color: '#fff',
-                        font: {
-                            size: 14,
-                        },
-                    },
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(2);
-                            return allZeros
-                                ? label 
-                                : `${label}: $${value.toLocaleString()} (${percentage}%)`;
-                        },
-                    },
-                },
-            },
-        },
-    });
-</script>
 {% endblock %}

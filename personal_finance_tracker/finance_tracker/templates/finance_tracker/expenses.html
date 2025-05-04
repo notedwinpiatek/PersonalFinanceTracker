@@ -23,7 +23,10 @@
                     {{ expense.date_incurred }} {{ expense.time_incurred }}
                 </span>
                 <span class='desc-amt'>
-                    <strong>-${{ expense.amount }}</strong><br>
+                    <strong>
+                        -{%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{ expense.converted_amount }}
+                        {%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                    </strong><br>
                     {{ expense.description }}
                 </span>
             </li>
@@ -32,6 +35,5 @@
             {% endfor %}
         </ul>        
     </div>
-    
 </div>
 {% endblock %}

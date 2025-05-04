@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<script src="{% static 'finance_tracker/js/genderSelection.js' %}" defer></script>
 <h1>Select Your Gender</h1>
 <form method="post" id="gender-form">
     {% csrf_token %}
@@ -20,12 +21,4 @@
         </label>
     </div>
 </form>
-<script>
-    document.querySelectorAll('.gender-options label').forEach(label => {
-        label.addEventListener('click', () => {
-            // Submit the form when an image is clicked
-            document.getElementById('gender-form').submit();
-        });
-    });
-</script>
 {% endblock %}

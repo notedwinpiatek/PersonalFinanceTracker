@@ -1,3 +1,4 @@
+from collections import defaultdict
 import datetime
 import json
 import calendar
@@ -14,16 +15,75 @@ from itertools import chain
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib import messages
+import requests
+from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from functools import lru_cache
 
 VALID_MONTHS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
+CURRENCIES = {
+    "USD": "$",
+    "GBP": "£",
+    "EUR": "€",
+    "PLN": "zł"
+}
+
 YEAR = datetime.datetime.now().year
+
+@require_POST
+@csrf_exempt
+def set_currency(request): 
+    if request.method == "POST":
+        data = json.loads(request.body)
+        currency = data.get("currency")
+        if currency:
+            request.session["current_currency"] = currency
+            # optionally: set currency symbol here too
+            return JsonResponse({"status": "success"})
+    return JsonResponse({"status": "error"}, status=400)
+
+@lru_cache(maxsize=None)
+def get_exchange_rate(base, target):
+    if base == target:
+        return Decimal("1.0")
+    url = f"https://api.frankfurter.dev/v1/latest?base={base}&symbols={target}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return Decimal(str(data["rates"][target]))
+    else:
+        return Decimal("1.0")
+
+def convert_queryset_total(queryset, target_currency):
+    total = Decimal("0.0")
+    for obj in queryset:
+        source_currency = getattr(obj, 'currency')
+        rate = get_exchange_rate(source_currency, target_currency)
+        amount = getattr(obj, 'amount')
+        total += Decimal(amount) * rate
+    return total
+
+def convert_dataset_currency(dataset, currency):
+    converted = []
+    for entry in dataset:
+        rate = get_exchange_rate(entry.currency, currency)
+        converted_amount = entry.amount * rate-2
+        entry.converted_amount = format(converted_amount, '.2f')
+        converted.append(entry)
+    return converted
+
 
 @login_required
 def index(request, month_name=None):
+    selected_currency = request.session.get("current_currency", "USD")
+    currency_sign = CURRENCIES[selected_currency]
+    
     if not month_name:
         month_name = datetime.datetime.now().strftime('%b') 
     
@@ -41,25 +101,24 @@ def index(request, month_name=None):
     date_incurred__month=month_number
     )
     
+    converted_incomes = convert_dataset_currency(user_incomes, selected_currency)
+    converted_expenses = convert_dataset_currency(user_expenses, selected_currency)
+    
     transactions = sorted(
-        chain(user_incomes, user_expenses),
+        chain(converted_incomes, converted_expenses),
         key=lambda obj: getattr(obj, 'date_received', None) or getattr(obj, 'date_incurred', None), reverse=True
     )
     
-    user_incomes_total = user_incomes.aggregate(total_amount=Sum('amount'))
-    user_incomes_total = user_incomes_total['total_amount'] or 0
-    user_incomes_total = format(user_incomes_total, '.2f') 
+    user_incomes_total = convert_queryset_total(user_incomes, selected_currency)
+    user_incomes_total = format(user_incomes_total, '.2f')
     
-    user_expenses_total = user_expenses.aggregate(total_amount=Sum('amount'))
-    user_expenses_total = user_expenses_total['total_amount'] or 0
+    user_expenses_total = convert_queryset_total(user_expenses, selected_currency)
     user_expenses_total = format(user_expenses_total, '.2f') 
     
     # Calculate overall total income and expenses
-    total_income = Income.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
-    total_expenses = Expense.objects.filter(user=request.user).aggregate(total_amount=Sum('amount'))
-
-    total_income_amount = total_income['total_amount'] or 0
-    total_expenses_amount = total_expenses['total_amount'] or 0
+    total_income_amount = convert_queryset_total(Income.objects.filter(user=request.user), selected_currency)
+    
+    total_expenses_amount = convert_queryset_total(Expense.objects.filter(user=request.user), selected_currency)
 
     # Calculate user balance
     user_balance = total_income_amount - total_expenses_amount
@@ -69,31 +128,42 @@ def index(request, month_name=None):
     income_data = [0.0] * 12
     expense_data = [0.0] * 12
     
-        # Fetch all income and expense records for the entire year
+    # Fetch all income and expense records for the entire year
     all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
     all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
 
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
 
     # Group and aggregate income and expense data for the entire year
-    monthly_income = all_user_incomes.values('date_received__month').annotate(total=Sum('amount'))
-    monthly_expenses = all_user_expenses.values('date_incurred__month').annotate(total=Sum('amount'))
+    monthly_income = all_user_incomes.values('date_received__month', 'currency').annotate(total=Sum('amount'))
+    monthly_expenses = all_user_expenses.values('date_incurred__month', 'currency').annotate(total=Sum('amount'))
 
     # Populate the monthly data arrays
     for income in monthly_income:
-        income_data[income['date_received__month'] - 1] = float(income['total'])
+        rate = get_exchange_rate(income['currency'], selected_currency)
+        income_data[income['date_received__month'] - 1] = float(Decimal(income['total']) * rate)
+    
     for expense in monthly_expenses:
-        expense_data[expense['date_incurred__month'] - 1] = float(expense['total'])
+        rate = get_exchange_rate(expense['currency'], selected_currency)
+        expense_data[expense['date_incurred__month'] - 1] = float(Decimal(expense['total']) * rate)
         
     # Filter income sources by month
-    income_sources = Income.objects.filter(
+    income_source_totals = defaultdict(Decimal)
+    
+    raw_income_sources = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-    ).values('source__name').annotate(total=Sum('amount'))
+    ).select_related('source')
     
-    source_labels = [source['source__name'] for source in income_sources]
-    source_totals = [float(source['total']) for source in income_sources]
+    for income in raw_income_sources:
+        rate = get_exchange_rate(income.currency, selected_currency)
+        converted = Decimal(income.amount) * rate
+        source_name = income.source.name
+        income_source_totals[source_name] += converted
+
+    source_labels = list(income_source_totals.keys())
+    source_totals = [float(amount) for amount in income_source_totals.values()]
     
     categories = ExpenseCategory.objects.filter(user=request.user)
     other_category = ExpenseCategory.objects.get(user=request.user, name='Other')
@@ -102,14 +172,23 @@ def index(request, month_name=None):
     categories.sort(key=lambda category: category.name == "Other") 
     
     # Filter income sources by month
-    expense_categories = Expense.objects.filter(
+    expense_category_totals = defaultdict(Decimal)
+    
+    raw_expense_categories = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
-    ).values('category__name').annotate(total=Sum('amount'))
-    
-    category_labels = [category['category__name'] for category in expense_categories]
-    category_totals = [float(category['total']) for category in expense_categories]
+    ).select_related('category')
+
+    for expense in raw_expense_categories:
+        rate = get_exchange_rate(expense.currency, selected_currency)
+        converted = Decimal(expense.amount) * rate
+        category_name = expense.category.name
+        expense_category_totals[category_name] += converted
+
+    category_labels = list(expense_category_totals.keys())
+    category_totals = [float(amount) for amount in expense_category_totals.values()]
+
         
     return render(request, "finance_tracker/index.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
@@ -120,18 +199,19 @@ def index(request, month_name=None):
         'transactions' : transactions,
         'income_data': json.dumps(income_data),
         'expense_data': json.dumps(expense_data),
+        'months_labels': json.dumps(VALID_MONTHS),
         'months': VALID_MONTHS,
         'gender': gender,
         'source_labels': json.dumps(source_labels),
         'source_totals': json.dumps(source_totals),
         'category_labels': json.dumps(category_labels),
         'category_totals': json.dumps(category_totals),
+        'currency_sign': currency_sign
     })
 
 
 def not_logged_in(user):
     return not user.is_authenticated
-
 
 @user_passes_test(not_logged_in, login_url='/finance_tracker', redirect_field_name=None)  
 def register(request):
@@ -145,9 +225,11 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-
 @login_required
 def income(request, month_name=None):
+    selected_currency = request.session.get("current_currency", "USD")
+    currency_sign = CURRENCIES[selected_currency]
+    
     # Handle the current month if no month name is provided
     if not month_name:
         month_name = datetime.datetime.now().strftime('%b') 
@@ -164,6 +246,8 @@ def income(request, month_name=None):
         date_received__month=month_number
     ).order_by('-date_received', '-time_received')
 
+    converted_incomes = convert_dataset_currency(user_incomes, selected_currency)
+    
     # Handle the form submission
     if request.method == 'POST':
         form = IncomeForm(request.POST, user=request.user)
@@ -171,6 +255,7 @@ def income(request, month_name=None):
             # Save the form instance but assign the logged-in user
             income = form.save(commit=False)
             income.user = request.user
+            income.currency = selected_currency
             income.save()
             return redirect('income', month_name=month_name)
     else:
@@ -178,16 +263,19 @@ def income(request, month_name=None):
 
     return render(request, "finance_tracker/income.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
-        'incomes': user_incomes,
+        'incomes': converted_incomes,
         'form': form,
         'months': VALID_MONTHS,
         'month_name': month_name,
-        'gender': gender
+        'gender': gender,
+        'currency_sign': currency_sign
     })
-
 
 @login_required
 def expenses(request, month_name=None):
+    selected_currency = request.session.get("current_currency", "USD")
+    currency_sign = CURRENCIES[selected_currency]
+    
     # Handle the current month if no month name is provided
     if not month_name:
         month_name = datetime.datetime.now().strftime('%b') 
@@ -201,9 +289,9 @@ def expenses(request, month_name=None):
     if request.method == "POST":
         form = ExpenseForm(request.POST, user=request.user)
         if form.is_valid():
-            
             expense = form.save(commit=False)
             expense.user = request.user  
+            expense.currency = selected_currency
             expense.save()
             return redirect('expenses', month_name=calendar.month_abbr[month_number])  
     else:
@@ -215,16 +303,18 @@ def expenses(request, month_name=None):
         date_incurred__year=YEAR,
         date_incurred__month=month_number
     ).order_by('-date_incurred', '-time_incurred')
+    
+    converted_expenses = convert_dataset_currency(user_expenses, selected_currency)
 
     return render(request, "finance_tracker/expenses.html", {
         'month': f"{calendar.month_name[month_number]} {YEAR}",
-        'expenses': user_expenses,
+        'expenses': converted_expenses,
         'form': form,
         'months': VALID_MONTHS,
         'month_name': month_name,
-        'gender': gender
+        'gender': gender,
+        'currency_sign': currency_sign
     })
-
 
 @login_required
 def account_settings(request):
@@ -273,6 +363,9 @@ def select_gender(request):
 
 @login_required
 def sources(request, month_name=None):
+    selected_currency = request.session.get("current_currency", "USD")
+    currency_sign = CURRENCIES[selected_currency]
+    
     # Handle the current month if no month name is provided
     if not month_name:
         month_name = datetime.datetime.now().strftime('%b') 
@@ -289,14 +382,22 @@ def sources(request, month_name=None):
     sources.sort(key=lambda source: source.name == "Other") 
     
     # Filter income sources by month
-    income_sources = Income.objects.filter(
+    income_source_totals = defaultdict(Decimal)
+    
+    raw_income_sources = Income.objects.filter(
         user=request.user,
         date_received__year=YEAR,
         date_received__month=month_number
-    ).values('source__name').annotate(total=Sum('amount'))
+    ).select_related('source')
     
-    source_labels = [source['source__name'] for source in income_sources]
-    source_totals = [float(source['total']) for source in income_sources]
+    for income in raw_income_sources:
+        rate = get_exchange_rate(income.currency, selected_currency)
+        converted = Decimal(income.amount) * rate
+        source_name = income.source.name
+        income_source_totals[source_name] += converted
+
+    source_labels = list(income_source_totals.keys())
+    source_totals = [float(amount) for amount in income_source_totals.values()]
     
     if request.method == 'POST':
         form = IncomeSourceForm(request.POST)
@@ -328,10 +429,14 @@ def sources(request, month_name=None):
         'months': VALID_MONTHS,
         'source_labels': json.dumps(source_labels),
         'source_totals': json.dumps(source_totals),
+        'currency_sign': currency_sign
         })
     
 @login_required
 def spendings(request, month_name=None):
+    selected_currency = request.session.get("current_currency", "USD")
+    currency_sign = CURRENCIES[selected_currency]
+    
     # Handle the current month if no month name is provided
     if not month_name:
         month_name = datetime.datetime.now().strftime('%b') 
@@ -348,14 +453,22 @@ def spendings(request, month_name=None):
     categories.sort(key=lambda category: category.name == "Other") 
     
     # Filter income sources by month
-    expense_categories = Expense.objects.filter(
+    expense_category_totals = defaultdict(Decimal)
+    
+    raw_expense_categories = Expense.objects.filter(
         user=request.user,
         date_incurred__year=YEAR,
         date_incurred__month=month_number
-    ).values('category__name').annotate(total=Sum('amount'))
-    
-    category_labels = [category['category__name'] for category in expense_categories]
-    category_totals = [float(category['total']) for category in expense_categories]
+    ).select_related('category')
+
+    for expense in raw_expense_categories:
+        rate = get_exchange_rate(expense.currency, selected_currency)
+        converted = Decimal(expense.amount) * rate
+        category_name = expense.category.name
+        expense_category_totals[category_name] += converted
+
+    category_labels = list(expense_category_totals.keys())
+    category_totals = [float(amount) for amount in expense_category_totals.values()]
     
     
     if request.method == 'POST':
@@ -388,6 +501,7 @@ def spendings(request, month_name=None):
         'months': VALID_MONTHS,
         'category_labels': json.dumps(category_labels),
         'category_totals': json.dumps(category_totals),
+        'currency_sign': currency_sign
         })
 
 @user_passes_test(not_logged_in)    
