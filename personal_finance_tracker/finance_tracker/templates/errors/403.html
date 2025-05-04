@@ -1,0 +1,12 @@
+{% extends "../base_errors.html" %}
+{% load static %}
+{% block title %}403 Permission denied - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+
+<img src="{% static 'finance_tracker/img/permision denied.png'%}" alt="error" class="error-image">
+<h1> Permission denied(403) </h1>
+<p>You do not have permission to access this page.</p>
+<a  href="{% url 'login' %}"class="link-text">Go back</a>
+
+{% endblock %}

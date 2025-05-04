@@ -1,11 +1,10 @@
 const montlyChartEl = document.getElementById('monthlyChart');
 const ctx = montlyChartEl.getContext('2d');
 const incomeData = JSON.parse(montlyChartEl.getAttribute("data-income"));
-console.log(incomeData)
 const expenseData = JSON.parse(montlyChartEl.getAttribute("data-expense"));
-console.log(expenseData)
 const months = JSON.parse(montlyChartEl.getAttribute("data-months"));
-console.log(months)
+const currencySign = montlyChartEl.getAttribute("data-currency-sign");
+import { formatCurrency } from "./utils.js";
 
 const chart = new Chart(ctx, {
     type: 'bar',
@@ -32,6 +31,7 @@ const chart = new Chart(ctx, {
     },
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
             legend: {
@@ -48,7 +48,7 @@ const chart = new Chart(ctx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return `$${context.raw.toLocaleString()}`;
+                        return formatCurrency(context.raw, currencySign);
                     }
                 }
             }
@@ -57,14 +57,16 @@ const chart = new Chart(ctx, {
             padding: {
                 left: 5,
                 right: 5,
-                top: 25,
-                bottom: 0
+                bottom: 70
             }
         },
         scales: {
             x: {
                 ticks: {
-                    color: '#ffffff', 
+                    color: '#ffffff',
+                    font: {
+                        size: 14
+                    } 
                 },
                 grid: {
                     display: false 
@@ -72,8 +74,14 @@ const chart = new Chart(ctx, {
             },
             y: {
                 beginAtZero: true,
+                suggestedMin: 0, 
+                suggestedMax: 500,
                 ticks: {
-                    color: '#ffffff', 
+                    font: {
+                        size: 14
+                    },
+                    color: '#ffffff',
+                    callback: (value) => formatCurrency(value, currencySign)
                 },
                 grid: {
                     display: false 
@@ -87,8 +95,8 @@ const chart = new Chart(ctx, {
 
 const sourceEl = document.getElementById('sourceChart');
 const sourceCtx = sourceEl.getContext('2d');
-const sourceLabels = JSON.parse(sourceEl.getAttribute("data-source-labels"));
-const sourceTotals = JSON.parse(sourceEl.getAttribute("data-source-totals"));
+const sourceLabels = JSON.parse(sourceEl.getAttribute("data-source-labels") || '[]');
+const sourceTotals = JSON.parse(sourceEl.getAttribute("data-source-totals") || '[]');
 
 // Combine labels and totals into a single array of objects
 const categories = sourceLabels.map((label, index) => ({
@@ -107,17 +115,21 @@ const limitedCategories = categories.slice(0, maxCategories);
 const sortedAndLimitedLabels = limitedCategories.map(category => category.label);
 const sortedAndLimitedTotals = limitedCategories.map(category => category.value);
 
-    // Dynamically adjust canvas width
+// Dynamically adjust canvas width
 const canvas = document.getElementById('sourceChart');
 const minWidth = 100; // Minimum width for the canvas
-const barWidth = 70; // Width per bar (adjust as needed)
-const maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
+const barWidth = 70; // Width per bar 
+let maxWidth;
+if (sourceLabels.length){
+    maxWidth = Math.max(minWidth, sourceLabels.length * (barWidth + 10));
+} else {
+    maxWidth = Math.max(minWidth, 4 * (barWidth + 10));
+}
 canvas.style.maxWidth = `${maxWidth}px`;
 
-const sourceChart = new Chart(sourceCtx, {
-    type: 'bar',
-    data: {
-        labels: sortedAndLimitedLabels,
+const sourceData = sortedAndLimitedTotals.length
+    ? {
+        labels:  sortedAndLimitedLabels,
         datasets: [{
             label: 'Income Amount',
             data: sortedAndLimitedTotals,
@@ -135,9 +147,25 @@ const sourceChart = new Chart(sourceCtx, {
             borderRadius: 7,
             maxBarThickness: 60,
         }]
-    },
+    } 
+    : {
+        labels:  ["No data 1", "No Data 2", "No Data 3", "No Data 4"],
+        datasets: [{
+            label: 'Income Amount',
+            data: [6, 4, 3, 2],
+            backgroundColor: ['#cccccc', '#aaaaaa', '#999999', '#666666'],
+            borderWidth: 0,
+            borderRadius: 7,
+            maxBarThickness: 60,
+        }]
+    }
+
+const sourceChart = new Chart(sourceCtx, {
+    type: 'bar',
+    data: sourceData,
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
             legend: {
@@ -146,20 +174,23 @@ const sourceChart = new Chart(sourceCtx, {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        return `$${context.raw.toLocaleString()}`;
+                        return formatCurrency(context.raw, currencySign)
                     }
                 }
-            }
+            },
         },
         layout: {
             padding: {
-                bottom: 15
+                bottom: 70
             },
         },
         scales: {
             x: {
                 ticks: {
                     color: '#ffffff',
+                    font: {
+                        size: 14
+                    } 
                 },
                 grid: {
                     display: false
@@ -219,18 +250,21 @@ const chartData = allZeros
         }]
     };
 
+const mobileScreen = window.innerWidth < 700;
+
 // Create the pie chart
 const categoryChart = new Chart(categoryCtx, {
     type: 'doughnut',
     data: chartData, 
     options: {
         devicePixelRatio: 4,
+        maintainAspectRatio: false,
         responsive: true,
         layout: {
             padding: {
                 bottom: 70, 
-                left: 120, 
-                right: 120
+                left: mobileScreen? 70: 100, 
+                right: mobileScreen? 70: 100
             },
         },
         plugins: {
@@ -253,7 +287,7 @@ const categoryChart = new Chart(categoryCtx, {
                         const percentage = ((value / total) * 100).toFixed(2);
                         return allZeros
                             ? label 
-                            : `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                            : `${label}: ${formatCurrency(value, currencySign)} (${percentage}%)`;
                     },
                 },
             },

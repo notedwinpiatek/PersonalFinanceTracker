@@ -41,8 +41,11 @@
                     {{ income.date_received }} {{ income.time_received }}
                 </span>
                 <span class='desc-amt'>
-                    <strong>+${{ income.amount }}</strong><br>
-                    {{ income.description }}
+                    <strong>
+                        +{%if currency_sign != 'zł' %}{{currency_sign}}{%endif%}{{income.converted_amount}}
+                        {%if currency_sign == 'zł' %}{{currency_sign}}{%endif%}
+                    </strong><br>
+                    {{income.description}}
                 </span>
             </li>
             {% empty %}

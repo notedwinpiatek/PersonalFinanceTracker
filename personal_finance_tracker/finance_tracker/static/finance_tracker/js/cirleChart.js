@@ -1,4 +1,7 @@
-export function cirleChart(labelNames, totals, context){
+import { formatCurrency } from "./utils.js";
+
+
+export function cirleChart(labelNames, totals, context, currencySign){
     // Check if there is no data
     const allZeros = totals.length === 0 || totals.every(total => total === 0);
     
@@ -59,7 +62,7 @@ export function cirleChart(labelNames, totals, context){
                             const percentage = ((value / total) * 100).toFixed(2);
                             return allZeros
                                 ? label 
-                                : `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                                : `${label}: ${formatCurrency(value.toLocaleString(), currencySign)} (${percentage}%)`;
                         },
                     },
                 },
