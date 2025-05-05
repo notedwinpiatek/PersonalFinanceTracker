@@ -36,7 +36,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 3rem;
     height: 97vh;
 }
 
@@ -202,7 +201,6 @@ footer p {
 
 /* FORMS */
 .form-wrapper {
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -220,12 +218,6 @@ button[type="submit"], input, .form-control, textarea {
     border-radius: 0.6rem;
     border:none;
     width: 17.5rem;
-}
-
-.form-block {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
 }
 
 .form-control {
@@ -526,11 +518,13 @@ button:hover {
     justify-content: center;
     gap: 10%;
     height: 95%;
+    max-height: 65vh;
     overflow: hidden;
 }
 
 .transaction-block {
-    height: 87%;
+    height: 55vh;
+    max-height: 500px;
     overflow-y: scroll;
     overflow-x: hidden;
     position: relative;
@@ -538,7 +532,8 @@ button:hover {
 
 .form-block{
     background-color: var(--secondary-background);
-    padding: 0px 2.5rem 1rem;
+    padding: 1rem 2rem;
+    margin: 0px;
     border-radius: 1rem;
 }
 
@@ -656,7 +651,7 @@ button:hover {
     height: auto;
 }
 .short-page {
-    max-height: 78vh;
+    max-height: 70vh;
     height: 70vh;
 }
 
