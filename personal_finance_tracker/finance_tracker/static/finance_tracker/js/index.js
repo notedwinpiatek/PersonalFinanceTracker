@@ -1,10 +1,13 @@
 const currency = document.getElementById("currencyImg");
 const currencySelect = document.getElementById("currencySelector");
 const currencyOptions= document.querySelectorAll(".currency-option");
+const trigger = document.getElementById("yearTrigger");
+const yearScroll = document.getElementById("yearScroll");
 const url = currencySelect.dataset.url;
 
 window.addEventListener('click', () => {
     currencySelect.style.display = 'none';
+    yearScroll.classList.remove("expanded");
 });
 
 currency.addEventListener("click", (event) => {
@@ -32,6 +35,15 @@ currencyOptions.forEach(option => {
         });
     })
 })
+
+trigger.addEventListener("click", function (event) {
+    event.stopPropagation();
+    const activeYear = yearScroll.querySelector(".active");
+    if (activeYear) {
+        activeYear.scrollIntoView()
+    }
+    yearScroll.classList.toggle("expanded");
+});
 
 function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));

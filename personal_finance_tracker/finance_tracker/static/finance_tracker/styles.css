@@ -95,22 +95,27 @@ nav a{
     height: auto;
 }
 
-.calendar{
+.calendar-wrapper {
     display: flex;
-    justify-content: center;  
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);  
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.calendar{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;
     border: none;
     border-radius: 2rem;
-    padding: 10px 5px 10px 20px;
+    padding: 0.7rem 1.2rem;
     background-color: var(--secondary-background);
 }
 
 .horizontal-month-list {
     list-style-type: none; 
     margin: 0px auto 0px auto;
-    padding: 0;
     display: flex;
 }
 
@@ -820,4 +825,72 @@ button:hover {
 
 .currency-image:hover {
     transform: scale(1.06);
+}
+
+.year-picker {
+    position: relative;
+    display: inline-block;
+}
+
+.year-circle {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--secondary-background);
+    color: var(--text-color);
+    text-align: center;
+    line-height: 4rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.year-scroll {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    position: absolute;
+    top: 0;
+    color: var(--text-color);
+    background-color: var(--secondary-background);
+    border: 0.2rem solid var(--secondary-color);
+    border-radius: 2.1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.year-scroll.expanded {
+    width: 10vw;
+    max-width: 10vw;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.year-scroll {
+    overflow-x: auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
+
+.year-scroll::-webkit-scrollbar {
+    display: none; 
+}
+
+.year-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.year-list li {
+    margin: 0 0.4rem;
+}
+
+.year-list li.active a {
+    font-weight: bold;
+    color: var(--secondary-color);
 }

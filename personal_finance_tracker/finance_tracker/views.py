@@ -27,6 +27,9 @@ VALID_MONTHS = [
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
+YEARS = list(range(2015, datetime.datetime.now().year + 1))
+YEAR = datetime.datetime.now().year
+
 CURRENCIES = {
     "USD": "$",
     "GBP": "£",
@@ -34,7 +37,6 @@ CURRENCIES = {
     "PLN": "zł"
 }
 
-YEAR = datetime.datetime.now().year
 
 @require_POST
 @csrf_exempt
@@ -80,7 +82,7 @@ def convert_dataset_currency(dataset, currency):
 
 
 @login_required
-def index(request, month_name=None):
+def index(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
@@ -89,15 +91,21 @@ def index(request, month_name=None):
     
     month_number = list(calendar.month_abbr).index(month_name)
     
+    if year is not None:
+        request.session['chosen_year'] = int(year)
+        year = int(year)
+    else:
+        year = request.session.get('chosen_year', datetime.datetime.now().year)
+
     # Filter income rocords based on user and month
     user_incomes = Income.objects.filter(
     user=request.user,
-    date_received__year=YEAR,
+    date_received__year=year,
     date_received__month=month_number
     )
     user_expenses = Expense.objects.filter(
     user=request.user,
-    date_incurred__year=YEAR,
+    date_incurred__year=year,
     date_incurred__month=month_number
     )
     
@@ -116,9 +124,9 @@ def index(request, month_name=None):
     user_expenses_total = format(user_expenses_total, '.2f') 
     
     # Calculate overall total income and expenses
-    total_income_amount = convert_queryset_total(Income.objects.filter(user=request.user), selected_currency)
+    total_income_amount = convert_queryset_total(Income.objects.filter(user=request.user, date_received__year=year), selected_currency)
     
-    total_expenses_amount = convert_queryset_total(Expense.objects.filter(user=request.user), selected_currency)
+    total_expenses_amount = convert_queryset_total(Expense.objects.filter(user=request.user, date_incurred__year=year), selected_currency)
 
     # Calculate user balance
     user_balance = total_income_amount - total_expenses_amount
@@ -129,8 +137,8 @@ def index(request, month_name=None):
     expense_data = [0.0] * 12
     
     # Fetch all income and expense records for the entire year
-    all_user_incomes = Income.objects.filter(user=request.user, date_received__year=YEAR)
-    all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=YEAR)
+    all_user_incomes = Income.objects.filter(user=request.user, date_received__year=year)
+    all_user_expenses = Expense.objects.filter(user=request.user, date_incurred__year=year)
 
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
 
@@ -152,7 +160,7 @@ def index(request, month_name=None):
     
     raw_income_sources = Income.objects.filter(
         user=request.user,
-        date_received__year=YEAR,
+        date_received__year=year,
         date_received__month=month_number
     ).select_related('source')
     
@@ -176,7 +184,7 @@ def index(request, month_name=None):
     
     raw_expense_categories = Expense.objects.filter(
         user=request.user,
-        date_incurred__year=YEAR,
+        date_incurred__year=year,
         date_incurred__month=month_number
     ).select_related('category')
 
@@ -191,7 +199,9 @@ def index(request, month_name=None):
 
         
     return render(request, "finance_tracker/index.html", {
-        'month': f"{calendar.month_name[month_number]} {YEAR}",
+        'month': f"{calendar.month_name[month_number]}",
+        'current_year': year,
+        'years': YEARS,
         'total_income_amount': user_incomes_total,
         'total_expenses_amount': user_expenses_total,
         'user_balance': user_balance,
@@ -226,7 +236,7 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 @login_required
-def income(request, month_name=None):
+def income(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
@@ -236,13 +246,19 @@ def income(request, month_name=None):
 
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name)
+
+    if year is not None:
+        request.session['chosen_year'] = int(year)
+        year = int(year)
+    else:
+        year = request.session.get('chosen_year', datetime.datetime.now().year)
     
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
 
     # Filter and sort income records based on user and month
     user_incomes = Income.objects.filter(
         user=request.user,
-        date_received__year=YEAR,
+        date_received__year=year,
         date_received__month=month_number
     ).order_by('-date_received', '-time_received')
 
@@ -257,12 +273,14 @@ def income(request, month_name=None):
             income.user = request.user
             income.currency = selected_currency
             income.save()
-            return redirect('income', month_name=month_name)
+            return redirect('income', month_name=month_name, year=year)
     else:
         form = IncomeForm(user=request.user)
 
     return render(request, "finance_tracker/income.html", {
-        'month': f"{calendar.month_name[month_number]} {YEAR}",
+        'month': f"{calendar.month_name[month_number]}",
+        'current_year': year,
+        'years': YEARS,
         'incomes': converted_incomes,
         'form': form,
         'months': VALID_MONTHS,
@@ -272,7 +290,7 @@ def income(request, month_name=None):
     })
 
 @login_required
-def expenses(request, month_name=None):
+def expenses(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
@@ -282,6 +300,12 @@ def expenses(request, month_name=None):
         
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    
+    if year is not None:
+        request.session['chosen_year'] = int(year)
+        year = int(year)
+    else:
+        year = request.session.get('chosen_year', datetime.datetime.now().year)
     
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
     
@@ -300,14 +324,16 @@ def expenses(request, month_name=None):
     # Filter and sort expense records based on user and month
     user_expenses = Expense.objects.filter(
         user=request.user,
-        date_incurred__year=YEAR,
+        date_incurred__year=year,
         date_incurred__month=month_number
     ).order_by('-date_incurred', '-time_incurred')
     
     converted_expenses = convert_dataset_currency(user_expenses, selected_currency)
     
     return render(request, "finance_tracker/expenses.html", {
-        'month': f"{calendar.month_name[month_number]} {YEAR}",
+        'month': f"{calendar.month_name[month_number]}",
+        'current_year': year,
+        'years': YEARS,
         'expenses': converted_expenses,
         'form': form,
         'months': VALID_MONTHS,
@@ -362,7 +388,7 @@ def select_gender(request):
     return render(request, 'finance_tracker/select_gender.html', {'form': form})
 
 @login_required
-def sources(request, month_name=None):
+def sources(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
@@ -372,6 +398,12 @@ def sources(request, month_name=None):
         
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    
+    if year is not None:
+        request.session['chosen_year'] = int(year)
+        year = int(year)
+    else:
+        year = request.session.get('chosen_year', datetime.datetime.now().year)
     
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
     
@@ -386,7 +418,7 @@ def sources(request, month_name=None):
     
     raw_income_sources = Income.objects.filter(
         user=request.user,
-        date_received__year=YEAR,
+        date_received__year=year,
         date_received__month=month_number
     ).select_related('source')
     
@@ -423,6 +455,8 @@ def sources(request, month_name=None):
 
     return render(request, 'finance_tracker/sources.html', {
         'form': form,
+        'current_year': year,
+        'years': YEARS,
         'sources': sources,
         'gender': gender,
         'month_name': month_name,
@@ -433,7 +467,7 @@ def sources(request, month_name=None):
         })
     
 @login_required
-def spendings(request, month_name=None):
+def spendings(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
@@ -443,6 +477,12 @@ def spendings(request, month_name=None):
         
     # Convert the month name to a month number
     month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    
+    if year is not None:
+        request.session['chosen_year'] = int(year)
+        year = int(year)
+    else:
+        year = request.session.get('chosen_year', datetime.datetime.now().year)
     
     gender = UserProfile.objects.filter(user=request.user).values('gender')[0]['gender']
     
@@ -457,7 +497,7 @@ def spendings(request, month_name=None):
     
     raw_expense_categories = Expense.objects.filter(
         user=request.user,
-        date_incurred__year=YEAR,
+        date_incurred__year=year,
         date_incurred__month=month_number
     ).select_related('category')
 
@@ -495,6 +535,8 @@ def spendings(request, month_name=None):
 
     return render(request, 'finance_tracker/spendings.html', {
         'form': form,
+        'current_year': year,
+        'years': YEARS,
         'categories': categories,
         'gender': gender,
         'month_name': month_name,
