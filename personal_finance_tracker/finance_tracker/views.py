@@ -86,11 +86,13 @@ def index(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
-    if not month_name:
-        month_name = datetime.datetime.now().strftime('%b') 
-    
+    if month_name is not None:
+        request.session['chosen_month'] = month_name
+    else:
+        month_name = request.session.get('chosen_month', datetime.datetime.now().strftime('%b') )
+        
     month_number = list(calendar.month_abbr).index(month_name)
-    
+        
     if year is not None:
         request.session['chosen_year'] = int(year)
         year = int(year)
@@ -240,11 +242,11 @@ def income(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
-    # Handle the current month if no month name is provided
-    if not month_name:
-        month_name = datetime.datetime.now().strftime('%b') 
-
-    # Convert the month name to a month number
+    if month_name is not None:
+        request.session['chosen_month'] = month_name
+    else:
+        month_name = request.session.get('chosen_month', datetime.datetime.now().strftime('%b') )
+        
     month_number = list(calendar.month_abbr).index(month_name)
 
     if year is not None:
@@ -294,12 +296,12 @@ def expenses(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
-    # Handle the current month if no month name is provided
-    if not month_name:
-        month_name = datetime.datetime.now().strftime('%b') 
+    if month_name is not None:
+        request.session['chosen_month'] = month_name
+    else:
+        month_name = request.session.get('chosen_month', datetime.datetime.now().strftime('%b') )
         
-    # Convert the month name to a month number
-    month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    month_number = list(calendar.month_abbr).index(month_name)
     
     if year is not None:
         request.session['chosen_year'] = int(year)
@@ -392,12 +394,12 @@ def sources(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
-    # Handle the current month if no month name is provided
-    if not month_name:
-        month_name = datetime.datetime.now().strftime('%b') 
+    if month_name is not None:
+        request.session['chosen_month'] = month_name
+    else:
+        month_name = request.session.get('chosen_month', datetime.datetime.now().strftime('%b') )
         
-    # Convert the month name to a month number
-    month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    month_number = list(calendar.month_abbr).index(month_name)
     
     if year is not None:
         request.session['chosen_year'] = int(year)
@@ -471,12 +473,12 @@ def spendings(request, month_name=None, year=None):
     selected_currency = request.session.get("current_currency", "USD")
     currency_sign = CURRENCIES[selected_currency]
     
-    # Handle the current month if no month name is provided
-    if not month_name:
-        month_name = datetime.datetime.now().strftime('%b') 
+    if month_name is not None:
+        request.session['chosen_month'] = month_name
+    else:
+        month_name = request.session.get('chosen_month', datetime.datetime.now().strftime('%b') )
         
-    # Convert the month name to a month number
-    month_number = list(calendar.month_abbr).index(month_name.capitalize())
+    month_number = list(calendar.month_abbr).index(month_name)
     
     if year is not None:
         request.session['chosen_year'] = int(year)
