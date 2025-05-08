@@ -6,18 +6,13 @@ const yearScroll = document.getElementById("yearScroll");
 const url = currencySelect.dataset.url;
 
 window.addEventListener('click', () => {
-    currencySelect.style.display = 'none';
     yearScroll.classList.remove("expanded");
+    currencySelect.classList.remove("expanded");
 });
 
 currency.addEventListener("click", (event) => {
     event.stopPropagation();
-    if (currencySelect.style.display == 'none'){
-        currencySelect.style.display = "block";
-    }
-    else {
-        currencySelect.style.display = 'none';
-    }
+    currencySelect.classList.toggle("expanded");
 });
 
 currencyOptions.forEach(option => {
