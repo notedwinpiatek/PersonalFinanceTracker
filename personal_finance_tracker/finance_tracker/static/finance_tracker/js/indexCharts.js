@@ -222,35 +222,35 @@ const allZeros = categoryTotals.length === 0 || categoryTotals.every(total => to
 
 // Define chart data based on the presence of data
 const chartData = allZeros
-    ? {
-        labels: ['No Data'], 
-        datasets: [{
-            label: 'Expense Amount',
-            data: [1],
-            backgroundColor: ['#cccccc'],
-            borderWidth: 0,
-        }]
-    }
-    : {
-        labels: categoryLabels,
-        datasets: [{
-            label: 'Income Amount',
-            data: categoryTotals,
-            backgroundColor: [
-                '#06ff4c',
-                '#dc3f4d',
-                '#fbbc16',
-                '#45aaf2',
-                '#8E1BE0',
-                '#E0D12D',
-                '#E12ECB',
-                '#45DBE0'
-            ],
-            borderWidth: 0,
-        }]
-    };
+? {
+    labels: ['No Data'], 
+    datasets: [{
+        label: 'Expense Amount',
+        data: [1],
+        backgroundColor: ['#cccccc'],
+        borderWidth: 0,
+    }]
+}
+: {
+    labels: categoryLabels,
+    datasets: [{
+        label: 'Income Amount',
+        data: categoryTotals,
+        backgroundColor: [
+            '#06ff4c',
+            '#dc3f4d',
+            '#fbbc16',
+            '#45aaf2',
+            '#8E1BE0',
+            '#E0D12D',
+            '#E12ECB',
+            '#45DBE0'
+        ],
+        borderWidth: 0,
+    }]
+};
 
-const mobileScreen = window.innerWidth < 700;
+const mobileScreen = window.innerWidth < 800;
 
 // Create the pie chart
 const categoryChart = new Chart(categoryCtx, {
@@ -270,7 +270,7 @@ const categoryChart = new Chart(categoryCtx, {
         plugins: {
             legend: {
                 display: true, 
-                position: 'left',
+                position: mobileScreen? 'bottom': 'left',
                 labels: {
                     color: '#fff',
                     font: {
