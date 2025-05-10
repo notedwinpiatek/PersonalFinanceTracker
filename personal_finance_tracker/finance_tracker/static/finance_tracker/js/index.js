@@ -8,6 +8,15 @@ const monthsScroll = document.getElementById("monthsScroll");
 const monthsDisplay = document.getElementById("monthsDisplay");
 const url = currencySelect.dataset.url;
 
+window.addEventListener('resize', updateMonthTriggerBehavior);
+window.addEventListener('DOMContentLoaded', updateMonthTriggerBehavior);
+window.addEventListener('click', windowClick);
+yearTrigger.addEventListener("click", yearTriggerClick);
+currency.addEventListener("click", currencyClick);
+currencyOptions.forEach(option => {
+    option.addEventListener("click", currencyOptionClick)
+})
+
 function updateMonthTriggerBehavior() {
     if (window.innerWidth < 1200) {
         monthsDisplay.textContent = monthsTrigger.getAttribute("data-month");
@@ -18,44 +27,39 @@ function updateMonthTriggerBehavior() {
     }
 }
 
-window.addEventListener('resize', updateMonthTriggerBehavior);
-window.addEventListener('DOMContentLoaded', updateMonthTriggerBehavior);
-
-window.addEventListener('click', () => {
+function windowClick() {
     yearScroll.classList.remove("expanded");
     currencySelect.classList.remove("expanded");
     monthsScroll.classList.remove("expanded");
-});
+}
 
-currency.addEventListener("click", (event) => {
+function currencyClick(event) {
     event.stopPropagation();
     currencySelect.classList.toggle("expanded");
-});
+}
 
-currencyOptions.forEach(option => {
-    option.addEventListener("click", () => {
-        const currency = option.dataset.currency;
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken")
-            },
-            body: JSON.stringify({ currency })
-        }).then(() => {
-            location.reload();
-        });
-    })
-})
+function currencyOptionClick() {
+    const currency = this.dataset.currency;
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ currency })
+    }).then(() => {
+        location.reload();
+    });
+}
 
-yearTrigger.addEventListener("click", function (event) {
+function yearTriggerClick(event) {
     event.stopPropagation();
     const activeYear = yearScroll.querySelector(".active");
     if (activeYear) {
         activeYear.scrollIntoView()
     }
     yearScroll.classList.toggle("expanded");
-});
+}
 
 function monthTriggerClick(event) {
     event.stopPropagation();
