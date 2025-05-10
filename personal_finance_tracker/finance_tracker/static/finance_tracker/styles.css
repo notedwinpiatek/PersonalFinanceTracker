@@ -40,7 +40,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-    width: 4px; 
+    width: 0; 
 }
 
 *::-webkit-scrollbar-track {
@@ -102,7 +102,7 @@ nav a{
     gap: 1rem;
 }
 
-.calendar{
+.months-picker{
     flex: 1;
     display: flex;
     justify-content: space-between;  
@@ -113,24 +113,24 @@ nav a{
     background-color: var(--secondary-background);
 }
 
-.horizontal-month-list {
+.month-list {
     list-style-type: none; 
     margin: 0px auto 0px auto;
     display: flex;
 }
 
-.horizontal-month-list li a{
+.month-list li a{
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.1s ease-in-out;
 }
 
-.horizontal-month-list li {
+.month-list li {
     margin-right: 1.9rem;
     font-size: 1.9rem;
 }
 
-.horizontal-month-list li a:hover {
+.month-list li a:hover {
     color: var(--secondary-color);
     cursor: pointer;
 }
@@ -717,87 +717,6 @@ button:hover {
     border-color: darkred; 
 }
 
-@media(max-width: 1800px){
-    :root{
-        font-size: 13px;
-    }
-    .parent {
-        max-width: none;
-    }
-    .parent > * {
-        padding: 0px 1rem !important;
-    }
-}
-@media(max-width: 1200px){
-    :root{
-        font-size: 12px;
-    }
-    .parent {
-        grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: auto;
-        overflow: scroll;
-    }
-
-    main {
-        max-height: none;
-    }
-
-    .balance{
-        grid-area: 1/1/1/1;
-    }
-    .income {
-        grid-area: 1/2/1/2;
-    }
-    .monthly-tracking {
-        min-height: 30vh;
-        grid-area: 2/1/5/1;
-    }
-    .expenses {
-        grid-area: 2/2/2/2;
-    }
-    .spendings {
-        min-height: 25vh;
-        grid-area: 3/2/5/2;
-    }
-    .history {
-        grid-area: 5/1/7/1;
-        padding: 0px 0.7rem 0.3rem !important;
-        height: 30vh;
-    }
-    .income-source {
-        grid-area: 5/2/7/2;
-        min-height: 25vh;
-    }
-}
-
-@media(max-width: 850px){
-    :root{
-        font-size: 11px;
-    }
-
-    .parent {
-        grid-template-columns: 1fr;
-        grid-auto-rows: auto;
-        overflow: scroll;
-    }
-
-    .expenses {
-        grid-row: 2 !important;
-    }
-
-    .monthly-tracking, .history, .spendings, .income-source {
-        min-height: 40vh;
-    }
-
-    main {
-        max-height: none;
-    }
-
-    .parent > * {
-        grid-area: auto;
-    }
-}
-
 
 /* Currency modal */
 #currencySelector{
@@ -837,7 +756,7 @@ button:hover {
     transform: scale(1.06);
 }
 
-.year-picker {
+.year-picker{
     position: relative;
     display: inline-block;
 }
@@ -903,4 +822,190 @@ button:hover {
 .year-list li.active a {
     font-weight: bold;
     color: var(--secondary-color);
+}
+
+
+@media(max-width: 1800px){
+    :root{
+        font-size: 13px;
+    }
+    .parent {
+        max-width: none;
+    }
+    .parent > * {
+        padding: 0px 1rem !important;
+    }
+}
+
+@media(max-width: 1200px){
+    :root{
+        font-size: 12px;
+    }
+    .parent {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+        overflow: scroll;
+    }
+
+    main {
+        max-height: none;
+    }
+
+    .logo {
+        justify-self: baseline;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .short-page, .parent {
+        height: 80vh;
+        max-height: 80vh;
+    }
+
+    #currencySelector {
+        margin-top: 20vh;
+        left: 50%;
+    }
+
+    .userpanel, .logo {
+        padding: 0;
+    }
+
+    .balance{
+        grid-area: 1/1/1/1;
+    }
+    .income {
+        grid-area: 1/2/1/2;
+    }
+    .monthly-tracking {
+        min-height: 30vh;
+        grid-area: 2/1/5/1;
+    }
+    .expenses {
+        grid-area: 2/2/2/2;
+    }
+    .spendings {
+        min-height: 25vh;
+        grid-area: 3/2/5/2;
+    }
+    .history {
+        grid-area: 5/1/7/1;
+        padding: 0px 0.7rem 0.3rem !important;
+        height: 30vh;
+    }
+    .income-source {
+        grid-area: 5/2/7/2;
+        min-height: 25vh;
+    }
+
+    .months-picker{
+        position: relative;
+        display: inline-block;
+        z-index: 999;
+        padding: 0;
+    }
+    
+    .months-circle {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background-color: var(--secondary-background);
+        color: var(--text-color);
+        text-align: center;
+        line-height: 4rem;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .months-scroll {
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        position: absolute;
+        top: 0;
+        color: var(--text-color);
+        background-color: var(--secondary-background);
+        border: 0.2rem solid var(--secondary-color);
+        border-radius: 2.1rem;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease-in-out;
+        width: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .months-scroll.expanded {
+        width: 20vw;
+        max-width: 20vw;
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .year-scroll.expanded {
+        width: 20vw;
+        max-width: 20vw; 
+    }
+    
+    .months-scroll {
+        overflow-x: auto;
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+    }
+    
+    .months-scroll::-webkit-scrollbar {
+        display: none; 
+    }
+    
+    #monthList {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #monthList li {
+        margin: 0 0.4rem;
+        font-size: 1.2rem;
+    }
+    
+    #monthList li.active a {
+        font-weight: bold;
+        color: var(--secondary-color);
+    }
+}
+
+@media(max-width: 850px){
+    :root{
+        font-size: 11px;
+    }
+
+    .logo > p {
+        display: none;
+    }
+
+    .parent {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        overflow: scroll;
+    }
+
+    .expenses {
+        grid-row: 2 !important;
+    }
+
+    .monthly-tracking, .history, .spendings, .income-source {
+        min-height: 40vh;
+    }
+
+    main {
+        max-height: none;
+    }
+
+    .parent > * {
+        grid-area: auto;
+    }
 }

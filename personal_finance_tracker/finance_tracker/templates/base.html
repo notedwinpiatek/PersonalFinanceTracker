@@ -37,14 +37,19 @@
         {% if user.is_authenticated %}
             {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' and request.resolver_match.url_name != 'landing_page'%}
             <div class="calendar-wrapper">
-                <div class="calendar">
-                    <ul class="horizontal-month-list">
-                        {% for month in months %}
-                            <li class="{% if month == month_name %}active{% endif %}">
-                                <a href="{% url request.resolver_match.view_name month current_year %}">{{ month }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <div class="months-picker">
+                    <div class="months-circle" id="monthsTrigger" data-month="{{month_name}}">
+                        <span id="monthsDisplay" class="month-display"></span>
+                        <div class="months-scroll" id="monthsScroll">
+                            <ul class="month-list" id="monthList">
+                                {% for month in months %}
+                                    <li class="{% if month == month_name %}active{% endif %}">
+                                        <a href="{% url request.resolver_match.view_name month current_year %}">{{ month }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="year-picker">
                     <div class="year-circle" id="yearTrigger">{{ current_year }}
