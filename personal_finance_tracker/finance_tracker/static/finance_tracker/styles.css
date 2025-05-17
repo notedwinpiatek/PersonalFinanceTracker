@@ -226,7 +226,11 @@ button[type="submit"], input, .form-control, textarea {
 }
 
 .form-control {
-    padding: 0.6rem 1.25rem;
+    border: 0.2rem solid transparent;
+}
+
+.form-control {
+    padding: 0.5rem 1rem;
     margin-bottom: 0px;
 }
 
@@ -239,7 +243,7 @@ input {
 
 form input:focus, textarea:focus {
     outline: none;
-    border: 0.2rem solid var(--primary-color) ;
+    border-color: var(--primary-color) ;
 }
 
 textarea#description-field{
