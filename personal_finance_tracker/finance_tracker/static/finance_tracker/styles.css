@@ -267,7 +267,44 @@ textarea#description-field{
     animation: gradient-animation 2s ease infinite;
 }
 
+select,
+::picker(select) {
+  appearance: base-select;
+  font-family: inherit;
+}
 
+select {
+    background: white;
+    color: black;
+    transition: all 0.2s;
+}
+
+select::picker-icon {
+    color: black;
+    transition: 0.2s rotate;
+}
+
+select:open::picker-icon {
+    rotate: 180deg;
+}
+
+::picker(select) {
+    border: 0.2rem solid var(--secondary-color);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    background-color: var(--secondary-background);
+}
+
+option {
+    background: var(--secondary-background);
+    color: var(--text-color);
+    transition: 0.1s;
+}  
+
+option:hover,
+option:focus {
+  color: var(--secondary-color)
+}
 
 /* ACCOUNT SETTINGS */
 .floating-block{
