@@ -31,7 +31,7 @@ class IncomeForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder':'Amount'}),
             'source': forms.Select(attrs={'class': 'form-control', 'id': 'source-field'}),
             'date_received': forms.HiddenInput(attrs={'id': 'dateInput', 'class': 'form-control'}),
-            'time_received': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'time_received': forms.HiddenInput(attrs={'class': 'form-control', 'id': 'timeInput'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }
         
@@ -39,7 +39,7 @@ class IncomeForm(forms.ModelForm):
         user = kwargs.pop('user') 
         super().__init__(*args, **kwargs)
         self.fields['source'].queryset = IncomeSource.objects.filter(user=user)
-        
+        self.fields['date_received'].input_formats = ['%m/%d/%Y']
         self.fields['source'].queryset = IncomeSource.objects.filter(user=user)
         self.fields['source'].empty_label = "Source"
         
@@ -58,7 +58,7 @@ class ExpenseForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder': 'Amount'}),
             'category': forms.Select(attrs={'class': 'form-control', 'id': 'category-field'}),
             'date_incurred': forms.HiddenInput(attrs={'id': 'dateInput', 'class': 'form-control'}),
-            'time_incurred': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}), 
+            'time_incurred': forms.HiddenInput(attrs={'class': 'form-control', 'id': 'timeInput'}), 
             'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }
         

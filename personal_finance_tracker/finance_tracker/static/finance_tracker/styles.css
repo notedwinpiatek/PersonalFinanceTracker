@@ -270,7 +270,7 @@ textarea#description-field{
 select,
 ::picker(select) {
   appearance: base-select;
-  font-family: inherit;
+  font-weight: 500;
 }
 
 select {
@@ -1056,18 +1056,22 @@ button:hover {
     }
 }
 
-/* DATEPICKER */
-.datepicker-wrapper {
+/* DATEPICKER / TIMEPICKER */
+.datepicker-wrapper, .timepicker-wrapper {
     position: relative;
 }
 
-#datepickerImg {
+#datepickerImg, #timepickerImg {
     right: 1.5rem;
     top: 0.7rem;
     position: absolute;
     width: 1.5rem;
     height: auto;
     cursor: pointer;
+}
+
+#timepickerInput::placeholder {
+    font-weight: bold;
 }
 
 #datepickerCalendar {
