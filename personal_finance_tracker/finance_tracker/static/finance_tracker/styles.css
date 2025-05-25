@@ -299,7 +299,12 @@ option {
     background: var(--secondary-background);
     color: var(--text-color);
     transition: 0.1s;
-}  
+} 
+
+option:nth-of-type(1){
+    color: #676f75;
+    pointer-events: none;
+}
 
 option:hover,
 option:focus {
