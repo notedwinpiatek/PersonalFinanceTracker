@@ -1,8 +1,23 @@
 const datepickerInput = document.getElementById('datepickerInput');
 const dateInput = document.getElementById('dateInput');
+const datepickerImg = document.getElementById('datepickerImg');
+const datepickerCalendar = document.getElementById('datepickerCalendar');
+const monthYearHeader = document.getElementById('monthYear');
+const daysContainer = document.getElementById('days');
+
 let mm = "", dd = "", yyyy = "", formatted = "";
+let currentDate = new Date();
+let today = new Date();
 
 datepickerInput.addEventListener('input', dateFormatter);
+datepickerImg.addEventListener('click', openDatePicker);
+window.addEventListener('click', windowClick);
+
+function windowClick(event) {
+    if (!datepickerCalendar.contains(event.target)) {
+        datepickerCalendar.classList.remove("expanded");
+    }
+}
 
 function dateFormatter(event){
     let raw = event.target.value.replace(/\D/g, "");
@@ -94,4 +109,74 @@ function dateFormatter(event){
     }
 }
 
+function openDatePicker(event){
+    event.stopPropagation();
+    datepickerCalendar.classList.toggle("expanded");
+    renderCalendar()
+}
 
+function changeMonth(delta) {
+    const newMonth = currentDate.getMonth() + delta;
+    const newYear = currentDate.getFullYear();
+    const currentYear = new Date().getFullYear();
+
+    if (newMonth < 0) {
+        newYear -= 1;
+    } else if (newMonth > 11) {
+        newYear += 1;
+    }
+
+    if (newYear >= 2015 && newYear <= currentYear){
+        currentDate.setMonth(newMonth);
+        renderCalendar();
+    }
+}
+
+function changeYear(delta) {
+    const newYear = currentDate.getFullYear() + delta;
+    const currentYear = new Date().getFullYear();
+
+    if (newYear >= 2015 && newYear <= currentYear){
+        currentDate.setFullYear(currentDate.getFullYear() + delta);
+        renderCalendar();
+    }
+}
+
+function renderCalendar() {
+    monthYearHeader.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    daysContainer.innerHTML = '';
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    for (let i = 0; i < firstDay; i++) {
+        daysContainer.innerHTML += `<div></div>`;
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        daysContainer.innerHTML += `<div class="populated">${i}</div>`
+    }
+
+    highlightToday();
+}
+
+function highlightToday(){
+    const day = today.getDate();
+    const month = today.getMonth();
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    const monthName = monthNames[month];
+    const year = today.getFullYear();
+
+    if (monthYearHeader.innerText.trim() == `${monthName} ${year}`){
+        const days = daysContainer.querySelectorAll('div');
+        days.forEach((d) => {
+            if (d.innerText == day){
+                d.classList.add('today')
+            }
+        })
+    }
+}

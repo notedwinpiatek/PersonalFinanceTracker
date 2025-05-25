@@ -1052,16 +1052,6 @@ button:hover {
 }
 
 /* DATEPICKER */
-#dateInput {
-    position: relative;
-}
-
-.datepicker {
-    position: absolute;
-    top: 0;
-    background-color: white;
-}
-
 .datepicker-wrapper {
     position: relative;
 }
@@ -1072,4 +1062,87 @@ button:hover {
     position: absolute;
     width: 1.5rem;
     height: auto;
+    cursor: pointer;
+}
+
+#datepickerCalendar {
+    position: absolute;
+    background-color: var(--secondary-background);
+    border: 0.2rem solid var(--secondary-color);
+    border-radius: 1rem;
+    width: 17.6rem;
+    top: -0.2rem;
+    left: 0.7rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    padding: 0.9rem 1.2rem;
+    z-index: 99;
+}
+
+#datepickerCalendar.expanded {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.datepicker-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.side-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.side-controls > div {
+    cursor: pointer;
+}
+
+.side-controls > div:hover {
+    color: var(--secondary-color)
+}
+
+.header {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.months, #days{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    gap: 0.1rem;
+    margin-top: 1rem;
+    box-sizing: border-box;
+}
+
+#days {
+    margin-top: 0.7rem;
+}
+
+#days > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+#days > div.populated:hover, .today {
+    background-color: var(--secondary-color);
+    color: black;
+}
+
+#todayBtn {
+    margin-top: 0.6rem;
+    text-align: center;
+    width: auto;
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
 }

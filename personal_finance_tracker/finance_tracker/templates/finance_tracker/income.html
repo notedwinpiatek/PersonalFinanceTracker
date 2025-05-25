@@ -21,6 +21,7 @@
                     <div class="datepicker-wrapper">
                         <input class="form-control" id="datepickerInput" type='text' placeholder="mm/dd/yyyy" max-length="10">
                         <img id="datepickerImg" src="{% static 'finance_tracker/img/calendar.png' %}"></img>
+                        <div id="datepickerCalendar" class=""></div>
                     </div>
                 {% else %}
                     {{ field }}

@@ -20,7 +20,25 @@
                     {{ field }}
                     <div class="datepicker-wrapper">
                         <input class="form-control" id="datepickerInput" type='text' placeholder="mm/dd/yyyy" max-length="10">
-                        <img id="datepickerImg" src="{% static 'finance_tracker/img/calendar.png' %}"></img>
+                        <img id="datepickerImg" src="{% static 'finance_tracker/img/calendar.png' %}">
+                        <div id="datepickerCalendar" class="">
+                            <div class="datepicker-header">
+                                <div class="side-controls">
+                                    <div onclick="changeYear(-1)">&laquo;</div>
+                                    <div onclick="changeMonth(-1)">&lsaquo;</div>
+                                </div>
+                                <div id="monthYear" class="header"></div>
+                                <div class="side-controls">
+                                    <div onclick="changeMonth(+1)">&rsaquo;</div>
+                                    <div onclick="changeYear(+1)">&raquo;</div>
+                                </div>
+                            </div>
+                            <div class="header months">
+                                <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                            </div>
+                            <div id="days"></div>
+                            <button id="todayBtn">Today</button>
+                        </div>
                     </div>
                 {% else %}
                     {{ field }}
