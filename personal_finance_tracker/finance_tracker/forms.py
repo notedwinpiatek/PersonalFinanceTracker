@@ -57,7 +57,7 @@ class ExpenseForm(forms.ModelForm):
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder': 'Amount'}),
             'category': forms.Select(attrs={'class': 'form-control', 'id': 'category-field'}),
-            'date_incurred': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), 
+            'date_incurred': forms.TextInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'dateInput', 'readonly': 'readonly', 'placeholder': 'mm/dd/yyyy'}), 
             'time_incurred': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}), 
             'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }

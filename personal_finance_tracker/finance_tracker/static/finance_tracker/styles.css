@@ -1050,3 +1050,13 @@ button:hover {
         grid-area: auto;
     }
 }
+
+#dateInput {
+    position: relative;
+}
+
+.datepicker {
+    position: absolute;
+    top: 0;
+    background-color: white;
+}
