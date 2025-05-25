@@ -4,6 +4,7 @@ const datepickerImg = document.getElementById('datepickerImg');
 const datepickerCalendar = document.getElementById('datepickerCalendar');
 const monthYearHeader = document.getElementById('monthYear');
 const daysContainer = document.getElementById('days');
+const todayBtn = document.getElementById('todayBtn');
 
 let mm = "", dd = "", yyyy = "", formatted = "";
 let currentDate = new Date();
@@ -11,6 +12,8 @@ let today = new Date();
 
 datepickerInput.addEventListener('input', dateFormatter);
 datepickerImg.addEventListener('click', openDatePicker);
+todayBtn.addEventListener('click', pickToday);
+
 window.addEventListener('click', windowClick);
 
 function windowClick(event) {
@@ -105,7 +108,6 @@ function dateFormatter(event){
     event.target.value = formatted;
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(formatted)){
         dateInput.value = formatted;
-        console.log(dateInput.value)
     }
 }
 
@@ -160,6 +162,13 @@ function renderCalendar() {
         daysContainer.innerHTML += `<div class="populated">${i}</div>`
     }
 
+    const days = daysContainer.querySelectorAll('div');
+    days.forEach((day) => {
+        if (day.textContent != "") {
+            day.addEventListener('click', datePick)
+        }
+    });
+
     highlightToday();
 }
 
@@ -179,4 +188,44 @@ function highlightToday(){
             }
         })
     }
+}
+
+function pickToday(){
+    let day = String(today.getDate());
+    let month = String(today.getMonth());
+    const year = today.getFullYear();
+
+    if (day.length == 1){
+        day = `0${day}`
+    }
+    if (month.length == 1){
+        month = `0${month}`
+    }
+
+    const value = `${month}/${day}/${year}`
+    datepickerInput.value = value;
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)){
+        dateInput.value = value;
+    }
+    datepickerCalendar.classList.remove('expanded');
+}
+
+function datePick(event) {
+    let month = String(currentDate.getMonth());
+    const year = currentDate.getFullYear();
+    let day = event.target.textContent;
+
+    if (day.length == 1){
+        day = `0${day}`
+    }
+    if (month.length == 1){
+        month = `0${month}`
+    }
+
+    const value = `${month}/${day}/${year}`
+    datepickerInput.value = value;
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)){
+        dateInput.value = value;
+    }
+    datepickerCalendar.classList.remove('expanded');
 }
