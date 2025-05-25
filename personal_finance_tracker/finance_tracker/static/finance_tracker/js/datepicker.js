@@ -33,19 +33,19 @@ function dateFormatter(event){
         case 1:
             if (raw >= 2) {
                 mm = `0${raw}`;
-            } else if( raw == 1 ) {
+            } else if( raw >= 0 ) {
                 mm = raw;
             }
             break;
         case 2:
-            if (raw[0] == 1 && raw[1] <= 2 ) {
+            if ((raw[0] == 1 && raw[1] <= 2) || (raw[0] == 0 && raw[1] >= 1)) {
                 mm = raw;
             }
             break;
         case 3:
             if (raw[2] >= 4) {
                 dd = `0${raw[2]}`;
-            } else if(raw[2] < 4 && raw[2] >= 1) {
+            } else if(raw[2] < 4 && raw[2] >= 0) {
                 dd = raw[2]
             }
             if (raw[0] && raw[1]) mm = `${raw[0]}${raw[1]}`;
@@ -100,9 +100,9 @@ function dateFormatter(event){
 
     formatted = 
     (mm && dd && yyyy)? `${mm}/${dd}/${yyyy}`:
-    (mm && dd && dd == 1 || dd == 2 || dd == 3)? `${mm}/${dd}`:
+    (mm && dd && dd <= 1 || dd == 2 || dd == 3)? `${mm}/${dd}`:
     (mm && dd)? `${mm}/${dd}/`:
-    (mm && mm == 1)? `${mm}`:
+    (mm && mm <= 1)? `${mm}`:
     (mm)? `${mm}/`: '';
 
     event.target.value = formatted;
