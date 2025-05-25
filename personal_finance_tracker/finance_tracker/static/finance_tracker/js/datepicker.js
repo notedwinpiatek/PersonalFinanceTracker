@@ -1,8 +1,11 @@
 const datepickerInput = document.getElementById('datepickerInput');
+const dateInput = document.getElementById('dateInput');
 let mm = "", dd = "", yyyy = "", formatted = "";
 
-datepickerInput.addEventListener('input', () => {
-    let raw = datepickerInput.value.replace(/\D/g, "");
+datepickerInput.addEventListener('input', dateFormatter);
+
+function dateFormatter(event){
+    let raw = event.target.value.replace(/\D/g, "");
     mm = "";
     dd = "";
     yyyy = "";
@@ -84,16 +87,11 @@ datepickerInput.addEventListener('input', () => {
     (mm && mm == 1)? `${mm}`:
     (mm)? `${mm}/`: '';
 
-    datepickerInput.value = formatted;
-});
-
-
-function isValidDate(value) {
-    const [mm, dd, yyyy] = value.split("/").map(Number);
-    const date = new Date(yyyy, mm - 1, dd);
-    return (
-        date.getFullYear() === yyyy &&
-        date.getMonth() === mm - 1 &&
-        date.getDate() === dd
-    );
+    event.target.value = formatted;
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(formatted)){
+        dateInput.value = formatted;
+        console.log(dateInput.value)
+    }
 }
+
+

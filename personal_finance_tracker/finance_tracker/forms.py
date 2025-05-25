@@ -30,7 +30,7 @@ class IncomeForm(forms.ModelForm):
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder':'Amount'}),
             'source': forms.Select(attrs={'class': 'form-control', 'id': 'source-field'}),
-            'date_received': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date_received': forms.DateInput(attrs={'type': 'date', 'id': 'dateInput', 'class': 'form-control'}),
             'time_received': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }
@@ -57,7 +57,7 @@ class ExpenseForm(forms.ModelForm):
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount-field', 'placeholder': 'Amount'}),
             'category': forms.Select(attrs={'class': 'form-control', 'id': 'category-field'}),
-            'date_incurred': forms.TextInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'dateInput', 'readonly': 'readonly', 'placeholder': 'mm/dd/yyyy'}), 
+            'date_incurred': forms.HiddenInput(attrs={'id': 'dateInput', 'class': 'form-control'}),
             'time_incurred': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}), 
             'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description-field', 'placeholder': 'Add a brief description (optional)', 'rows': 4}),
         }
@@ -66,7 +66,7 @@ class ExpenseForm(forms.ModelForm):
         user = kwargs.pop('user')  # Expect user to be passed to the form
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = ExpenseCategory.objects.filter(user=user)
-        
+        self.fields['date_incurred'].input_formats = ['%m/%d/%Y']
         self.fields['category'].queryset = ExpenseCategory.objects.filter(user=user)
         self.fields['category'].empty_label = "Category"
         

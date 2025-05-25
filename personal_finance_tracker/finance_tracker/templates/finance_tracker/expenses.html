@@ -17,11 +17,15 @@
             <p class="form-group">
                 {{ field.label_tag }}
                 {% if field.id_for_label == 'dateInput'%}
-                    {{ field.as_hidden }}
-                    <input class="form-control" id="datepickerInput" type='text' placeholder="mm/dd/yyyy" max-length="10">
+                    {{ field }}
+                    <div class="datepicker-wrapper">
+                        <input class="form-control" id="datepickerInput" type='text' placeholder="mm/dd/yyyy" max-length="10">
+                        <img id="datepickerImg" src="{% static 'finance_tracker/img/calendar.png' %}"></img>
+                    </div>
                 {% else %}
                     {{ field }}
                 {% endif %}
+            </p>
                 {% if field.errors %}
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
@@ -32,7 +36,6 @@
                         });
                     </script>
                 {% endif %}
-            </p>
             {% endfor %}
 
             <button class="add-transaction-btn" type="submit">Add Expense</button>
