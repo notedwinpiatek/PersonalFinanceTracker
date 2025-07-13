@@ -2,6 +2,7 @@
 :root {
     --primary-color: #ea453a;
     --secondary-color: #fbbc16;
+    --secondary-color-dimmed: #fbba1675;
     --text-color: #fff;
     --background-color: #121220;
     --secondary-background: #181c3b;
@@ -1142,9 +1143,13 @@ button:hover {
     cursor: pointer;
 }
 
-#days > div.populated:hover, .today {
+#days > div.populated:hover, .selectedDate {
     background-color: var(--secondary-color);
     color: black;
+}
+
+.today {
+    background-color: var(--secondary-color-dimmed);
 }
 
 #todayBtn {

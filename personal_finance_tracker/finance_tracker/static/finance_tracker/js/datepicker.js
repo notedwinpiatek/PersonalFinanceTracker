@@ -9,12 +9,14 @@ const todayBtn = document.getElementById('todayBtn');
 let mm = "", dd = "", yyyy = "", formatted = "";
 let currentDate = new Date();
 let today = new Date();
+let selectedDate = null;
 
 datepickerInput.addEventListener('input', dateFormatter);
 datepickerImg.addEventListener('click', openDatePicker);
 todayBtn.addEventListener('click', pickToday);
 
 window.addEventListener('click', windowClick);
+window.addEventListener('keypress', windowClick);
 
 function windowClick(event) {
     if (!datepickerCalendar.contains(event.target)) {
@@ -118,8 +120,8 @@ function openDatePicker(event){
 }
 
 function changeMonth(delta) {
-    const newMonth = currentDate.getMonth() + delta;
-    const newYear = currentDate.getFullYear();
+    let newMonth = currentDate.getMonth() + delta;
+    let newYear = currentDate.getFullYear();
     const currentYear = new Date().getFullYear();
 
     if (newMonth < 0) {
@@ -158,8 +160,28 @@ function renderCalendar() {
         daysContainer.innerHTML += `<div></div>`;
     }
 
+    console.log(selectedDate)
+
     for (let i = 1; i <= daysInMonth; i++) {
-        daysContainer.innerHTML += `<div class="populated">${i}</div>`
+        const isSelected =
+            selectedDate &&
+            selectedDate.day === i &&
+            selectedDate.month === month &&
+            selectedDate.year === year;
+
+        const isToday =
+            i === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear();
+
+        let classList = 'populated';
+        if (isSelected) {
+            classList += ' selectedDate';
+        } else if (isToday) {
+            classList += ' today';
+        }
+
+        daysContainer.innerHTML += `<div class="${classList}">${i}</div>`;
     }
 
     const days = daysContainer.querySelectorAll('div');
@@ -169,30 +191,29 @@ function renderCalendar() {
         }
     });
 
-    highlightToday();
 }
 
-function highlightToday(){
-    const day = today.getDate();
-    const month = today.getMonth();
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
-    const monthName = monthNames[month];
-    const year = today.getFullYear();
+function setDaysColor(dayInput) {
+    const dayToday = today.getDate().toString();
 
-    if (monthYearHeader.innerText.trim() == `${monthName} ${year}`){
-        const days = daysContainer.querySelectorAll('div');
-        days.forEach((d) => {
-            if (d.innerText == day){
-                d.classList.add('today')
-            }
-        })
-    }
+    Array.from(daysContainer.getElementsByTagName("div")).forEach(div => {
+        const text = div.textContent;
+
+        if (text == dayToday && text != dayInput) {
+            div.classList.add('today');
+            div.classList.remove('selectedDate');
+        } else if (text === dayInput) {
+            div.classList.add('selectedDate');
+            div.classList.remove('today');
+        } else {
+            div.classList.remove('selectedDate');
+        }
+    });
 }
 
 function pickToday(){
     let day = String(today.getDate());
-    let month = String(today.getMonth());
+    let month = String(today.getMonth() + 1);
     const year = today.getFullYear();
 
     if (day.length == 1){
@@ -201,6 +222,10 @@ function pickToday(){
     if (month.length == 1){
         month = `0${month}`
     }
+
+    selectedDate = { day: parseInt(day), month: parseInt(month) - 1, year: year };
+
+    setDaysColor(day);
 
     const value = `${month}/${day}/${year}`
     datepickerInput.value = value;
@@ -211,10 +236,12 @@ function pickToday(){
 }
 
 function datePick(event) {
-    let month = String(currentDate.getMonth());
+    let month = String(currentDate.getMonth() + 1);
     const year = currentDate.getFullYear();
     let day = event.target.textContent;
 
+    selectedDate = { day: parseInt(day), month: parseInt(month) - 1, year: year };
+    
     if (day.length == 1){
         day = `0${day}`
     }
@@ -227,5 +254,8 @@ function datePick(event) {
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)){
         dateInput.value = value;
     }
+
+    setDaysColor(day);
+
     datepickerCalendar.classList.remove('expanded');
 }
