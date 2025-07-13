@@ -1,8 +1,37 @@
 const timepickerInput = document.getElementById('timepickerInput');
 const timeInput = document.getElementById('timeInput');
-let h = "", m = "", amPm = "", formattedT = "";
+const timepickerImg = document.getElementById('timepickerImg');
+const timepicker = document.getElementById("timepicker");
+const hoursContainer = document.getElementById('hours');
+const minutesContainer = document.getElementById('minutes');
+const amPmContainer = document.getElementById('amPm');
+const am = document.getElementById('amOption');
+const pm = document.getElementById('pmOption');
 
-timepickerInput.addEventListener('input', timeFormatter)
+let h = "", m = "", amPm = "", formattedT = "";
+let hour = "", minute = "", selectedPeriod = "";
+const ITEM_HEIGHT = '2.1rem';
+hasTimeBeenSelected = false;
+
+timepickerInput.addEventListener('input', timeFormatter);
+timepickerImg.addEventListener('click', openTimepicker);
+
+am.addEventListener('click', () => {
+    selectedPeriod = 'AM';
+    updateAMPM();
+});
+pm.addEventListener('click', () => {
+    selectedPeriod = 'PM';
+    updateAMPM();
+});
+window.addEventListener('click', windowClick);
+window.addEventListener('keypress', windowClick);
+
+function windowClick(event) {
+    if (!timepicker.contains(event.target)) {
+        timepicker.classList.remove("expanded");
+    }
+}
 
 function timeFormatter(event){
     let raw = event.target.value;
@@ -78,4 +107,115 @@ function formatAmPmToDjangoTime(timeStr) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
   
     return `${hours}:${minutes}`; 
+}
+
+function openTimepicker(event){
+    event.stopPropagation();
+    timepicker.classList.toggle("expanded");
+    renderTime()
+}
+
+function renderTime() {
+    if (!hasTimeBeenSelected) {
+        hoursContainer.innerHTML = '';
+        minutesContainer.innerHTML = '';
+        for (i = 1; i <= 12; i++){
+            const child = `<div>${i < 10 ? '0' + i : i}</div>`;
+            hoursContainer.innerHTML += child;
+        }
+        for (i = 0; i <= 59; i++){
+            const child = `<div>${i < 10 ? '0' + i : i}</div>`;
+            minutesContainer.innerHTML += child;
+        }
+        scrollToInitialTime();
+        setInitialAMPM();
+    }
+}
+
+function updateTime() {
+    hour = hoursContainer.getElementsByClassName("selected")[0]?.textContent || "00";
+    minute = minutesContainer.getElementsByClassName("selected")[0]?.textContent || "00";
+    time = `${hour}:${minute} ${selectedPeriod}`;
+    timepickerInput.value = time;
+    timeInput.value = formatAmPmToDjangoTime(time)
+}
+
+function getClosestElement(container) {
+    const children = Array.from(container.children);
+    const containerMiddle = container.getBoundingClientRect().top + container.offsetHeight / 2;
+    let closest = null;
+    let minDistance = Infinity;
+  
+    children.forEach(child => {
+      const childMiddle = child.getBoundingClientRect().top + child.offsetHeight / 2;
+      const distance = Math.abs(containerMiddle - childMiddle);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closest = child;
+      }
+    });
+  
+    children.forEach(c => c.classList.remove('selected'));
+    if (closest) closest.classList.add('selected');
+
+    hasTimeBeenSelected = true;
+    updateTime();
+
+    return closest?.textContent;
   }
+  
+  hoursContainer.addEventListener("scroll", () => {
+    clearTimeout(hoursContainer._scrollTimeout);
+    hoursContainer._scrollTimeout = setTimeout(() => {
+      getClosestElement(hoursContainer);
+    }, 100);
+  });
+  
+  minutesContainer.addEventListener("scroll", () => {
+    clearTimeout(minutesContainer._scrollTimeout);
+    minutesContainer._scrollTimeout = setTimeout(() => {
+      getClosestElement(minutesContainer);
+    }, 100);
+  });
+
+function scrollToInitialTime() {
+    const now = new Date();
+    const currentHour = now.getHours() % 12 || 12;
+    const currentMinute = now.getMinutes();
+
+    scrollToValue(hoursContainer, currentHour);
+    scrollToValue(minutesContainer, currentMinute);
+}
+
+function scrollToValue(container, value) {
+    const formatted = value < 10 ? '0' + value : '' + value;
+    const children = Array.from(container.children);
+    
+    // Find the <div> with the matching value
+    const match = children.find(child => child.textContent === formatted);
+
+    if (match) {
+        match.scrollIntoView({ behavior: 'auto', block: 'center' });
+        children.forEach(c => c.classList.remove('selected'));
+        match.classList.add('selected');
+        updateTime();
+    }
+}
+
+function setInitialAMPM() {
+    const now = new Date();
+    const period = now.getHours() >= 12 ? 'PM' : 'AM';
+    selectedPeriod = period;
+    updateAMPM();
+}
+
+function updateAMPM() {
+    if (selectedPeriod == 'AM'){
+        am.classList.add("selected");
+        pm.classList.remove("selected");
+    } else {
+        pm.classList.add("selected");
+        am.classList.remove("selected");
+    }
+    updateTime();
+}

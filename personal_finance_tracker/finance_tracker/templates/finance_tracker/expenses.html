@@ -46,6 +46,17 @@
                     <div class="timepicker-wrapper">
                         <input class="form-control" id="timepickerInput" type='text' placeholder="--:-- --" max-length="10">
                         <img id="timepickerImg" src="{% static 'finance_tracker/img/time.png' %}">
+                        <div id="timepicker" class="">
+                            <div class="time-wrapper">
+                                <div class="scroll-container" id="hours"></div>
+                                <div class="separator"><b>:</b></div>
+                                <div class="scroll-container" id="minutes"></div>
+                                <div class="am-pm" id="amPm">
+                                    <div class="am-option" id="amOption">AM</div>
+                                    <div class="ap-option" id="pmOption">PM</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {% else %}
                     {{ field }}

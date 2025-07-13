@@ -6,6 +6,7 @@
 {% block content %}
 <script src="{% static 'finance_tracker/js/incomeForm.js' %}" defer></script>
 <script src="{% static 'finance_tracker/js/datepicker.js'%}" defer></script>
+<script src="{% static 'finance_tracker/js/timepicker.js'%}" defer></script>
 
 <div class="container">
     <div class="form-wrapper form-block">
@@ -38,6 +39,23 @@
                             </div>
                             <div id="days"></div>
                             <button id="todayBtn" type="button">Today</button>
+                        </div>
+                    </div>
+                {% elif field.id_for_label == 'timeInput'%}
+                    {{ field }}
+                    <div class="timepicker-wrapper">
+                        <input class="form-control" id="timepickerInput" type='text' placeholder="--:-- --" max-length="10">
+                        <img id="timepickerImg" src="{% static 'finance_tracker/img/time.png' %}">
+                        <div id="timepicker" class="">
+                            <div class="time-wrapper">
+                                <div class="scroll-container" id="hours"></div>
+                                <div class="separator"><b>:</b></div>
+                                <div class="scroll-container" id="minutes"></div>
+                                <div class="am-pm" id="amPm">
+                                    <div class="am-option" id="amOption">AM</div>
+                                    <div class="ap-option" id="pmOption">PM</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% else %}

@@ -1074,7 +1074,7 @@ button:hover {
     font-weight: bold;
 }
 
-#datepickerCalendar {
+#datepickerCalendar, #timepicker {
     position: absolute;
     background-color: var(--secondary-background);
     border: 0.2rem solid var(--secondary-color);
@@ -1090,7 +1090,7 @@ button:hover {
     z-index: 99;
 }
 
-#datepickerCalendar.expanded {
+#datepickerCalendar.expanded, #timepicker.expanded {
     opacity: 1;
     pointer-events: auto;
 }
@@ -1154,4 +1154,51 @@ button:hover {
     padding: 0.2rem 0.8rem;
     border-radius: 0.3rem;
     font-size: 1rem;
+}
+
+.time-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+    gap: 1rem;
+    overflow: hidden;
+    position: relative;
+    font-size: 1.6rem;
+}
+
+.scroll-container {
+    overflow-y: scroll;
+    height: 100%;
+    scroll-snap-type: y mandatory;
+}
+
+.scroll-container div {
+  scroll-snap-align: center;
+  text-align: center;
+}
+
+.separator {
+    font-size: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.selected {
+    color: var(--secondary-color)
+}
+
+.am-pm > div {
+    cursor: pointer;
+}
+
+.am-pm > div:hover {
+    color: var(--secondary-color);
+}
+
+.scroll-container::before,
+.scroll-container::after {
+  content: '';
+  display: block;
+  height: 2.1rem; 
+  flex-shrink: 0;
 }
