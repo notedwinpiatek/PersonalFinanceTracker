@@ -1055,6 +1055,9 @@ button:hover {
     .parent > * {
         grid-area: auto;
     }
+    .transaction-block, .chart {
+        display: none!important;
+    }
 }
 
 /* DATEPICKER / TIMEPICKER */
