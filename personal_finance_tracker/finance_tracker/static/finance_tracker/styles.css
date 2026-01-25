@@ -123,11 +123,6 @@ nav a{
     height: 4rem;
 }
 
-#currencyImg {
-    width: 4rem;
-    height: auto;
-}
-
 .calendar-wrapper {
     display: flex;
     justify-content: space-between;
@@ -809,8 +804,8 @@ button:hover {
     border-radius: 1rem;
     z-index: 9999999;
     padding: 1rem 1.5rem;
-    margin-top: 20vh;
-    left: 89%;
+    bottom: 87%;
+    left: 91%;
     box-shadow: 0.2rem 0.3rem 0.5rem rgba(0, 0, 0, 0.647);
 }
 
@@ -826,12 +821,13 @@ button:hover {
     transition: all 0.1s;
 }
 
-
-.currency-image {
-    width: 0.3rem;
+.currency-option {
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
-.currency-image:hover {
+.currency-option:hover {
+    color: var(--secondary-color);
     transform: scale(1.06);
 }
 
@@ -898,7 +894,7 @@ button:hover {
     margin: 0 0.4rem;
 }
 
-.year-list li.active a {
+.year-list li.active a, .year-list li a:hover, .year-circle:hover  {
     font-weight: bold;
     color: var(--secondary-color);
 }
