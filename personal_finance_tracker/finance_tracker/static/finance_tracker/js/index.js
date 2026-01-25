@@ -30,9 +30,9 @@ function updateMonthTriggerBehavior() {
 }
 
 function windowClick() {
-    yearScroll.classList.remove("expanded");
+    if(yearScroll) yearScroll.classList.remove("expanded");
     currencySelect.classList.remove("expanded");
-    monthsScroll.classList.remove("expanded");
+    if(yearScroll) monthsScroll.classList.remove("expanded");
 }
 
 function currencyClick(event) {

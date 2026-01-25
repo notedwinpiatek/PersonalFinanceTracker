@@ -12,6 +12,7 @@
     <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
     {%if request.resolver_match.url_name != 'landing_page'%}
     <script src="{% static 'finance_tracker/js/index.js' %}" defer></script>
+    <script src="{% static 'finance_tracker/js/theme.js' %}"></script>
     {%endif%}
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
