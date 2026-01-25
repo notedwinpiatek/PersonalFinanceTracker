@@ -2,12 +2,12 @@ const colorContainer = document.getElementById('colorContainer');
 const colorChangeButton = document.getElementById("colorChangeBtn");
 const colorBtn = document.getElementById("colorChangeBtn");
 const themes = [
-  { name: 'pink', secondary: '#883584ff' },
-  { name: 'grey', secondary: '#757575ff' },
-  { name: 'green', secondary: '#467530ff' },
-  { name: 'brown', secondary: '#7c5033ff' },
-  { name: 'blue', secondary: '#30397aff' },
-  { name: 'lightBlue', secondary: '#307074ff' }
+  { name: 'pink', secondary: '#be3eb8ff' },
+  { name: 'grey', secondary: '#9b9b9bff' },
+  { name: 'green', secondary: '#5aa736ff' },
+  { name: 'brown', secondary: '#b46c3cff' },
+  { name: 'blue', secondary: '#3e4bacff' },
+  { name: 'lightBlue', secondary: '#3ea8afff' }
 ];
 
 function buildColorPopup() {
