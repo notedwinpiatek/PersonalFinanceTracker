@@ -219,3 +219,21 @@ function updateAMPM() {
     }
     updateTime();
 }
+
+function enableClickSelection(container) {
+  container.addEventListener('click', (e) => {
+    const item = e.target.closest('div');
+    if (!item || !container.contains(item)) return;
+
+    item.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    // optional: update immediately (without waiting for scroll end)
+    setTimeout(() => getClosestElement(container), 150);
+  });
+}
+
+enableClickSelection(hoursContainer);
+enableClickSelection(minutesContainer);
