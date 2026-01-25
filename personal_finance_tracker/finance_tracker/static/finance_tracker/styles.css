@@ -1183,6 +1183,7 @@ button:hover {
 
 .scroll-container div {
   scroll-snap-align: center;
+  cursor: pointer;
   text-align: center;
 }
 
@@ -1191,7 +1192,7 @@ button:hover {
     padding-bottom: 0.5rem;
 }
 
-.selected {
+.selected, .scroll-container div:hover  {
     color: var(--secondary-color)
 }
 
@@ -1207,6 +1208,6 @@ button:hover {
 .scroll-container::after {
   content: '';
   display: block;
-  height: 2.1rem; 
-  flex-shrink: 0;
+  height: calc(50% - 0.8rem);
+  pointer-events: none;
 }
