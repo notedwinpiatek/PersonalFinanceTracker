@@ -1284,5 +1284,6 @@ button:hover {
 }
 
 .color-tile.active {
-  border-color: white;
+  border-width: 0.2rem;
+  border-color: var(--secondary-color);
 }
