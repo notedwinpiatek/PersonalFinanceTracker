@@ -12,6 +12,7 @@
     <link href="{% static 'finance_tracker/styles.css' %}" rel="stylesheet">
     {%if request.resolver_match.url_name != 'landing_page'%}
     <script src="{% static 'finance_tracker/js/index.js' %}" defer></script>
+    <script src="{% static 'finance_tracker/js/theme.js' %}"></script>
     {%endif%}
     <title>{% block title %}Personal Finance Tracker{% endblock %}</title>
     <link rel="icon" href="{% static 'finance_tracker/img/us-dollar.png'%}">
@@ -73,10 +74,10 @@
                 <img id="currencyImg" src="{% static 'finance_tracker/img/exchange.png'%}">
                 <div id="currencySelector" data-url="{% url 'set_currency' %}">
                     <div class="currency-wrapper">
-                        <div class="currency-option" data-currency="PLN"><img src="{% static 'finance_tracker/img/zloty.png' %}" alt="PLN" class="currency-image"></div>
-                        <div class="currency-option" data-currency="USD"><img src="{% static 'finance_tracker/img/dollar.png' %}" alt="USD" class="currency-image"></div>
-                        <div class="currency-option" data-currency="GBP"><img src="{% static 'finance_tracker/img/pound.png' %}" alt="GBP" class="currency-image"></div>
-                        <div class="currency-option" data-currency="EUR"><img src="{% static 'finance_tracker/img/euro.png' %}" alt="EUR" class="currency-image"></div>
+                        <div class="currency-option" data-currency="PLN">PLN</div>
+                        <div class="currency-option" data-currency="USD">USD</div>
+                        <div class="currency-option" data-currency="GBP">GBP</div>
+                        <div class="currency-option" data-currency="EUR">EUR</div>
                     </div>
                 </div>
                 <a href="{% url 'account_settings' %}">
@@ -92,7 +93,7 @@
     {% if request.resolver_match.url_name != 'landing_page' %}
     <main class="short-page">
     {% else %}
-    <main class="long-page"">
+    <main class="long-page">
     {% endif %}
         {% block content %}{% endblock %}
     </main>

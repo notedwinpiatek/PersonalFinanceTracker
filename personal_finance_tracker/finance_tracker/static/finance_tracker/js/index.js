@@ -11,26 +11,28 @@ const url = currencySelect.dataset.url;
 window.addEventListener('resize', updateMonthTriggerBehavior);
 window.addEventListener('DOMContentLoaded', updateMonthTriggerBehavior);
 window.addEventListener('click', windowClick);
-yearTrigger.addEventListener("click", yearTriggerClick);
+if (yearTrigger) yearTrigger.addEventListener("click", yearTriggerClick);
 currency.addEventListener("click", currencyClick);
 currencyOptions.forEach(option => {
     option.addEventListener("click", currencyOptionClick)
 })
 
 function updateMonthTriggerBehavior() {
-    if (window.innerWidth < 1200) {
-        monthsDisplay.textContent = monthsTrigger.getAttribute("data-month");
-        monthsTrigger.addEventListener("click", monthTriggerClick);
-    } else {
-        monthsTrigger.removeEventListener("click", monthTriggerClick);
-        monthsDisplay.textContent = "";
+    if (monthsTrigger && monthsDisplay) {
+        if (window.innerWidth < 1200) {
+            monthsDisplay.textContent = monthsTrigger.getAttribute("data-month");
+            monthsTrigger.addEventListener("click", monthTriggerClick);
+        } else {
+            monthsTrigger.removeEventListener("click", monthTriggerClick);
+            monthsDisplay.textContent = "";
+        }
     }
 }
 
 function windowClick() {
-    yearScroll.classList.remove("expanded");
+    if(yearScroll) yearScroll.classList.remove("expanded");
     currencySelect.classList.remove("expanded");
-    monthsScroll.classList.remove("expanded");
+    if(yearScroll) monthsScroll.classList.remove("expanded");
 }
 
 function currencyClick(event) {
