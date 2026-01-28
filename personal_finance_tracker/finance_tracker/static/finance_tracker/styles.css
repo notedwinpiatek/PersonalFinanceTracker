@@ -69,7 +69,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 97vh;
+    height: 100vh;
+    overflow-x: hidden;
+    margin: 0%;
 }
 
 *::-webkit-scrollbar {
@@ -219,17 +221,14 @@ main{
 }
 
 /* FOOTER */
-footer hr {
-    background-color: var(--secondary-background);
-    border:none;
-    height: 0.06rem;
-}
-
-footer p {
+footer {
+    border-top: var(--secondary-background) 0.2rem solid;
     display: flex;
     justify-content: center;
-    margin-bottom: 0.3rem;
+    align-items: center;
+    background-color: var(--background-color);
 }
+
 
 
 /* FORMS */

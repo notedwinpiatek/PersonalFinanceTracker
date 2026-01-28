@@ -9,7 +9,7 @@ from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from .models import Income, Expense
-from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm, IncomeSourceForm, ExpenseCategoryForm
+from .forms import CustomPasswordChangeForm, IncomeForm, ExpenseForm, ExpenseCategory, IncomeSource, UserProfile, GenderSelectionForm, IncomeSourceForm, ExpenseCategoryForm, UsernameChangeForm
 from django.db.models import Sum
 from itertools import chain
 from django.db.models.signals import post_save
@@ -380,14 +380,54 @@ def select_gender(request):
     if request.method == 'POST':
         form = GenderSelectionForm(request.POST)
         if form.is_valid():
-            # Save the gender in the user's profile
             gender = form.cleaned_data['gender']
-            UserProfile.objects.create(user=request.user, gender=gender)
+
+            UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={'gender': gender}
+            )
+
             current_month = datetime.datetime.now().strftime('%b')
             return redirect(reverse('index', kwargs={'month_name': current_month}))
     else:
         form = GenderSelectionForm()
+
     return render(request, 'finance_tracker/select_gender.html', {'form': form})
+
+@login_required
+def gender_change(request):
+    if request.method == 'POST':
+        form = GenderSelectionForm(request.POST)
+        if form.is_valid():
+            gender = form.cleaned_data['gender']
+
+            UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={'gender': gender}
+            )
+
+            return redirect('account_settings')
+    else:
+        form = GenderSelectionForm()
+
+    return render(request, 'finance_tracker/select_gender.html', {'form': form})
+
+
+@login_required
+def change_username(request):
+    user = request.user
+    gender = UserProfile.objects.filter(user=user).values('gender')[0]['gender']
+
+    if request.method == 'POST':
+        form = UsernameChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Username changed successfully!")
+            return redirect('account_settings')
+    else:
+        form = UsernameChangeForm(instance=user)
+
+    return render(request, 'finance_tracker/change_username.html', {'form': form, 'gender': gender})
 
 @login_required
 def sources(request, month_name=None, year=None):

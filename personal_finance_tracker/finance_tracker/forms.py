@@ -1,6 +1,7 @@
 from django import forms
 from .models import Income, Expense, IncomeSource, ExpenseCategory, UserProfile
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 
 class GenderSelectionForm(forms.Form):
     gender = forms.ChoiceField(
@@ -91,3 +92,23 @@ class ExpenseCategoryForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'New Category'}),
         }
+        
+
+class UsernameChangeForm(forms.ModelForm):
+    username = forms.CharField(
+        label="New Username",
+        max_length=150,
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter new username'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['username']
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        # Exclude current user from check
+        if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
