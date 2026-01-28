@@ -380,13 +380,36 @@ def select_gender(request):
     if request.method == 'POST':
         form = GenderSelectionForm(request.POST)
         if form.is_valid():
-            # Save the gender in the user's profile
             gender = form.cleaned_data['gender']
-            UserProfile.objects.create(user=request.user, gender=gender)
+
+            UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={'gender': gender}
+            )
+
             current_month = datetime.datetime.now().strftime('%b')
             return redirect(reverse('index', kwargs={'month_name': current_month}))
     else:
         form = GenderSelectionForm()
+
+    return render(request, 'finance_tracker/select_gender.html', {'form': form})
+
+@login_required
+def gender_change(request):
+    if request.method == 'POST':
+        form = GenderSelectionForm(request.POST)
+        if form.is_valid():
+            gender = form.cleaned_data['gender']
+
+            UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={'gender': gender}
+            )
+
+            return redirect('account_settings')
+    else:
+        form = GenderSelectionForm()
+
     return render(request, 'finance_tracker/select_gender.html', {'form': form})
 
 @login_required
