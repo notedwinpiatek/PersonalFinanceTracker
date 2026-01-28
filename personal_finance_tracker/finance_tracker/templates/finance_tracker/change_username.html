@@ -1,0 +1,50 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Change Username - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<script src="{% static 'finance_tracker/js/usernameChange.js' %}" defer></script>
+
+<div class="form-wrapper">
+    <h1>Change Username</h1>
+    <form method="post" class="auth" novalidate>
+        {% csrf_token %}
+
+        <!-- Username Field -->
+        <p class="form-group {% if form.username.errors %}has-error{% endif %}">
+            {{ form.username }}
+            {% if form.username.errors %}
+            <div class="error-wrapper">
+                <img src="{% static 'finance_tracker/img/alert.png' %}">
+                <div class="error-heading">
+                    <h3>Something Went Wrong!</h3>
+                    <div class="error-text">
+                        {% for error in form.username.errors %}
+                        <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </p>
+
+        <!-- Non-field Errors -->
+        {% if form.non_field_errors %}
+        <div class="error-wrapper">
+            <img src="{% static 'finance_tracker/img/alert.png' %}">
+            <div class="error-heading">
+                <h3>Something Went Wrong!</h3>
+                <div class="error-text">
+                    {% for error in form.non_field_errors %}
+                    <p class="error-text">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <button type="submit">Change Username</button>
+    </form>
+    <p><a href="{% url 'account_settings' %}">Back to Profile</a></p>
+</div>
+{% endblock %}
