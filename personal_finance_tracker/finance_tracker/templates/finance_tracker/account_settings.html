@@ -5,8 +5,11 @@
 {% block content %}
 <div class="floating-block">
     <h1>Hi {{user.username}}!</h1>
-        <a href="{% url 'gender_change' %}">
+    <a href="{% url 'gender_change' %}">
         <button>Change Avatar</button>
+    </a>
+    <a href="{% url 'change_username' %}">
+        <button>Change Username</button>
     </a>
     <a href="{% url 'password_change' %}">
         <button>Change Password</button>
