@@ -36,7 +36,7 @@
             </div>
         </a>
         {% if user.is_authenticated %}
-            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' and request.resolver_match.url_name != 'landing_page'%}
+            {% if request.resolver_match.url_name != 'account_settings' and request.resolver_match.url_name != 'password_change' and request.resolver_match.url_name != 'password_change_done' and request.resolver_match.url_name != 'select_gender' and request.resolver_match.url_name != 'landing_page' and request.resolver_match.url_name != 'change_username'%}
             <div class="calendar-wrapper">
                 <div class="months-picker">
                     <div class="months-circle" id="monthsTrigger" data-month="{{month_name}}">
