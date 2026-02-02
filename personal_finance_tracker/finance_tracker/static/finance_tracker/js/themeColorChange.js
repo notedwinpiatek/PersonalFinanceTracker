@@ -54,3 +54,27 @@ document.addEventListener('click', () => {
   closePopup();
 });
 
+function setTheme(themeName) {
+  document.documentElement.setAttribute('data-theme', themeName);
+
+  fetch('/finance_tracker/set-theme/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie("csrftoken")
+    },
+    body: JSON.stringify({ theme: themeName })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status !== 'success') {
+      console.error('Theme save failed', data);
+    }
+  })
+  .catch(err => console.error(err));
+}
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+}

@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
+    path("set-theme/", views.set_color_theme, name="set_color_theme"),
     path('api/set_currency/', views.set_currency, name="set_currency"),
     path('landing_page/', views.landing_page, name='landing_page'),
     path('select_gender/', views.select_gender, name='select_gender'),

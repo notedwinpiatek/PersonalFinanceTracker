@@ -588,6 +588,27 @@ def spendings(request, month_name=None, year=None):
         'currency_sign': currency_sign
         })
 
+@require_POST
+@login_required
+@csrf_exempt
+def set_color_theme(request):
+    try:
+        data = json.loads(request.body)
+        theme = data.get("theme")
+
+        if not theme:
+            return JsonResponse({"status": "error", "message": "No theme provided"}, status=400)
+
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        profile.color_theme = theme
+        profile.save()
+
+        return JsonResponse({"status": "success", "theme": theme})
+
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
 @user_passes_test(not_logged_in)    
 def landing_page(request):
     return render(request, 'finance_tracker/landing_page.html')

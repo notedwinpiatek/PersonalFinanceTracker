@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ request.user.userprofile.color_theme|default:'blue' }}">
 
 <head>
     <meta charset="UTF-8">

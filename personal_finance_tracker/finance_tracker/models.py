@@ -9,6 +9,15 @@ CURRENCY_CHOICES = [
     ("GBP", "British Pound"),
 ]
 
+COLOR_THEMES_CHOICES = [
+    ("blue", "Blue"),
+    ("pink", "Pink"),
+    ("lightBlue", "Light Blue"),
+    ("brown", "Brown"),
+    ("grey", "Grey"), 
+    ("green", "Green")
+]
+
 class IncomeSource(models.Model):
     name = models.CharField(max_length=25)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -66,3 +75,4 @@ class UserProfile(models.Model):
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='O')
+    color_theme = models.CharField(max_length=10, choices=COLOR_THEMES_CHOICES, default="blue")

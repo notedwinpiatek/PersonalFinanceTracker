@@ -17,27 +17,27 @@
     border-color 0.25s ease;
 }
 
-[data-theme="pink"] {
+html[data-theme="pink"] {
     --background-color: #20121f;
     --secondary-background: #3b1839;
 }
-[data-theme="grey"] {
+html[data-theme="grey"] {
     --background-color: #2c2c2c;
     --secondary-background: #3d3d3d;
 }
-[data-theme="green"] {
+html[data-theme="green"] {
     --background-color: #162012;
     --secondary-background: #233b18;
 }
-[data-theme="brown"] {
+html[data-theme="brown"] {
     --background-color: #201712;
     --secondary-background: #3b2618;
 }
-[data-theme="blue"] {
+html[data-theme="blue"] {
     --background-color: #121220;
     --secondary-background: #181c3b;
 }
-[data-theme="lightBlue"] {
+html[data-theme="lightBlue"] {
     --background-color: #121f20;
     --secondary-background: #18393b;
 }
