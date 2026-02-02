@@ -709,6 +709,7 @@ button:hover {
 
 .functionality-container{
     display: flex;
+    flex-direction: row;
     justify-content: center;
     gap: 30px;
 }
@@ -939,6 +940,16 @@ button:hover {
         max-height: 80vh;
     }
 
+        .functionality-wrap2 {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .functionality-wrap, .functionality-wrap2 {
+        width: 37.5rem;
+    }
+
+
     #currencySelector {
         margin-top: 20vh;
         left: 50%;
@@ -1060,6 +1071,17 @@ button:hover {
     .logo > p {
         display: none;
     }
+
+
+    .functionality-container, .functionality-wrap2 {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .functionality-wrap, .functionality-wrap2, .section-header {
+        width: 37.5rem;
+    }
+
 
     .parent {
         grid-template-columns: 1fr;
