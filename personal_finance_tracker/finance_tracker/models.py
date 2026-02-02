@@ -76,3 +76,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='O')
     color_theme = models.CharField(max_length=10, choices=COLOR_THEMES_CHOICES, default="blue")
+
+    preferred_currency = models.CharField(
+        max_length=3,
+        choices=CURRENCY_CHOICES,
+        default="USD"
+    )

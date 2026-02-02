@@ -39,16 +39,21 @@ CURRENCIES = {
 
 
 @require_POST
+@login_required
 @csrf_exempt
-def set_currency(request): 
-    if request.method == "POST":
-        data = json.loads(request.body)
-        currency = data.get("currency")
-        if currency:
-            request.session["current_currency"] = currency
-            # optionally: set currency symbol here too
-            return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "error"}, status=400)
+def set_currency(request):
+    data = json.loads(request.body)
+    currency = data.get("currency")
+
+    if not currency:
+        return JsonResponse({"status": "error"}, status=400)
+
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    profile.preferred_currency = currency
+    profile.save()
+
+    return JsonResponse({"status": "success"})
+
 
 @lru_cache(maxsize=None)
 def get_exchange_rate(base, target):
@@ -83,7 +88,9 @@ def convert_dataset_currency(dataset, currency):
 
 @login_required
 def index(request, month_name=None, year=None):
-    selected_currency = request.session.get("current_currency", "USD")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    selected_currency = profile.preferred_currency if profile else "USD"
+
     currency_sign = CURRENCIES[selected_currency]
     
     if month_name is not None:
@@ -239,7 +246,9 @@ def register(request):
 
 @login_required
 def income(request, month_name=None, year=None):
-    selected_currency = request.session.get("current_currency", "USD")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    selected_currency = profile.preferred_currency if profile else "USD"
+
     currency_sign = CURRENCIES[selected_currency]
     
     if month_name is not None:
@@ -293,7 +302,9 @@ def income(request, month_name=None, year=None):
 
 @login_required
 def expenses(request, month_name=None, year=None):
-    selected_currency = request.session.get("current_currency", "USD")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    selected_currency = profile.preferred_currency if profile else "USD"
+
     currency_sign = CURRENCIES[selected_currency]
     
     if month_name is not None:
@@ -431,7 +442,9 @@ def change_username(request):
 
 @login_required
 def sources(request, month_name=None, year=None):
-    selected_currency = request.session.get("current_currency", "USD")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    selected_currency = profile.preferred_currency if profile else "USD"
+
     currency_sign = CURRENCIES[selected_currency]
     
     if month_name is not None:
@@ -510,7 +523,9 @@ def sources(request, month_name=None, year=None):
     
 @login_required
 def spendings(request, month_name=None, year=None):
-    selected_currency = request.session.get("current_currency", "USD")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    selected_currency = profile.preferred_currency if profile else "USD"
+
     currency_sign = CURRENCIES[selected_currency]
     
     if month_name is not None:
