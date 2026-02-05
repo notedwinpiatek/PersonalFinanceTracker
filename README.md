@@ -54,12 +54,9 @@ Built with simplicity in mind, so you spend less time managing money and more ti
 
 ## 👥 Contributors
 <p align="center">
-  <a href="https://github.com/notedwinpiatek">
-    <img src="https://github.com/notedwinpiatek.png" width="80" style="border-radius:50%; margin-right:8px;" />
-  </a>
-  <a href="https://github.com/JuliaMaxx">
-    <img src="https://github.com/JuliaMaxx.png" width="80" style="border-radius:50%; margin-right:8px;" />
-  </a>
+  <a href = "https://github.com/JuliaMaxx/PersonalFinanceTracker/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=JuliaMaxx/PersonalFinanceTracker"/>
+</a>
 </p>
 
 ---
