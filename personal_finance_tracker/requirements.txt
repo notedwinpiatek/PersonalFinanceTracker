@@ -7,3 +7,11 @@ requests==2.32.5
 sqlparse==0.5.3
 tzdata==2024.2
 urllib3==2.6.3
+dj-database-url==3.1.0
+python-dotenv==1.2.1 
+gunicorn==25.0.1
+psycopg2-binary==2.9.11
+django-storages==1.14.6
+azure-storage-blob==12.28.0
+pymongo==4.16.0
+whitenoise==6.11.0
