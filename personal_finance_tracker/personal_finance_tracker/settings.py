@@ -146,16 +146,14 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-if AWS_STORAGE_BUCKET_NAME:
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
-    STATICFILES_STORAGE = 'personal_finance_tracker.storages.StaticStorage'
-    DEFAULT_FILE_STORAGE = 'personal_finance_tracker.storages.MediaStorage'
-else:
-    STATIC_URL = '/static/'
-    MEDIA_URL = '/media/'
+# if AWS_STORAGE_BUCKET_NAME:
+#     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+#     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+#     STATICFILES_STORAGE = 'personal_finance_tracker.storages.StaticStorage'
+#     DEFAULT_FILE_STORAGE = 'personal_finance_tracker.storages.MediaStorage'
+# else:
+#     STATIC_URL = '/static/'
+#     MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
